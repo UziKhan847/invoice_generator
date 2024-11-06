@@ -1,0 +1,42 @@
+name: markaz_umaza_invoice_generator
+description: "A new Flutter project."
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.5.3
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  pdf: ^3.11.1
+  printing: ^5.13.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+
+flutter:
+
+  uses-material-design: true
+
+  assets:
+    - images/
+
+  fonts:
+    - family: LiberationSans
+      fonts:
+        - asset: fonts/LiberationSans-Regular.ttf
+        - asset: fonts/LiberationSans-Italic.ttf
+          style: italic
+        - asset: fonts/LiberationSans-Bold.ttf
+          weight: 700
+    - family: Arial
+      fonts:
+        - asset: fonts/Arial.ttf
+
