@@ -23,9 +23,9 @@ class GeneralText extends StatelessWidget {
       text,
       textAlign: textAlign,
       style: TextStyle(
+          color: color,
           fontFamily: fontFamily,
           fontSize: fontSize,
-          color: color,
           fontWeight: fontWeight),
     );
   }

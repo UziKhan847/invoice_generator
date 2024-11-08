@@ -14,6 +14,8 @@ dependencies:
   cupertino_icons: ^1.0.8
   pdf: ^3.11.1
   printing: ^5.13.4
+  flutter_riverpod: ^2.6.1
+  supabase_flutter: ^2.8.0
 
 dev_dependencies:
   flutter_test:
@@ -39,4 +41,7 @@ flutter:
     - family: Arial
       fonts:
         - asset: fonts/Arial.ttf
+    - family: Times
+      fonts:
+        - asset: fonts/times.ttf
 

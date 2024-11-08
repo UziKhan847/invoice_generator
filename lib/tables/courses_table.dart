@@ -9,15 +9,21 @@ class CoursesTable extends StatelessWidget {
     return Table(
       border: TableBorder.all(),
       //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      columnWidths: const <int, TableColumnWidth>{0: FixedColumnWidth(160)},
+      columnWidths: const <int, TableColumnWidth>{
+        0: FixedColumnWidth(145),
+        1: FixedColumnWidth(50),
+        2: FixedColumnWidth(50),
+        3: FixedColumnWidth(50),
+      },
       children: <TableRow>[
         GeneralTableRow.row(
           decoration: BoxDecoration(color: Colors.grey.shade300),
-          fontSize: 10,
+          fontSizeThree: 7,
           textAlign: TextAlign.center,
           columnOne: "DESCRIPTION",
-          columnTwo: "QUANTITY",
-          columnThree: "AMOUNT",
+          columnTwo: "COST",
+          columnThree: "QUANTITY",
+          columnFour: "AMOUNT",
         ),
         GeneralTableRow.row(
           columnOne: "[Name of Course]",
@@ -26,6 +32,7 @@ class CoursesTable extends StatelessWidget {
         GeneralTableRow.row(),
         GeneralTableRow.row(),
         GeneralTableRow.row(),
+        GeneralTableRow.row(columnOne: "Subtotal"),
         GeneralTableRow.row(
           columnOne: "HST %13",
         ),
@@ -36,6 +43,7 @@ class CoursesTable extends StatelessWidget {
               color: Colors.black,
               height: 1,
             ),
+            Container(),
             Container(),
             Container(),
           ],
