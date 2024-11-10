@@ -1,11 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/utils/general_table_row.dart';
 
 class CoursesTable extends StatelessWidget {
-  const CoursesTable({super.key});
+  const CoursesTable({super.key, required this.courses});
+
+  final List<Course?> courses;
 
   @override
   Widget build(BuildContext context) {
+    Course? courseOne = courses[0];
+    Course? courseTwo = courses[1];
+    Course? courseThree = courses[2];
+    Course? courseFour = courses[3];
+    Course? courseFive = courses[4];
+
     return Table(
       border: TableBorder.all(),
       //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -25,27 +34,54 @@ class CoursesTable extends StatelessWidget {
           columnThree: "QUANTITY",
           columnFour: "AMOUNT",
         ),
-        GeneralTableRow.row(
-          columnOne: "[Name of Course]",
-        ),
-        GeneralTableRow.row(),
-        GeneralTableRow.row(),
-        GeneralTableRow.row(),
-        GeneralTableRow.row(),
+        courseOne == null
+            ? GeneralTableRow.row()
+            : GeneralTableRow.row(
+                columnOne: "${courseOne.name}",
+                columnTwo: "${courseOne.cost}",
+                columnThree: "${courseOne.quantity}",
+                columnFour: "${courseOne.amount}"),
+        courseTwo == null
+            ? GeneralTableRow.row()
+            : GeneralTableRow.row(
+                columnOne: "${courseTwo.name}",
+                columnTwo: "${courseTwo.cost}",
+                columnThree: "${courseTwo.quantity}",
+                columnFour: "${courseTwo.amount}"),
+        courseThree == null
+            ? GeneralTableRow.row()
+            : GeneralTableRow.row(
+                columnOne: "${courseThree.name}",
+                columnTwo: "${courseThree.cost}",
+                columnThree: "${courseThree.quantity}",
+                columnFour: "${courseThree.amount}"),
+        courseFour == null
+            ? GeneralTableRow.row()
+            : GeneralTableRow.row(
+                columnOne: "${courseFour.name}",
+                columnTwo: "${courseFour.cost}",
+                columnThree: "${courseFour.quantity}",
+                columnFour: "${courseFour.amount}"),
+        courseFive == null
+            ? GeneralTableRow.row()
+            : GeneralTableRow.row(
+                columnOne: "${courseFive.name}",
+                columnTwo: "${courseFive.cost}",
+                columnThree: "${courseFive.quantity}",
+                columnFour: "${courseFive.amount}"),
         GeneralTableRow.row(columnOne: "Subtotal"),
         GeneralTableRow.row(
           columnOne: "HST %13",
         ),
         //Bold Final Top Border
-        TableRow(
+        const TableRow(
           children: [
-            Container(
-              color: Colors.black,
+            SizedBox(
               height: 1,
             ),
-            Container(),
-            Container(),
-            Container(),
+            SizedBox(),
+            SizedBox(),
+            SizedBox(),
           ],
         ),
         GeneralTableRow.row(

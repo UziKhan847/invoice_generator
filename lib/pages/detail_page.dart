@@ -1,13 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
+import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
+import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/tables/courses_table.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/general_text.dart';
 
 class DetailPage extends StatelessWidget {
-  const DetailPage({super.key});
+  const DetailPage({super.key, required this.invoice});
+
+  final Invoice invoice;
 
   @override
   Widget build(BuildContext context) {
+    Sender sender = invoice.senders;
+    Recipient recipient = invoice.recipients;
+    List<Course?> courses = invoice.courses;
+
+    while (courses.length < 5) {
+      courses.add(null);
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Invoice Details"),
@@ -33,10 +47,10 @@ class DetailPage extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
+                          const Text(
                             "Markaz Umaza",
                             style: TextStyle(
                                 fontFamily: "LiberationSans",
@@ -45,16 +59,17 @@ class DetailPage extends StatelessWidget {
                           ),
                           Margins.vertical2,
                           GeneralText(
-                            text: "[Name Optional]",
+                            text: "${sender.name}",
                           ),
                           GeneralText(
-                            text: "118 Chestnut Avenue, Hamitlon, ON",
+                            text:
+                                "${sender.street}, ${sender.city}, ${sender.province}",
                           ),
                           GeneralText(
-                            text: "[letter].saleem@markazumaza.com",
+                            text: invoice.senders.email!,
                           ),
                           GeneralText(
-                            text: "+1 (289)-456-9089",
+                            text: "${sender.phone}",
                           ),
                         ],
                       ),
@@ -95,17 +110,18 @@ class DetailPage extends StatelessWidget {
                             color: Colors.grey,
                           ),
                           Margins.vertical10,
-                          const GeneralText(
-                            text: "[Name/Company Name]",
+                          GeneralText(
+                            text: "${recipient.name}",
                           ),
-                          const GeneralText(
-                            text: "[Street]",
+                          GeneralText(
+                            text: "${recipient.street}",
                           ),
-                          const GeneralText(
-                            text: "[City, Prov, ZIP]",
+                          GeneralText(
+                            text:
+                                "${recipient.city}, ${recipient.province}, ${recipient.zip}",
                           ),
-                          const GeneralText(
-                            text: "[Email]",
+                          GeneralText(
+                            text: "${recipient.email}",
                           ),
                         ],
                       ),
@@ -129,25 +145,25 @@ class DetailPage extends StatelessWidget {
                         ],
                       ),
                       Margins.horizontal6,
-                      const Column(
+                      Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GeneralText(
-                            text: "4085292927",
+                            text: "${invoice.invoiceId}",
                           ),
                           Margins.vertical22,
                           GeneralText(
-                            text: "MM/DD/YYYY",
+                            text: invoice.invoiceDate,
                           ),
                           GeneralText(
-                            text: "MM/DD/YYYY",
+                            text: "${invoice.dueDate}",
                           ),
                         ],
                       ),
                     ],
                   ),
                   Margins.vertical26,
-                  const CoursesTable(),
+                  CoursesTable(courses: courses,),
                   Margins.vertical26,
                   const GeneralText(
                     text:
@@ -171,15 +187,15 @@ class DetailPage extends StatelessWidget {
                             width: 130.0,
                             color: Colors.grey.shade500,
                           ),
-                          const Row(
+                          Row(
                             children: [
-                              GeneralText(
+                              const GeneralText(
                                 text: "E-transfer to: ",
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
                               ),
                               GeneralText(
-                                text: "[etransfer@email.com]",
+                                text: "${sender.eTransfer}",
                                 fontSize: 12,
                               ),
                             ],

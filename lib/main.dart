@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
-import 'package:markaz_umaza_invoice_generator/pages/detail_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/invoice_list_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
@@ -22,12 +21,12 @@ void main() async {
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
-  late final AppData fullData;
-  late final data = fullData.getData();
+  late final AppData provider;
+  late final data = provider.getData();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    fullData = ref.watch(appData);
+    provider = ref.watch(appData);
 
     return MaterialApp(
       title: "Invoice Generator",
@@ -54,14 +53,13 @@ class MyApp extends ConsumerWidget {
           future: data,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return const InvoiceListPage();
+              return InvoiceListPage();
             }
 
             return const LoadingScreenPage();
           }),
       routes: {
-        "/invoice_list_page": (context) => const InvoiceListPage(),
-        "/detail_page": (context) => const DetailPage(),
+        "/invoice_list_page": (context) => InvoiceListPage(),
         "/pdf_preview_page": (context) => const PdfPreviewPage(),
       },
     );
