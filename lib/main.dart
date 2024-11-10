@@ -1,18 +1,34 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/detail_page.dart';
-import 'package:markaz_umaza_invoice_generator/pages/homepage.dart';
 import 'package:markaz_umaza_invoice_generator/pages/invoice_list_page.dart';
+import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
+import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
-  runApp(const MyApp());
+final supabase = Supabase.instance.client;
+
+void main() async {
+  await Supabase.initialize(
+    url: supabaseUrlKey,
+    anonKey: supabaseAnonKey,
+  );
+
+  runApp(ProviderScope(child: MyApp()));
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends ConsumerWidget {
+  MyApp({super.key});
+
+  late final AppData fullData;
+  late final data = fullData.getData();
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    fullData = ref.watch(appData);
+
     return MaterialApp(
       title: "Invoice Generator",
       debugShowCheckedModeBanner: false,
@@ -34,22 +50,20 @@ class MyApp extends StatelessWidget {
           shape: CircleBorder(),
         ),
       ),
-      home: const MyHomePage(),
+      home: FutureBuilder(
+          future: data,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.done) {
+              return const InvoiceListPage();
+            }
+
+            return const LoadingScreenPage();
+          }),
       routes: {
-        "/homepage": (context) => const Homepage(),
         "/invoice_list_page": (context) => const InvoiceListPage(),
         "/detail_page": (context) => const DetailPage(),
         "/pdf_preview_page": (context) => const PdfPreviewPage(),
       },
     );
-  }
-}
-
-class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return const Homepage();
   }
 }
