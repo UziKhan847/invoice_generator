@@ -1,9 +1,20 @@
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_table_row.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class PdfTable {
-  static pw.Table table() => pw.Table(
+  static pw.Table table({
+    required Course? courseOne,
+    required Course? courseTwo,
+    required Course? courseThree,
+    required Course? courseFour,
+    required Course? courseFive,
+    required double subtotal,
+    required double? hst,
+    required double total,
+  }) =>
+      pw.Table(
         border: pw.TableBorder.all(),
         //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: const <int, pw.TableColumnWidth>{
@@ -54,47 +65,77 @@ class PdfTable {
               ),
             ],
           ),
+          courseOne == null
+              ? PdfTableRow.row()
+              : PdfTableRow.row(
+                  font: pw.Font.times(),
+                  columnOne: "1. ${courseOne.name}",
+                  columnTwo: "${courseOne.cost}",
+                  columnThree: "${courseOne.quantity}",
+                  columnFour: "${courseOne.amount}",
+                ),
+          courseTwo == null
+              ? PdfTableRow.row()
+              : PdfTableRow.row(
+                  font: pw.Font.times(),
+                  columnOne: "2. ${courseTwo.name}",
+                  columnTwo: "\$${courseTwo.cost}",
+                  columnThree: "${courseTwo.quantity}",
+                  columnFour: "\$${courseTwo.amount}",
+                ),
+          courseThree == null
+              ? PdfTableRow.row()
+              : PdfTableRow.row(
+                  font: pw.Font.times(),
+                  columnOne: "3. ${courseThree.name}",
+                  columnTwo: "\$${courseThree.cost}",
+                  columnThree: "${courseThree.quantity}",
+                  columnFour: "\$${courseThree.amount}",
+                ),
+          courseFour == null
+              ? PdfTableRow.row()
+              : PdfTableRow.row(
+                  font: pw.Font.times(),
+                  columnOne: "4. ${courseFour.name}",
+                  columnTwo: "\$${courseFour.cost}",
+                  columnThree: "${courseFour.quantity}",
+                  columnFour: "\$${courseFour.amount}",
+                ),
+          courseFive == null
+              ? PdfTableRow.row()
+              : PdfTableRow.row(
+                  font: pw.Font.times(),
+                  columnOne: "5. ${courseFive.name}",
+                  columnTwo: "\$${courseFive.cost}",
+                  columnThree: "${courseFive.quantity}",
+                  columnFour: "\$${courseFive.amount}",
+                ),
           PdfTableRow.row(
-            columnOne: "[Name of Course]",
+              font: pw.Font.times(),
+              columnOne: "Subtotal",
+              columnFour: "\$$subtotal"),
+          PdfTableRow.row(
             font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
-            font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
-            font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
-            font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
-            font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
-            columnOne: "Subtotal",
-            font: pw.Font.times(),
-          ),
-          PdfTableRow.row(
             columnOne: "HST %13",
-            font: pw.Font.times(),
+            columnFour: "\$$hst",
           ),
           //Bold Final Top Border
           pw.TableRow(
             children: [
-              pw.Container(
-                color: const PdfColor(0, 0, 0),
+              pw.SizedBox(
+                // color: const PdfColor(0, 0, 0),
                 height: 1,
               ),
-              pw.Container(),
-              pw.Container(),
-              pw.Container(),
+              pw.SizedBox(),
+              pw.SizedBox(),
+              pw.SizedBox(),
             ],
           ),
           PdfTableRow.row(
-            fontWeight: pw.FontWeight.bold,
-            font: pw.Font.timesBold(),
-            columnOne: "TOTAL",
-          ),
+              fontWeight: pw.FontWeight.bold,
+              font: pw.Font.timesBold(),
+              columnOne: "TOTAL",
+              columnFour: "\$$total"),
         ],
       );
 }

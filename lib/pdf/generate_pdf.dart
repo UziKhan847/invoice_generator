@@ -1,11 +1,21 @@
 import 'package:flutter/services.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
+import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
+import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_table.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_margins.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_text.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generatePdf() async {
+Future<Uint8List> generatePdf({
+  required Invoice invoice,
+  required Sender sender,
+  required Recipient recipient,
+  required List<Course?> courses,
+  required bool showName,
+}) async {
   final pdf = pw.Document();
 
   //Logo
@@ -31,16 +41,16 @@ Future<Uint8List> generatePdf() async {
                 ),
                 PdfMargins.vertical6,
                 PdfText.general(
-                  text: "[Name]",
+                  text: showName ? sender.name : "",
                 ),
                 PdfText.general(
-                  text: "118 Chestnut Avenue, Hamitlon, ON",
+                  text: "${sender.street}, ${sender.city}, ${sender.province}",
                 ),
                 PdfText.general(
-                  text: "[letter].saleem@markazumaza.com",
+                  text: sender.email,
                 ),
                 PdfText.general(
-                  text: "+1 (289)-456-9089",
+                  text: sender.phone,
                 ),
               ],
             ),
@@ -81,16 +91,17 @@ Future<Uint8List> generatePdf() async {
                 ),
                 PdfMargins.vertical10,
                 PdfText.general(
-                  text: "[Name]",
+                  text: recipient.name,
                 ),
                 PdfText.general(
-                  text: "[Street]",
+                  text: recipient.street,
                 ),
                 PdfText.general(
-                  text: "[City, Prov, ZIP]",
+                  text:
+                      "${recipient.city}, ${recipient.province}, ${recipient.zip}",
                 ),
                 PdfText.general(
-                  text: "[Email]",
+                  text: recipient.email,
                 ),
               ],
             ),
@@ -109,7 +120,7 @@ Future<Uint8List> generatePdf() async {
                   fontWeight: pw.FontWeight.bold,
                 ),
                 PdfText.general(
-                  text: "Due Date:",
+                  text: invoice.dueDate == null ? "" : "Due Date:",
                   fontWeight: pw.FontWeight.bold,
                 ),
               ],
@@ -120,21 +131,30 @@ Future<Uint8List> generatePdf() async {
               children: [
                 PdfMargins.vertical4,
                 PdfText.general(
-                  text: "4085292927",
+                  text: "#${invoice.invoiceId}",
                 ),
                 PdfMargins.vertical22,
                 PdfText.general(
-                  text: "MM/DD/YYYY",
+                  text: invoice.invoiceDate,
                 ),
                 PdfText.general(
-                  text: "MM/DD/YYYY",
+                  text: invoice.dueDate ?? "",
                 ),
               ],
             ),
           ],
         ),
         PdfMargins.vertical48,
-        PdfTable.table(),
+        PdfTable.table(
+          courseOne: courses[0],
+          courseTwo: courses[1],
+          courseThree: courses[2],
+          courseFour: courses[3],
+          courseFive: courses[4],
+          subtotal: invoice.subtotal,
+          hst: invoice.hst,
+          total: invoice.total,
+        ),
         PdfMargins.vertical48,
         PdfText.general(
           text:
@@ -168,7 +188,7 @@ Future<Uint8List> generatePdf() async {
                       fontWeight: pw.FontWeight.bold,
                     ),
                     PdfText.general(
-                      text: "[etransfer@email.com]",
+                      text: "${sender.eTransfer}",
                       fontSize: 12,
                     ),
                   ],

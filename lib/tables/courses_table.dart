@@ -3,9 +3,17 @@ import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/utils/general_table_row.dart';
 
 class CoursesTable extends StatelessWidget {
-  const CoursesTable({super.key, required this.courses});
+  const CoursesTable(
+      {super.key,
+      required this.courses,
+      required this.subtotal,
+      required this.hst,
+      required this.total});
 
   final List<Course?> courses;
+  final double subtotal;
+  final double? hst;
+  final double total;
 
   @override
   Widget build(BuildContext context) {
@@ -37,41 +45,45 @@ class CoursesTable extends StatelessWidget {
         courseOne == null
             ? GeneralTableRow.row()
             : GeneralTableRow.row(
-                columnOne: "${courseOne.name}",
-                columnTwo: "${courseOne.cost}",
+                columnOne: "1. ${courseOne.name}",
+                columnTwo: "\$${courseOne.cost}",
                 columnThree: "${courseOne.quantity}",
-                columnFour: "${courseOne.amount}"),
+                columnFour: "\$${courseOne.amount}"),
         courseTwo == null
             ? GeneralTableRow.row()
             : GeneralTableRow.row(
-                columnOne: "${courseTwo.name}",
-                columnTwo: "${courseTwo.cost}",
+                columnOne: "2. ${courseTwo.name}",
+                columnTwo: "\$${courseTwo.cost}",
                 columnThree: "${courseTwo.quantity}",
-                columnFour: "${courseTwo.amount}"),
+                columnFour: "\$${courseTwo.amount}"),
         courseThree == null
             ? GeneralTableRow.row()
             : GeneralTableRow.row(
-                columnOne: "${courseThree.name}",
-                columnTwo: "${courseThree.cost}",
+                columnOne: "3. ${courseThree.name}",
+                columnTwo: "\$${courseThree.cost}",
                 columnThree: "${courseThree.quantity}",
-                columnFour: "${courseThree.amount}"),
+                columnFour: "\$${courseThree.amount}"),
         courseFour == null
             ? GeneralTableRow.row()
             : GeneralTableRow.row(
-                columnOne: "${courseFour.name}",
-                columnTwo: "${courseFour.cost}",
+                columnOne: "4. ${courseFour.name}",
+                columnTwo: "\$${courseFour.cost}",
                 columnThree: "${courseFour.quantity}",
-                columnFour: "${courseFour.amount}"),
+                columnFour: "\$${courseFour.amount}"),
         courseFive == null
             ? GeneralTableRow.row()
             : GeneralTableRow.row(
-                columnOne: "${courseFive.name}",
-                columnTwo: "${courseFive.cost}",
+                columnOne: "5. ${courseFive.name}",
+                columnTwo: "\$${courseFive.cost}",
                 columnThree: "${courseFive.quantity}",
-                columnFour: "${courseFive.amount}"),
-        GeneralTableRow.row(columnOne: "Subtotal"),
+                columnFour: "\$${courseFive.amount}"),
+        GeneralTableRow.row(
+          columnOne: "Subtotal",
+          columnFour: "\$$subtotal",
+        ),
         GeneralTableRow.row(
           columnOne: "HST %13",
+          columnFour: "\$$hst",
         ),
         //Bold Final Top Border
         const TableRow(
@@ -87,6 +99,7 @@ class CoursesTable extends StatelessWidget {
         GeneralTableRow.row(
           fontWeight: FontWeight.bold,
           columnOne: "TOTAL",
+          columnFour: "\$$total",
         ),
       ],
     );

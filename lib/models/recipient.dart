@@ -18,13 +18,13 @@ Recipient({
 @JsonKey(name: 'recipient_id')
 int recipientId;
 
-String? name;
-String? street;
-String? city;
-String? province;
-String? zip;
-String? phone;
-String? email;
+String name;
+String street;
+String city;
+String province;
+String zip;
+String phone;
+String email;
 
 
 factory Recipient.fromJson(Map<String, dynamic> json) => _$RecipientFromJson(json);

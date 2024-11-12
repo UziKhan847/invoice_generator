@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/invoice_list_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
-import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -32,23 +31,29 @@ class MyApp extends ConsumerWidget {
       title: "Invoice Generator",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        appBarTheme: const AppBarTheme(
+          appBarTheme: const AppBarTheme(
+              backgroundColor: Color(0xFF951414),
+              foregroundColor: Colors.white,
+              shadowColor: Colors.black,
+              elevation: 4,
+              centerTitle: true),
+          listTileTheme: const ListTileThemeData(
+              titleTextStyle: TextStyle(fontSize: 20),
+              textColor: Colors.black,
+              tileColor: Color(0xFFF7F7F7)),
+          floatingActionButtonTheme: const FloatingActionButtonThemeData(
             backgroundColor: Color(0xFF951414),
             foregroundColor: Colors.white,
-            shadowColor: Colors.black,
             elevation: 4,
-            centerTitle: true),
-        listTileTheme: const ListTileThemeData(
-            titleTextStyle: TextStyle(fontSize: 20),
-            textColor: Colors.black,
-            tileColor: Color(0xFFF7F7F7)),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF951414),
-          foregroundColor: Colors.white,
-          elevation: 4,
-          shape: CircleBorder(),
-        ),
-      ),
+            shape: CircleBorder(),
+          ),
+          elevatedButtonTheme: const ElevatedButtonThemeData(
+              style: ButtonStyle(
+            backgroundColor: WidgetStatePropertyAll(Colors.white),
+            foregroundColor: WidgetStatePropertyAll(Color(0xFF951414)),
+            elevation: WidgetStatePropertyAll(4),
+            overlayColor: WidgetStatePropertyAll(Color(0xFFFFC9C9)),
+          ))),
       home: FutureBuilder(
           future: data,
           builder: (context, snapshot) {
@@ -58,10 +63,6 @@ class MyApp extends ConsumerWidget {
 
             return const LoadingScreenPage();
           }),
-      routes: {
-        "/invoice_list_page": (context) => InvoiceListPage(),
-        "/pdf_preview_page": (context) => const PdfPreviewPage(),
-      },
     );
   }
 }

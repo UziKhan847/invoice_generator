@@ -13,12 +13,12 @@ class Course {
   });
 
   @JsonKey(name: 'course_id')
-  int? courseId;
+  int courseId;
 
-  String? name;
-  double? cost;
-  int? quantity;
-  double? amount;
+  String name;
+  double cost;
+  int quantity;
+  double amount;
 
   factory Course.fromJson(Map<String, dynamic> json) => _$CourseFromJson(json);
 

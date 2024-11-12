@@ -46,7 +46,7 @@ class InvoiceTile extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      invoice.senders.name!,
+                      invoice.senders.name,
                       style: const TextStyle(fontSize: 16),
                     )
                   ],
@@ -60,7 +60,7 @@ class InvoiceTile extends StatelessWidget {
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      invoice.recipients.name!,
+                      invoice.recipients.name,
                       style: const TextStyle(fontSize: 16),
                     )
                   ],
