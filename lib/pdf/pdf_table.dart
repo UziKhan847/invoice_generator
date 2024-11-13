@@ -84,13 +84,11 @@ class PdfTable {
           //Bold Final Top Border
           pw.TableRow(
             children: [
-              pw.SizedBox(
-                // color: const PdfColor(0, 0, 0),
-                height: 1,
-              ),
-              pw.SizedBox(),
-              pw.SizedBox(),
-              pw.SizedBox(),
+              for (int i = 0; i < 4; i++) ...[
+                pw.SizedBox(
+                  height: 1,
+                ),
+              ],
             ],
           ),
           PdfTableRow.row(
