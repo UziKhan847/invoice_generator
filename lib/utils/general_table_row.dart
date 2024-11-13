@@ -7,7 +7,7 @@ class GeneralTableRow {
           FontWeight? fontWeight,
           String? fontFamily = "times",
           double? fontSizeOne = 8.0,
-          double? fontSizTwo = 8.0,
+          double? fontSizeTwo = 8.0,
           double? fontSizeThree = 8.0,
           double? fontSizeFour = 8.0,
           String columnOne = "",
@@ -32,7 +32,7 @@ class GeneralTableRow {
             child: Text(columnTwo,
                 textAlign: textAlign,
                 style: TextStyle(
-                  fontSize: fontSizTwo,
+                  fontSize: fontSizeTwo,
                   fontWeight: fontWeight,
                   fontFamily: fontFamily,
                 )),

@@ -5,11 +5,7 @@ import 'package:pdf/widgets.dart' as pw;
 
 class PdfTable {
   static pw.Table table({
-    required Course? courseOne,
-    required Course? courseTwo,
-    required Course? courseThree,
-    required Course? courseFour,
-    required Course? courseFive,
+    required List<Course?> courses,
     required double subtotal,
     required double? hst,
     required double total,
@@ -65,51 +61,17 @@ class PdfTable {
               ),
             ],
           ),
-          courseOne == null
-              ? PdfTableRow.row()
-              : PdfTableRow.row(
-                  font: pw.Font.times(),
-                  columnOne: "1. ${courseOne.name}",
-                  columnTwo: "${courseOne.cost}",
-                  columnThree: "${courseOne.quantity}",
-                  columnFour: "${courseOne.amount}",
-                ),
-          courseTwo == null
-              ? PdfTableRow.row()
-              : PdfTableRow.row(
-                  font: pw.Font.times(),
-                  columnOne: "2. ${courseTwo.name}",
-                  columnTwo: "\$${courseTwo.cost}",
-                  columnThree: "${courseTwo.quantity}",
-                  columnFour: "\$${courseTwo.amount}",
-                ),
-          courseThree == null
-              ? PdfTableRow.row()
-              : PdfTableRow.row(
-                  font: pw.Font.times(),
-                  columnOne: "3. ${courseThree.name}",
-                  columnTwo: "\$${courseThree.cost}",
-                  columnThree: "${courseThree.quantity}",
-                  columnFour: "\$${courseThree.amount}",
-                ),
-          courseFour == null
-              ? PdfTableRow.row()
-              : PdfTableRow.row(
-                  font: pw.Font.times(),
-                  columnOne: "4. ${courseFour.name}",
-                  columnTwo: "\$${courseFour.cost}",
-                  columnThree: "${courseFour.quantity}",
-                  columnFour: "\$${courseFour.amount}",
-                ),
-          courseFive == null
-              ? PdfTableRow.row()
-              : PdfTableRow.row(
-                  font: pw.Font.times(),
-                  columnOne: "5. ${courseFive.name}",
-                  columnTwo: "\$${courseFive.cost}",
-                  columnThree: "${courseFive.quantity}",
-                  columnFour: "\$${courseFive.amount}",
-                ),
+          for (int i = 0; i < 5; i++) ...[
+            courses[i] == null
+                ? PdfTableRow.row()
+                : PdfTableRow.row(
+                    font: pw.Font.times(),
+                    columnOne: "${i + 1}. ${courses[i]!.name}",
+                    columnTwo: "${courses[i]!.cost}",
+                    columnThree: "${courses[i]!.quantity}",
+                    columnFour: "${courses[i]!.amount}",
+                  ),
+          ],
           PdfTableRow.row(
               font: pw.Font.times(),
               columnOne: "Subtotal",

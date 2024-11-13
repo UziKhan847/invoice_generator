@@ -17,12 +17,6 @@ class CoursesTable extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Course? courseOne = courses[0];
-    Course? courseTwo = courses[1];
-    Course? courseThree = courses[2];
-    Course? courseFour = courses[3];
-    Course? courseFive = courses[4];
-
     return Table(
       border: TableBorder.all(),
       //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
@@ -42,41 +36,15 @@ class CoursesTable extends StatelessWidget {
           columnThree: "QUANTITY",
           columnFour: "AMOUNT",
         ),
-        courseOne == null
-            ? GeneralTableRow.row()
-            : GeneralTableRow.row(
-                columnOne: "1. ${courseOne.name}",
-                columnTwo: "\$${courseOne.cost}",
-                columnThree: "${courseOne.quantity}",
-                columnFour: "\$${courseOne.amount}"),
-        courseTwo == null
-            ? GeneralTableRow.row()
-            : GeneralTableRow.row(
-                columnOne: "2. ${courseTwo.name}",
-                columnTwo: "\$${courseTwo.cost}",
-                columnThree: "${courseTwo.quantity}",
-                columnFour: "\$${courseTwo.amount}"),
-        courseThree == null
-            ? GeneralTableRow.row()
-            : GeneralTableRow.row(
-                columnOne: "3. ${courseThree.name}",
-                columnTwo: "\$${courseThree.cost}",
-                columnThree: "${courseThree.quantity}",
-                columnFour: "\$${courseThree.amount}"),
-        courseFour == null
-            ? GeneralTableRow.row()
-            : GeneralTableRow.row(
-                columnOne: "4. ${courseFour.name}",
-                columnTwo: "\$${courseFour.cost}",
-                columnThree: "${courseFour.quantity}",
-                columnFour: "\$${courseFour.amount}"),
-        courseFive == null
-            ? GeneralTableRow.row()
-            : GeneralTableRow.row(
-                columnOne: "5. ${courseFive.name}",
-                columnTwo: "\$${courseFive.cost}",
-                columnThree: "${courseFive.quantity}",
-                columnFour: "\$${courseFive.amount}"),
+        for (int i = 0; i < 5; i++) ...[
+          courses[i] == null
+              ? GeneralTableRow.row()
+              : GeneralTableRow.row(
+                  columnOne: "${i + 1}. ${courses[i]!.name}",
+                  columnTwo: "\$${courses[i]!.cost}",
+                  columnThree: "${courses[i]!.quantity}",
+                  columnFour: "\$${courses[i]!.amount}"),
+        ],
         GeneralTableRow.row(
           columnOne: "Subtotal",
           columnFour: "\$$subtotal",
@@ -86,14 +54,13 @@ class CoursesTable extends StatelessWidget {
           columnFour: "\$$hst",
         ),
         //Bold Final Top Border
-        const TableRow(
+        TableRow(
           children: [
-            SizedBox(
-              height: 1,
-            ),
-            SizedBox(),
-            SizedBox(),
-            SizedBox(),
+            for (int i = 0; i < 4; i++) ...[
+              const SizedBox(
+                height: 1,
+              )
+            ]
           ],
         ),
         GeneralTableRow.row(

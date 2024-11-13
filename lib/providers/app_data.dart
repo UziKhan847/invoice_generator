@@ -14,6 +14,7 @@ final appData = ChangeNotifierProvider<AppData>((ref) {
 class AppData extends ChangeNotifier {
   late PostgrestList invoiceData;
   late List<Invoice> invoices;
+  late PostgrestList invoiceId;
 
   late PostgrestList senderData;
   late List<Sender> senders;
@@ -24,6 +25,7 @@ class AppData extends ChangeNotifier {
   late PostgrestList courseData;
   late List<Course> courses;
 
+  //Fetch Data Methods
   Future<void> getData() async {
     try {
       invoiceData = await supabase
@@ -56,4 +58,20 @@ class AppData extends ChangeNotifier {
       print(e);
     }
   }
+
+  Future<void> getInvoiceId() async {
+    await supabase
+    .from("invoices")
+    .select("invoice_id");
+  }
+
+
+  //Insert Data Methods
+  Future<void> insertInvoice() async {}
+
+  Future<void> insertSender() async {}
+
+  Future<void> insertRecipient() async {}
+
+  Future<void> insertCourse() async {}
 }

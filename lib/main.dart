@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
-import 'package:markaz_umaza_invoice_generator/pages/invoice_list_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
+import 'package:markaz_umaza_invoice_generator/pages/tabs_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -58,7 +58,7 @@ class MyApp extends ConsumerWidget {
           future: data,
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.done) {
-              return InvoiceListPage();
+              return const TabsPage();
             }
 
             return const LoadingScreenPage();

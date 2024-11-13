@@ -146,11 +146,7 @@ Future<Uint8List> generatePdf({
         ),
         PdfMargins.vertical48,
         PdfTable.table(
-          courseOne: courses[0],
-          courseTwo: courses[1],
-          courseThree: courses[2],
-          courseFour: courses[3],
-          courseFive: courses[4],
+          courses: courses,
           subtotal: invoice.subtotal,
           hst: invoice.hst,
           total: invoice.total,

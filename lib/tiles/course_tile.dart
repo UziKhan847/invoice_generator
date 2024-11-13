@@ -1,31 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
-import 'package:markaz_umaza_invoice_generator/pages/detail_page.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
+import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 
-class InvoiceTile extends StatelessWidget {
-  const InvoiceTile({super.key, required this.invoice});
+class CourseTile extends StatelessWidget {
+  const CourseTile({super.key, required this.course});
 
-  final Invoice invoice;
+  final Course course;
 
   @override
   Widget build(BuildContext context) {
-    invoice.courses.removeWhere((e) => e == null);
-
     return GestureDetector(
-      onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-                builder: (context) => DetailPage(
-                      invoice: invoice,
-                    )));
-      },
+      onTap: () {},
       child: Column(
         children: [
           ListTile(
             leading: const Icon(
-              Icons.receipt,
+              Icons.my_library_books,
               size: 20,
             ),
             title: Column(
@@ -33,12 +24,12 @@ class InvoiceTile extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Invoice Id: ",
+                      "Course Id: ",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      '${invoice.invoiceId}',
+                      "${course.courseId}",
                       style: const TextStyle(fontSize: 12),
                     )
                   ],
@@ -47,12 +38,12 @@ class InvoiceTile extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Sender: ",
+                      "Course Name: ",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      invoice.senders.name,
+                      course.name,
                       style: const TextStyle(fontSize: 12),
                     )
                   ],
@@ -61,38 +52,45 @@ class InvoiceTile extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Recipient: ",
+                      "Course Cost (Hourly): ",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      invoice.recipients.name,
+                      "\$${course.cost}",
                       style: const TextStyle(fontSize: 12),
                     )
                   ],
                 ),
                 Margins.vertical4,
-                for (int i = 0; i < invoice.courses.length; i++) ...[
-                  Row(
-                    children: [
-                      Text(
-                        "Course ${i + 1}: ",
-                        style: const TextStyle(
-                            fontSize: 12, fontWeight: FontWeight.bold),
-                      ),
-                      Text(
-                        invoice.courses[i]!.name,
-                        style: const TextStyle(fontSize: 12),
-                      )
-                    ],
-                  ),
-                  Margins.vertical4,
-                ],
+                Row(
+                  children: [
+                    const Text(
+                      "Course Quantity (# of Hours): ",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "${course.quantity}",
+                      style: const TextStyle(fontSize: 12),
+                    )
+                  ],
+                ),
+                Margins.vertical4,
+                Row(
+                  children: [
+                    const Text(
+                      "Total Amount (Excluding Tax): ",
+                      style:
+                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                    ),
+                    Text(
+                      "\$${course.amount}",
+                      style: const TextStyle(fontSize: 12),
+                    )
+                  ],
+                ),
               ],
-            ),
-            trailing: Text(
-              "\$${invoice.total}",
-              style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),
           ),
           const Divider(
