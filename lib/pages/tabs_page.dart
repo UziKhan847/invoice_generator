@@ -15,20 +15,99 @@ class TabsPage extends ConsumerStatefulWidget {
 }
 
 class _TabPageState extends ConsumerState<TabsPage>
-    with TickerProviderStateMixin {
-  int selectedIndex = 0;
+    with SingleTickerProviderStateMixin {
   late AppData provider;
 
   late TabController tabController;
+  Color? appBarColor;
+  Color? indicatorColor;
+  int selectedIndex = 0;
+  double currentIndex = 0;
+  late double animationValue;
+  late double offset;
+  late bool swipeRight;
+  double counter = 0;
 
   @override
   void initState() {
     super.initState();
     tabController = TabController(length: 5, vsync: this);
 
-    tabController.addListener(() {
+    tabController.animation!.addListener(() {
+      animationValue = tabController.animation!.value;
+      offset = tabController.offset;
+      currentIndex = animationValue % 1 == 0
+          ? tabController.animation!.value
+          : currentIndex;
+      selectedIndex = tabController.index;
+      swipeRight = animationValue > currentIndex;
+
       setState(() {
-        selectedIndex = tabController.index;
+        if (selectedIndex != 0) {
+          counter = 0;
+        }
+
+        if (swipeRight) {
+          if (animationValue > selectedIndex) {
+            appBarColor = Color.lerp(
+              getAppBarColor(selectedIndex),
+              getAppBarColor(selectedIndex + 1),
+              offset.abs(),
+            );
+
+            indicatorColor = Color.lerp(
+              getIndicatorColor(selectedIndex),
+              getIndicatorColor(selectedIndex + 1),
+              offset.abs(),
+            );
+          } else if (animationValue < selectedIndex) {
+            appBarColor = Color.lerp(
+              getAppBarColor(currentIndex.toInt()),
+              getAppBarColor(selectedIndex),
+              (animationValue / selectedIndex).abs(),
+            );
+
+            indicatorColor = Color.lerp(
+              getIndicatorColor(currentIndex.toInt()),
+              getIndicatorColor(selectedIndex),
+              (animationValue / selectedIndex).abs(),
+            );
+          }
+        } else {
+          if (animationValue < selectedIndex) {
+            appBarColor = Color.lerp(
+              getAppBarColor(selectedIndex),
+              getAppBarColor(selectedIndex - 1),
+              offset.abs(),
+            );
+
+            indicatorColor = Color.lerp(
+              getIndicatorColor(selectedIndex),
+              getIndicatorColor(selectedIndex - 1),
+              offset.abs(),
+            );
+          } else if (animationValue > selectedIndex) {
+            appBarColor = Color.lerp(
+              getAppBarColor(currentIndex.toInt()),
+              getAppBarColor(selectedIndex),
+              selectedIndex != 0
+                  ? (selectedIndex / animationValue).abs()
+                  : counter >= 1
+                      ? 1
+                      : (counter = counter + 0.15),
+            );
+
+            indicatorColor = Color.lerp(
+              getIndicatorColor(currentIndex.toInt()),
+              getIndicatorColor(selectedIndex),
+              selectedIndex != 0
+                  ? (selectedIndex / animationValue).abs()
+                  : counter >= 1
+                      ? 1
+                      : (counter = counter + 0.15),
+            );
+          }
+        }
       });
     });
   }
@@ -39,22 +118,24 @@ class _TabPageState extends ConsumerState<TabsPage>
     super.dispose();
   }
 
-  Color? changeColor(int index) {
+  Color? getAppBarColor(int index) {
     switch (index) {
       case 0:
         return Theme.of(context).appBarTheme.backgroundColor;
       case 1:
         return const Color(0xFFAD6D20);
       case 2:
-        return const Color.fromARGB(255, 30, 87, 151);
+        return const Color(0xFF1E5797);
       case 3:
-        return const Color.fromARGB(255, 16, 112, 56);
+        return const Color(0xFF107038);
       case 4:
-        return const Color.fromARGB(255, 66, 16, 112);
+        return const Color(0xFF421070);
+      default:
+        return Theme.of(context).appBarTheme.backgroundColor;
     }
   }
 
-  Color? changeIndicatorColor(int index) {
+  Color? getIndicatorColor(int index) {
     switch (index) {
       case 0:
         return const Color(0xFFF6857D);
@@ -66,6 +147,8 @@ class _TabPageState extends ConsumerState<TabsPage>
         return const Color.fromARGB(255, 165, 255, 203);
       case 4:
         return const Color.fromARGB(255, 221, 185, 255);
+      default:
+        return const Color(0xFFF6857D);
     }
   }
 
@@ -80,7 +163,7 @@ class _TabPageState extends ConsumerState<TabsPage>
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                backgroundColor: changeColor(selectedIndex),
+                backgroundColor: appBarColor, //changeColor(selectedIndex),
                 foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
                 title: const GeneralText(
                   text: "Invoice Generator",
@@ -91,13 +174,14 @@ class _TabPageState extends ConsumerState<TabsPage>
                 pinned: true,
                 floating: true,
                 bottom: TabBar(
+                  onTap: null,
                   tabAlignment: TabAlignment.start,
                   indicatorWeight: 2,
                   overlayColor:
                       const WidgetStatePropertyAll(Colors.transparent),
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                      color: changeIndicatorColor(selectedIndex),
+                      color: indicatorColor ?? const Color(0xFFF6857D),
                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10),
                           topLeft: Radius.circular(10))),
@@ -105,11 +189,6 @@ class _TabPageState extends ConsumerState<TabsPage>
                   labelColor: Colors.black,
                   unselectedLabelColor: Colors.white,
                   controller: tabController,
-                  // onTap: (index) {
-                  //   setState(() {
-                  //     selectedIndex = index;
-                  //   });
-                  // },
                   isScrollable: true,
                   tabs: const [
                     Tab(text: "Invoices"),
@@ -123,68 +202,29 @@ class _TabPageState extends ConsumerState<TabsPage>
             ];
           },
           body: TabBarView(
-            physics: const NeverScrollableScrollPhysics(),
+            //physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
             children: [
-              InvoiceListBuilder(
-                invoices: provider.invoices,
-              ),
-              SenderListBuilder(senders: provider.senders),
-              RecipientListBuilder(recipients: provider.recipients),
-              CourseListBuilder(
-                courses: provider.courses,
-              ),
+              // InvoiceListBuilder(
+              //   invoices: provider.invoices,
+              // ),
+              // SenderListBuilder(senders: provider.senders),
+              // RecipientListBuilder(recipients: provider.recipients),
+              // CourseListBuilder(
+              //   courses: provider.courses,
+              // ),
+              const Center(child: Text("RECEIPTS")),
+              const Center(child: Text("RECEIPTS")),
+              const Center(child: Text("RECEIPTS")),
+              const Center(child: Text("RECEIPTS")),
               const Center(child: Text("RECEIPTS")),
             ],
           ),
         ),
-        //  AppBar(
-        //   backgroundColor: changeColor(selectedIndex),
-        //   title: const GeneralText(
-        //     text: "Invoice Generator",
-        //     fontFamily: "LiberationSans",
-        //     fontWeight: FontWeight.bold,
-        //     fontSize: 20,
-        //   ),
-        //   bottom: TabBar(
-        //     overlayColor: const WidgetStatePropertyAll(Colors.transparent),
-        //     indicatorSize: TabBarIndicatorSize.tab,
-        //     indicator: BoxDecoration(
-        //         color: changeIndicatorColor(selectedIndex),
-        //         borderRadius: const BorderRadius.only(
-        //             topRight: Radius.circular(10),
-        //             topLeft: Radius.circular(10))),
-        //     labelPadding: const EdgeInsets.all(0),
-        //     labelColor: Colors.black,
-        //     unselectedLabelColor: Colors.white,
-        //     // controller: tabController,
-        //     onTap: (index) {
-        //       setState(() {
-        //         selectedIndex = index;
-        //       });
-        //     },
-        //     tabs: const [
-        //       Tab(text: "Invoices"),
-        //       Tab(text: "Senders"),
-        //       Tab(text: "Recipients"),
-        //       Tab(text: "Reciepts"),
-        //     ],
-        //   ),
-        // ),
-        // body: TabBarView(
-        //   // controller: tabController,
-        //   children: [
-        //     InvoiceListBuilder(
-        //       invoices: provider.invoices,
-        //     ),
-        //     SenderListBuilder(senders: provider.senders),
-        //     RecipientListBuilder(recipients: provider.recipients),
-        //     Center(child: Text("RECIIPTS")),
-        //   ],
-        // ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {},
-          backgroundColor: changeColor(selectedIndex),
+          backgroundColor: appBarColor,
+          //splashColor: labelColor ?? const Color(0xFFF6857D),
           child: const Icon(Icons.add),
         ),
       ),

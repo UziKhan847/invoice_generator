@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
-import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 
 class CourseTile extends StatelessWidget {

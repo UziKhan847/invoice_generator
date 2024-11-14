@@ -20,12 +20,12 @@ void main() async {
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
-  late final AppData provider;
-  late final data = provider.getData();
+  // late final AppData provider;
+  // late final data = provider.getData();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    provider = ref.watch(appData);
+    // provider = ref.watch(appData);
 
     return MaterialApp(
       title: "Invoice Generator",
@@ -54,15 +54,16 @@ class MyApp extends ConsumerWidget {
             elevation: WidgetStatePropertyAll(4),
             overlayColor: WidgetStatePropertyAll(Color(0xFFFFC9C9)),
           ))),
-      home: FutureBuilder(
-          future: data,
-          builder: (context, snapshot) {
-            if (snapshot.connectionState == ConnectionState.done) {
-              return const TabsPage();
-            }
+      home: TabsPage() 
+      // FutureBuilder(
+      //     future: data,
+      //     builder: (context, snapshot) {
+      //       if (snapshot.connectionState == ConnectionState.done) {
+      //         return const TabsPage();
+      //       }
 
-            return const LoadingScreenPage();
-          }),
+      //       return const LoadingScreenPage();
+      //     }),
     );
   }
 }
