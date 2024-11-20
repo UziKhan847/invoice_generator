@@ -24,6 +24,7 @@ class AppData extends ChangeNotifier {
 
   late PostgrestList courseData;
   late List<Course> courses;
+  late PostgrestList newCourse;
 
   //Fetch Data Methods
   Future<void> getData() async {
@@ -60,11 +61,8 @@ class AppData extends ChangeNotifier {
   }
 
   Future<void> getInvoiceId() async {
-    await supabase
-    .from("invoices")
-    .select("invoice_id");
+    await supabase.from("invoices").select("invoice_id");
   }
-
 
   //Insert Data Methods
   Future<void> insertInvoice() async {}
@@ -73,5 +71,18 @@ class AppData extends ChangeNotifier {
 
   Future<void> insertRecipient() async {}
 
-  Future<void> insertCourse() async {}
+  Future<void> insertCourse() async {
+    try {
+      newCourse = await supabase.from("courses").insert(
+          {'name': 'Typing Arabic', 'cost': 20.0, 'quantity': 8}).select();
+
+      courses.add(Course.fromJson(newCourse[0]));
+
+      notifyListeners();
+
+      print("SUCCES");
+    } catch (e) {
+      print("FAILED");
+    }
+  }
 }

@@ -1,9 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:markaz_umaza_invoice_generator/list%20view%20builders/course_list_builder.dart';
-import 'package:markaz_umaza_invoice_generator/list%20view%20builders/invoice_list_builder.dart';
-import 'package:markaz_umaza_invoice_generator/list%20view%20builders/recipient_list_builder.dart';
-import 'package:markaz_umaza_invoice_generator/list%20view%20builders/sender_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/adding_data/add_course.dart';
+import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/list_view_builders/invoice_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/general_text.dart';
 
@@ -18,138 +21,75 @@ class _TabPageState extends ConsumerState<TabsPage>
     with SingleTickerProviderStateMixin {
   late AppData provider;
 
-  late TabController tabController;
-  Color? appBarColor;
-  Color? indicatorColor;
-  int selectedIndex = 0;
-  double currentIndex = 0;
-  late double animationValue;
-  late double offset;
-  late bool swipeRight;
-  double counter = 0;
+  late TabController tabController = TabController(length: 5, vsync: this);
+  // int currentIndex = 0;
+  // int nextIndex = 0;
+  // double lerp = 0.0;
+  // bool isTransitioning = false;
 
-  @override
-  void initState() {
-    super.initState();
-    tabController = TabController(length: 5, vsync: this);
+  // final appBarColors = [
+  //   const Color(0xFF951414),
+  //   const Color(0xFFAD6D20),
+  //   const Color(0xFF1E5797),
+  //   const Color(0xFF107038),
+  //   const Color(0xFF421070)
+  // ];
 
-    tabController.animation!.addListener(() {
-      animationValue = tabController.animation!.value;
-      offset = tabController.offset;
-      currentIndex = animationValue % 1 == 0
-          ? tabController.animation!.value
-          : currentIndex;
-      selectedIndex = tabController.index;
-      swipeRight = animationValue > currentIndex;
+  // final indicatorColors = [
+  //   const Color(0xFFF6857D),
+  //   const Color(0xFFFFCA8A),
+  //   const Color(0xFFA3CEFF),
+  //   const Color(0xFFA5FFCB),
+  //   const Color(0xFFDDB9FF)
+  // ];
 
-      setState(() {
-        if (selectedIndex != 0) {
-          counter = 0;
-        }
+  // Color? get appBarColor {
+  //   return Color.lerp(
+  //     appBarColors[currentIndex],
+  //     appBarColors[nextIndex],
+  //     lerp,
+  //   );
+  // }
 
-        if (swipeRight) {
-          if (animationValue > selectedIndex) {
-            appBarColor = Color.lerp(
-              getAppBarColor(selectedIndex),
-              getAppBarColor(selectedIndex + 1),
-              offset.abs(),
-            );
+  // Color? get indicatorColor {
+  //   return Color.lerp(
+  //     indicatorColors[currentIndex],
+  //     indicatorColors[nextIndex],
+  //     lerp,
+  //   );
+  // }
 
-            indicatorColor = Color.lerp(
-              getIndicatorColor(selectedIndex),
-              getIndicatorColor(selectedIndex + 1),
-              offset.abs(),
-            );
-          } else if (animationValue < selectedIndex) {
-            appBarColor = Color.lerp(
-              getAppBarColor(currentIndex.toInt()),
-              getAppBarColor(selectedIndex),
-              (animationValue / selectedIndex).abs(),
-            );
+  // @override
+  // void initState() {
+  //   super.initState();
 
-            indicatorColor = Color.lerp(
-              getIndicatorColor(currentIndex.toInt()),
-              getIndicatorColor(selectedIndex),
-              (animationValue / selectedIndex).abs(),
-            );
-          }
-        } else {
-          if (animationValue < selectedIndex) {
-            appBarColor = Color.lerp(
-              getAppBarColor(selectedIndex),
-              getAppBarColor(selectedIndex - 1),
-              offset.abs(),
-            );
+  //   tabController.animation!.addListener(() {
+  //     final animationValue = tabController.animation!.value;
+  //     isTransitioning = animationValue % 1 == 0;
+  //     final tabIndex = tabController.index;
+  //     currentIndex = isTransitioning ? animationValue.toInt() : currentIndex;
+  //     final differenceOnTap = (tabIndex - currentIndex).abs();
+  //     final swipeRight = animationValue > currentIndex;
 
-            indicatorColor = Color.lerp(
-              getIndicatorColor(selectedIndex),
-              getIndicatorColor(selectedIndex - 1),
-              offset.abs(),
-            );
-          } else if (animationValue > selectedIndex) {
-            appBarColor = Color.lerp(
-              getAppBarColor(currentIndex.toInt()),
-              getAppBarColor(selectedIndex),
-              selectedIndex != 0
-                  ? (selectedIndex / animationValue).abs()
-                  : counter >= 1
-                      ? 1
-                      : (counter = counter + 0.15),
-            );
+  //     //onSwipe
+  //     if (currentIndex == tabIndex) {
+  //       nextIndex = swipeRight ? animationValue.ceil() : animationValue.floor();
+  //       lerp = tabController.offset.abs();
+  //     }
+  //     //onTap
+  //     else {
+  //       nextIndex = tabIndex;
+  //       lerp = (animationValue - currentIndex).abs() / differenceOnTap;
+  //     }
 
-            indicatorColor = Color.lerp(
-              getIndicatorColor(currentIndex.toInt()),
-              getIndicatorColor(selectedIndex),
-              selectedIndex != 0
-                  ? (selectedIndex / animationValue).abs()
-                  : counter >= 1
-                      ? 1
-                      : (counter = counter + 0.15),
-            );
-          }
-        }
-      });
-    });
-  }
+  //     setState(() {});
+  //   });
+  // }
 
   @override
   void dispose() {
     tabController.dispose();
     super.dispose();
-  }
-
-  Color? getAppBarColor(int index) {
-    switch (index) {
-      case 0:
-        return Theme.of(context).appBarTheme.backgroundColor;
-      case 1:
-        return const Color(0xFFAD6D20);
-      case 2:
-        return const Color(0xFF1E5797);
-      case 3:
-        return const Color(0xFF107038);
-      case 4:
-        return const Color(0xFF421070);
-      default:
-        return Theme.of(context).appBarTheme.backgroundColor;
-    }
-  }
-
-  Color? getIndicatorColor(int index) {
-    switch (index) {
-      case 0:
-        return const Color(0xFFF6857D);
-      case 1:
-        return const Color.fromARGB(255, 255, 202, 138);
-      case 2:
-        return const Color.fromARGB(255, 163, 206, 255);
-      case 3:
-        return const Color.fromARGB(255, 165, 255, 203);
-      case 4:
-        return const Color.fromARGB(255, 221, 185, 255);
-      default:
-        return const Color(0xFFF6857D);
-    }
   }
 
   @override
@@ -163,7 +103,7 @@ class _TabPageState extends ConsumerState<TabsPage>
           headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
             return <Widget>[
               SliverAppBar(
-                backgroundColor: appBarColor, //changeColor(selectedIndex),
+                //backgroundColor: appBarColor, //changeColor(selectedIndex),
                 foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
                 title: const GeneralText(
                   text: "Invoice Generator",
@@ -181,7 +121,7 @@ class _TabPageState extends ConsumerState<TabsPage>
                       const WidgetStatePropertyAll(Colors.transparent),
                   indicatorSize: TabBarIndicatorSize.tab,
                   indicator: BoxDecoration(
-                      color: indicatorColor ?? const Color(0xFFF6857D),
+                      //color: indicatorColor ?? const Color(0xFFF6857D),
                       borderRadius: const BorderRadius.only(
                           topRight: Radius.circular(10),
                           topLeft: Radius.circular(10))),
@@ -205,26 +145,26 @@ class _TabPageState extends ConsumerState<TabsPage>
             //physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
             children: [
-              // InvoiceListBuilder(
-              //   invoices: provider.invoices,
-              // ),
+              // InvoiceListBuilder(invoices: provider.invoices),
               // SenderListBuilder(senders: provider.senders),
               // RecipientListBuilder(recipients: provider.recipients),
-              // CourseListBuilder(
-              //   courses: provider.courses,
-              // ),
-              const Center(child: Text("RECEIPTS")),
-              const Center(child: Text("RECEIPTS")),
-              const Center(child: Text("RECEIPTS")),
-              const Center(child: Text("RECEIPTS")),
-              const Center(child: Text("RECEIPTS")),
+              // CourseListBuilder(courses: provider.courses),
+              // const Center(child: Text("RECEIPTS"))
+              for (int i = 0; i < 5; i++) ...[
+                Center(
+                  child: Text('Tab: ${i + 1}'),
+                )
+              ]
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () {},
-          backgroundColor: appBarColor,
-          //splashColor: labelColor ?? const Color(0xFFF6857D),
+          onPressed: () => showDialog<String>(
+            barrierDismissible: true,
+            context: context,
+            builder: (BuildContext context) => const AddCourse(),
+          ),
+          //backgroundColor: appBarColor,
           child: const Icon(Icons.add),
         ),
       ),

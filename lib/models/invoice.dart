@@ -42,7 +42,7 @@ class Invoice {
   int recipientId;
   Recipient recipients;
 
-  List<Course?> courses;
+  List<Course> courses;
 
   factory Invoice.fromJson(Map<String, dynamic> json) =>
       _$InvoiceFromJson(json);

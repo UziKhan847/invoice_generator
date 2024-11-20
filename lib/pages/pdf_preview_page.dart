@@ -19,7 +19,7 @@ class PdfPreviewPage extends StatelessWidget {
   final Invoice invoice;
   final Sender sender;
   final Recipient recipient;
-  final List<Course?> courses;
+  final Map<int, Course> courses;
   bool showName;
 
   @override

@@ -10,7 +10,7 @@ class InvoiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    invoice.courses.removeWhere((e) => e == null);
+   // invoice.courses.removeWhere((e) => e == null); //TO GET RID OF THE NULL |||||||||||||||||||||||||||||||||
 
     return GestureDetector(
       onTap: () {

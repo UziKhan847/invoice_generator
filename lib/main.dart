@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/tabs_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/test_page_dropwdown.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -20,12 +22,12 @@ void main() async {
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
-  // late final AppData provider;
+  // late AppData provider;
   // late final data = provider.getData();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    // provider = ref.watch(appData);
+    //  provider = ref.watch(appData);
 
     return MaterialApp(
       title: "Invoice Generator",
@@ -50,11 +52,30 @@ class MyApp extends ConsumerWidget {
           elevatedButtonTheme: const ElevatedButtonThemeData(
               style: ButtonStyle(
             backgroundColor: WidgetStatePropertyAll(Colors.white),
-            foregroundColor: WidgetStatePropertyAll(Color(0xFF951414)),
+            foregroundColor: WidgetStatePropertyAll(Colors.black),
             elevation: WidgetStatePropertyAll(4),
-            overlayColor: WidgetStatePropertyAll(Color(0xFFFFC9C9)),
-          ))),
-      home: TabsPage() 
+            overlayColor: WidgetStatePropertyAll(Color(0xFFDDDDDD)),
+          )),
+          inputDecorationTheme: const InputDecorationTheme(
+            // filled: true,
+            // fillColor: Color(0xFFF4F4F4),
+            //isCollapsed: true,
+            //isDense: true,
+            iconColor: Color(0xFF6A6A6A),
+            labelStyle: TextStyle(
+              color: Color(0xFF6A6A6A),
+            ),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF616161))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF135993))),
+            errorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            focusedErrorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+          ),
+          dialogTheme: DialogTheme(backgroundColor: const Color(0xFFF7F7F7))),
+      home: TabsPage()
       // FutureBuilder(
       //     future: data,
       //     builder: (context, snapshot) {

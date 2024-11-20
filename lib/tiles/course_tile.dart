@@ -51,12 +51,12 @@ class CourseTile extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Course Cost (Hourly): ",
+                      "Course Cost: ",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),
                     Text(
-                      "\$${course.cost}",
+                      "\$${course.cost}/${course.costFrequency}",
                       style: const TextStyle(fontSize: 12),
                     )
                   ],
@@ -65,7 +65,7 @@ class CourseTile extends StatelessWidget {
                 Row(
                   children: [
                     const Text(
-                      "Course Quantity (# of Hours): ",
+                      "Course Quantity: ",
                       style:
                           TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                     ),

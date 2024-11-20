@@ -5,7 +5,7 @@ import 'package:pdf/widgets.dart' as pw;
 
 class PdfTable {
   static pw.Table table({
-    required List<Course?> courses,
+    required Map<int, Course?> courses,
     required double subtotal,
     required double? hst,
     required double total,
@@ -34,11 +34,11 @@ class PdfTable {
               ),
               pw.Padding(
                 padding: const pw.EdgeInsets.all(3.0),
-                child: pw.Text("COST",
+                child: pw.Text("COST (CAD)",
                     textAlign: pw.TextAlign.center,
                     style: pw.TextStyle(
                       font: pw.Font.times(),
-                      fontSize: 14,
+                      fontSize: 12,
                     )),
               ),
               pw.Padding(
@@ -66,10 +66,12 @@ class PdfTable {
                 ? PdfTableRow.row()
                 : PdfTableRow.row(
                     font: pw.Font.times(),
+                    fontSizeTwo: 12,
                     columnOne: "${i + 1}. ${courses[i]!.name}",
-                    columnTwo: "${courses[i]!.cost}",
+                    columnTwo:
+                        "\$${courses[i]!.cost}/${courses[i]!.costFrequency}",
                     columnThree: "${courses[i]!.quantity}",
-                    columnFour: "${courses[i]!.amount}",
+                    columnFour: "\$${courses[i]!.amount}",
                   ),
           ],
           PdfTableRow.row(

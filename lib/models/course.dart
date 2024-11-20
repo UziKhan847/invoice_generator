@@ -8,6 +8,7 @@ class Course {
     required this.courseId,
     required this.name,
     required this.cost,
+    required this.costFrequency,
     required this.quantity,
     required this.amount,
   });
@@ -17,6 +18,10 @@ class Course {
 
   String name;
   double cost;
+
+  @JsonKey(name: "cost_frequency")
+  String costFrequency;
+
   int quantity;
   double amount;
 

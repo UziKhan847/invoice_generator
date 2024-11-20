@@ -13,7 +13,7 @@ Future<Uint8List> generatePdf({
   required Invoice invoice,
   required Sender sender,
   required Recipient recipient,
-  required List<Course?> courses,
+  required Map<int, Course> courses,
   required bool showName,
 }) async {
   final pdf = pw.Document();

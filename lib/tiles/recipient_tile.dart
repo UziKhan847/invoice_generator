@@ -14,7 +14,7 @@ class RecipientTile extends StatelessWidget {
       child: Column(
         children: [
           ListTile(
-            leading: Icon(
+            leading: const Icon(
               Icons.person,
               size: 20,
             ),

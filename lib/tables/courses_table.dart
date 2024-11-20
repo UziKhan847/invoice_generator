@@ -10,7 +10,7 @@ class CoursesTable extends StatelessWidget {
       required this.hst,
       required this.total});
 
-  final List<Course?> courses;
+  final Map<int, Course> courses;
   final double subtotal;
   final double? hst;
   final double total;
@@ -29,10 +29,11 @@ class CoursesTable extends StatelessWidget {
       children: <TableRow>[
         GeneralTableRow.row(
           decoration: BoxDecoration(color: Colors.grey.shade300),
+          fontSizeTwo: 6.5,
           fontSizeThree: 7,
           textAlign: TextAlign.center,
           columnOne: "DESCRIPTION",
-          columnTwo: "COST",
+          columnTwo: "COST (CAD)",
           columnThree: "QUANTITY",
           columnFour: "AMOUNT",
         ),
@@ -40,8 +41,10 @@ class CoursesTable extends StatelessWidget {
           courses[i] == null
               ? GeneralTableRow.row()
               : GeneralTableRow.row(
+                  fontSizeTwo: 7,
                   columnOne: "${i + 1}. ${courses[i]!.name}",
-                  columnTwo: "\$${courses[i]!.cost}",
+                  columnTwo:
+                      "\$${courses[i]!.cost}/${courses[i]!.costFrequency}",
                   columnThree: "${courses[i]!.quantity}",
                   columnFour: "\$${courses[i]!.amount}"),
         ],

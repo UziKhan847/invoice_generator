@@ -24,11 +24,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     Sender sender = widget.invoice.senders;
     Recipient recipient = widget.invoice.recipients;
-    List<Course?> courses = widget.invoice.courses;
-
-    while (courses.length < 5) {
-      courses.add(null);
-    }
+    List<Course> courses = widget.invoice.courses;
 
     return Scaffold(
       appBar: AppBar(
@@ -181,7 +177,7 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                       Margins.vertical26,
                       CoursesTable(
-                        courses: courses,
+                        courses: courses.asMap(),
                         subtotal: widget.invoice.subtotal,
                         hst: widget.invoice.hst,
                         total: widget.invoice.total,
@@ -232,7 +228,12 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             ElevatedButton(
-              style: ButtonStyle(),
+              style: const ButtonStyle(
+                backgroundColor: WidgetStatePropertyAll(Colors.white),
+                foregroundColor: WidgetStatePropertyAll(Color(0xFF951414)),
+                elevation: WidgetStatePropertyAll(4),
+                overlayColor: WidgetStatePropertyAll(Color(0xFFFFC9C9)),
+              ),
               onPressed: () {
                 setState(() {
                   showName = !showName;
@@ -252,7 +253,7 @@ class _DetailPageState extends State<DetailPage> {
                         invoice: widget.invoice,
                         sender: sender,
                         recipient: recipient,
-                        courses: courses,
+                        courses: courses.asMap(),
                         showName: showName,
                       )));
         },

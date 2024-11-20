@@ -1,0 +1,300 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "amco-mobile-store",
+            "cwd": "Users\\aayan\\AMCO\\amco-mobile-store",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "amco-mobile-store (profile mode)",
+            "cwd": "Users\\aayan\\AMCO\\amco-mobile-store",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "amco-mobile-store (release mode)",
+            "cwd": "Users\\aayan\\AMCO\\amco-mobile-store",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "arab_dict",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\arab_dict",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "arab_dict (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\arab_dict",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "arab_dict (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\arab_dict",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "hifdh_tracker",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\hifdh_tracker",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hifdh_tracker (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\hifdh_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "hifdh_tracker (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\hifdh_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "ilm_planner",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_planner",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ilm_planner (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_planner",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "ilm_planner (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_planner",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "ilm_tracker",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_tracker",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "ilm_tracker (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "ilm_tracker (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\ilm_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "test_proj",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\test_proj",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "test_proj (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\test_proj",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "test_proj (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\test_proj",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "tic_tac_toe",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\tic_tac_toe",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "tic_tac_toe (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\tic_tac_toe",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "tic_tac_toe (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\tic_tac_toe",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "watch_counter",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\watch_counter",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "watch_counter (profile mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\watch_counter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "watch_counter (release mode)",
+            "cwd": "Users\\aayan\\AndroidStudioProjects\\watch_counter",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "calculator",
+            "cwd": "Users\\aayan\\Projects\\calculator",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "calculator (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\calculator",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "calculator (release mode)",
+            "cwd": "Users\\aayan\\Projects\\calculator",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "classroom_tools",
+            "cwd": "Users\\aayan\\Projects\\classroom_tools",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "classroom_tools (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\classroom_tools",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "classroom_tools (release mode)",
+            "cwd": "Users\\aayan\\Projects\\classroom_tools",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "hifz_tracker",
+            "cwd": "Users\\aayan\\Projects\\hifz_tracker",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "hifz_tracker (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\hifz_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "hifz_tracker (release mode)",
+            "cwd": "Users\\aayan\\Projects\\hifz_tracker",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "iz_scan",
+            "cwd": "Users\\aayan\\Projects\\iz_scan",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "iz_scan (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\iz_scan",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "iz_scan (release mode)",
+            "cwd": "Users\\aayan\\Projects\\iz_scan",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "test_proj",
+            "cwd": "Users\\aayan\\Projects\\test_proj",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "umaza_web",
+            "cwd": "Users\\aayan\\Projects\\umaza_web",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "umaza_web (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\umaza_web",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "umaza_web (release mode)",
+            "cwd": "Users\\aayan\\Projects\\umaza_web",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "weather",
+            "cwd": "Users\\aayan\\Projects\\weather",
+            "request": "launch",
+            "type": "dart"
+        },
+        {
+            "name": "weather (profile mode)",
+            "cwd": "Users\\aayan\\Projects\\weather",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "profile"
+        },
+        {
+            "name": "weather (release mode)",
+            "cwd": "Users\\aayan\\Projects\\weather",
+            "request": "launch",
+            "type": "dart",
+            "flutterMode": "release"
+        },
+        {
+            "name": "test",
+            "cwd": "Users\\aayan\\Senegal\\test",
+            "request": "launch",
+            "type": "dart"
+        }
+    ]
+}

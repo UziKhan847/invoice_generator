@@ -6,7 +6,10 @@ class PdfTableRow {
           pw.BoxDecoration? decoration,
           pw.FontWeight? fontWeight,
           pw.Font? font,
-          double? fontSize = 14.0,
+          double? fontSizeOne = 14.0,
+          double? fontSizeTwo = 14.0,
+          double? fontSizeThree = 14.0,
+          double? fontSizeFour = 14.0,
           String columnOne = "",
           String columnTwo = "",
           String columnThree = "",
@@ -25,7 +28,7 @@ class PdfTableRow {
                   textAlign: textAlign,
                   style: pw.TextStyle(
                     font: font,
-                    fontSize: fontSize,
+                    fontSize: fontSizeOne,
                     fontWeight: fontWeight,
                   ))
             ]),
@@ -36,7 +39,7 @@ class PdfTableRow {
                 textAlign: textAlign,
                 style: pw.TextStyle(
                   font: font,
-                  fontSize: fontSize,
+                  fontSize: fontSizeTwo,
                   fontWeight: fontWeight,
                 )),
           ),
@@ -46,7 +49,7 @@ class PdfTableRow {
                 textAlign: textAlign,
                 style: pw.TextStyle(
                   font: font,
-                  fontSize: fontSize,
+                  fontSize: fontSizeThree,
                   fontWeight: fontWeight,
                 )),
           ),
@@ -56,7 +59,7 @@ class PdfTableRow {
                 textAlign: textAlign,
                 style: pw.TextStyle(
                   font: font,
-                  fontSize: fontSize,
+                  fontSize: fontSizeFour,
                   fontWeight: fontWeight,
                 )),
           ),
