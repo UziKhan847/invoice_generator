@@ -1,0 +1,14 @@
+Courses:
+course_id, name, cost, cost_frequency, amount
+
+Invoice_Courses:
+invoice_id, course_id
+
+Senders:
+sender_id, name, street, city, province, zip, phone, email, e_transfer
+
+Recipeints:
+recipient_id, name, street, city, province, zip, phone, email
+
+Invoices:
+invoice_id, invoice_date, due_date, subtotal, hst, total, sender_id, recipient_id

@@ -3,9 +3,9 @@ import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/course_tile.dart';
 
 class CourseListBuilder extends StatelessWidget {
-  CourseListBuilder({super.key, required this.courses});
+  const CourseListBuilder({super.key, required this.courses});
 
-  List<Course> courses;
+  final List<Course> courses;
 
   @override
   Widget build(BuildContext context) {

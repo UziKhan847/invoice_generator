@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:markaz_umaza_invoice_generator/adding_data/add_course.dart';
+import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_course.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/invoice_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
@@ -145,22 +145,22 @@ class _TabPageState extends ConsumerState<TabsPage>
             //physics: const NeverScrollableScrollPhysics(),
             controller: tabController,
             children: [
-              // InvoiceListBuilder(invoices: provider.invoices),
-              // SenderListBuilder(senders: provider.senders),
-              // RecipientListBuilder(recipients: provider.recipients),
-              // CourseListBuilder(courses: provider.courses),
-              // const Center(child: Text("RECEIPTS"))
-              for (int i = 0; i < 5; i++) ...[
-                Center(
-                  child: Text('Tab: ${i + 1}'),
-                )
-              ]
+              InvoiceListBuilder(invoices: provider.invoices),
+              SenderListBuilder(senders: provider.senders),
+              RecipientListBuilder(recipients: provider.recipients),
+              CourseListBuilder(courses: provider.courses),
+              const Center(child: Text("RECEIPTS"))
+              // for (int i = 0; i < 5; i++) ...[
+              //   Center(
+              //     child: Text('Tab: ${i + 1}'),
+              //   )
+              // ]
             ],
           ),
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () => showDialog<String>(
-            barrierDismissible: true,
+            barrierDismissible: false,
             context: context,
             builder: (BuildContext context) => const AddCourse(),
           ),

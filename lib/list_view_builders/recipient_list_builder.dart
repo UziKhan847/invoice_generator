@@ -3,9 +3,9 @@ import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/recipient_tile.dart';
 
 class RecipientListBuilder extends StatelessWidget {
-  RecipientListBuilder({super.key, required this.recipients});
+  const RecipientListBuilder({super.key, required this.recipients});
 
-  List<Recipient> recipients;
+  final List<Recipient> recipients;
 
   @override
   Widget build(BuildContext context) {

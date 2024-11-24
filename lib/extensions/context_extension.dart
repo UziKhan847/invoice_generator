@@ -37,7 +37,7 @@ extension ContextExtension on BuildContext {
   void insertOverlay(
     BuildContext context, {
     required Widget? listViewBuilder,
-    required Function()? onTapRemove,
+    required Function()? onTapOutsideOverlay,
     double? top,
     double? bottom,
     double? right,
@@ -51,7 +51,7 @@ extension ContextExtension on BuildContext {
         builder: (BuildContext context) => Stack(
               children: [
                 GestureDetector(
-                  onTap: onTapRemove,
+                  onTap: onTapOutsideOverlay,
                   child: Container(
                     color: Colors.transparent,
                   ),

@@ -3,9 +3,9 @@ import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/sender_tile.dart';
 
 class SenderListBuilder extends StatelessWidget {
-  SenderListBuilder({super.key, required this.senders});
+  const SenderListBuilder({super.key, required this.senders});
 
-  List<Sender> senders;
+  final List<Sender> senders;
 
   @override
   Widget build(BuildContext context) {

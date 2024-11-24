@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/main.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
@@ -71,18 +72,34 @@ class AppData extends ChangeNotifier {
 
   Future<void> insertRecipient() async {}
 
-  Future<void> insertCourse() async {
+  Future<void> insertCourse({
+    required BuildContext context,
+    required String name,
+    required double cost,
+    required String frequency,
+    required int quantity,
+  }) async {
     try {
       newCourse = await supabase.from("courses").insert(
-          {'name': 'Typing Arabic', 'cost': 20.0, 'quantity': 8}).select();
+        {
+          'name': name,
+          'cost': cost,
+          'cost_frequency': frequency,
+          'quantity': quantity
+        },
+      ).select();
 
       courses.add(Course.fromJson(newCourse[0]));
 
       notifyListeners();
 
-      print("SUCCES");
+      if (context.mounted) {
+        context.showSnackBar('Successfully Added Course');
+      }
     } catch (e) {
-      print("FAILED");
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
     }
   }
 }
