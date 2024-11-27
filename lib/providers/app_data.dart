@@ -16,12 +16,17 @@ class AppData extends ChangeNotifier {
   late PostgrestList invoiceData;
   late List<Invoice> invoices;
   late PostgrestList invoiceId;
+  late PostgrestList invoiceIdData;
+  late int newInvoiceId;
+  late PostgrestList newInvoice;
 
   late PostgrestList senderData;
   late List<Sender> senders;
+  late PostgrestList newSender;
 
   late PostgrestList recipientData;
   late List<Recipient> recipients;
+  late PostgrestList newRecipient;
 
   late PostgrestList courseData;
   late List<Course> courses;
@@ -61,17 +66,143 @@ class AppData extends ChangeNotifier {
     }
   }
 
-  Future<void> getInvoiceId() async {
-    await supabase.from("invoices").select("invoice_id");
+  //Insert Data Methods
+  Future<void> insertInvoice({
+    required BuildContext context,
+    required String invoiceDate,
+    required String? dueDate,
+    required double subtotal,
+    required int senderId,
+    required int recipientId,
+    required Map<int, Course> selectedCourses,
+  }) async {
+    try {
+      invoiceIdData = invoiceDate.isEmpty
+          ? await supabase.from("invoices").insert(
+              {
+                'due_date': dueDate,
+                'subtotal': subtotal,
+                'sender_id': senderId,
+                'recipient_id': recipientId
+              },
+            ).select("invoice_id")
+          : await supabase.from("invoices").insert(
+              {
+                'invoice_date': invoiceDate,
+                'due_date': dueDate,
+                'subtotal': subtotal,
+                'sender_id': senderId,
+                'recipient_id': recipientId
+              },
+            ).select("invoice_id");
+
+      newInvoiceId = invoiceIdData[0]['invoice_id'];
+
+      for (int i = 0; i < selectedCourses.length; i++) {
+        await supabase.from("invoice_courses").insert({
+          'invoice_id': newInvoiceId,
+          'course_id': selectedCourses[i]!.courseId
+        });
+      }
+
+      newInvoice = await supabase
+          .from('invoices')
+          .select("*, senders(*), recipients(*), courses(*)")
+          .eq('invoice_id', newInvoiceId);
+
+      invoices.add(Invoice.fromJson(newInvoice[0]));
+
+      notifyListeners();
+
+      if (context.mounted) {
+        context.showSnackBar('Successfully Added an Invocie');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
+    }
   }
 
-  //Insert Data Methods
-  Future<void> insertInvoice() async {}
+  //Sender
+  Future<void> insertSender({
+    required BuildContext context,
+    required String name,
+    required String street,
+    required String city,
+    required String prov,
+    required String zip,
+    required String phone,
+    required String email,
+    required String eTransfer,
+  }) async {
+    try {
+      newSender = await supabase.from("senders").insert(
+        {
+          'name': name,
+          'street': street,
+          'city': city,
+          'province': prov,
+          'zip': zip,
+          'phone': phone,
+          'email': email,
+          'e_transer': eTransfer
+        },
+      ).select();
 
-  Future<void> insertSender() async {}
+      senders.add(Sender.fromJson(newSender[0]));
 
-  Future<void> insertRecipient() async {}
+      notifyListeners();
 
+      if (context.mounted) {
+        context.showSnackBar('Successfully Added a Sender');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
+    }
+  }
+
+  //Recipient
+  Future<void> insertRecipeint({
+    required BuildContext context,
+    required String name,
+    required String street,
+    required String city,
+    required String prov,
+    required String zip,
+    required String phone,
+    required String email,
+  }) async {
+    try {
+      newRecipient = await supabase.from("recipients").insert(
+        {
+          'name': name,
+          'street': street,
+          'city': city,
+          'province': prov,
+          'zip': zip,
+          'phone': phone,
+          'email': email,
+        },
+      ).select();
+
+      recipients.add(Recipient.fromJson(newRecipient[0]));
+
+      notifyListeners();
+
+      if (context.mounted) {
+        context.showSnackBar('Successfully Added a Recipient');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
+    }
+  }
+
+  //Course
   Future<void> insertCourse({
     required BuildContext context,
     required String name,

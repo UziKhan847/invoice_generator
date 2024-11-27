@@ -20,9 +20,9 @@ class _AddCourseState extends ConsumerState<AddCourse> {
 
   final nameController = TextEditingController();
   final costController = TextEditingController();
+  final frequencyController = TextEditingController();
+  final quantityController = TextEditingController();
 
-  String selectedFrequency = 'Hr';
-  String selectedQuantity = '1';
   bool isFrequencySelected = false;
   bool isQuantitySelected = false;
   List<String> frequencyDropdowItems = ["Hr", "Day", "Wk", "Mo", "Yr"];
@@ -38,6 +38,8 @@ class _AddCourseState extends ConsumerState<AddCourse> {
   void dispose() {
     nameController.dispose();
     costController.dispose();
+    frequencyController.dispose();
+    quantityController.dispose();
     super.dispose();
   }
 
@@ -61,8 +63,8 @@ class _AddCourseState extends ConsumerState<AddCourse> {
             context: context,
             name: nameController.text,
             cost: double.parse(costController.text),
-            frequency: selectedFrequency,
-            quantity: int.parse(selectedQuantity),
+            frequency: frequencyController.text,
+            quantity: int.parse(quantityController.text),
           );
           loadCircle();
 
@@ -75,171 +77,200 @@ class _AddCourseState extends ConsumerState<AddCourse> {
         Navigator.pop(context);
       },
       dialogContent: SizedBox(
-        height: 148,
+        height: 200,
         child: Form(
           key: _formKey,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              //  Margins.vertical4,
+          child: SizedBox(
+            width: 290,
+            child: ListView(
+              children: [
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "* required fields",
+                          style: TextStyle(color: Colors.grey.shade600),
+                        ),
+                      ],
+                    ),
+                    Margins.vertical26,
 
-              //Name Field
-              SizedBox(
-                height: 65,
-                child: TextFormField(
-                  focusNode: nameFocus,
-                  controller: nameController,
-                  onTapOutside: (_) => nameFocus.unfocus(),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter a name';
-                    } else if (value.length < 3) {
-                      return 'Name must contain more than 3 characters';
-                    }
-                    return null;
-                  },
-                  decoration: const InputDecoration(
-                    labelText: "Course Name",
-                    errorStyle: TextStyle(height: 0, fontSize: 11),
-                  ),
-                ),
-              ),
-              Margins.vertical18,
-
-              //Cost Field
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  SizedBox(
-                    width: 120,
-                    child: TextFormField(
-                      focusNode: costFocus,
-                      controller: costController,
-                      onTapOutside: (_) => costFocus.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter cost';
-                        } else if (!costRegex.hasMatch(value) ||
-                            costZeroRegex.hasMatch(value)) {
-                          return 'Invalid cost';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        prefix: Text("\$"),
-                        labelText: "Cost (CAD)",
-                        errorStyle: TextStyle(height: 0, fontSize: 11),
+                    //Name Field
+                    SizedBox(
+                      height: 65,
+                      child: TextFormField(
+                        focusNode: nameFocus,
+                        controller: nameController,
+                        onTapOutside: (_) => nameFocus.unfocus(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a name';
+                          } else if (value.length < 3) {
+                            return 'Name must contain more than 3 characters';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Course Name*",
+                        ),
                       ),
                     ),
-                  ),
-                  Margins.horizontal14,
+                    Margins.vertical18,
 
-                  //Frequency DropDown Menu
-                  DropdownMenuTile(
-                    labelText: "Frequency",
-                    selectedItem: selectedFrequency,
-                    isSelected: isFrequencySelected,
-                    arrowRightPosition: 2,
-                    arrowTopPosition: 12,
-                    menuInkHeight: 47,
-                    menuInkWidth: 64,
-                    menuBoxWidth: 64,
-                    onTapMenuBox: () {
-                      setState(() {
-                        isFrequencySelected = !isFrequencySelected;
-                      });
+                    //Cost Field
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        SizedBox(
+                          width: 120,
+                          child: TextFormField(
+                            keyboardType:
+                                const TextInputType.numberWithOptions(),
+                            focusNode: costFocus,
+                            controller: costController,
+                            onTapOutside: (_) => costFocus.unfocus(),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Enter cost';
+                              } else if (!costRegex.hasMatch(value) ||
+                                  costZeroRegex.hasMatch(value)) {
+                                return 'Invalid cost';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              prefix: Text("\$"),
+                              labelText: "Cost (CAD)*",
+                            ),
+                          ),
+                        ),
+                        Margins.horizontal14,
 
-                      context.insertOverlay(
-                        context,
-                        height: 250,
-                        width: 62,
-                        bottom: 60,
-                        right: 116,
-                        onTapOutsideOverlay: () {
-                          setState(() {
-                            isFrequencySelected = !isFrequencySelected;
-                          });
-                          context.removeOverlay();
-                        },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: frequencyDropdowItems.length,
-                            itemBuilder: (context, index) {
-                              String item = frequencyDropdowItems[index];
+                        //Frequency DropDown Menu
+                        DropdownMenuTile(
+                          labelText: "Frequency*",
+                          controller: frequencyController,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Invalid';
+                            }
+                            return null;
+                          },
+                          isSelected: isFrequencySelected,
+                          menuInkHeight: 47,
+                          menuInkWidth: 66,
+                          menuBoxWidth: 66,
+                          onTapMenuBox: () {
+                            setState(() {
+                              isFrequencySelected = !isFrequencySelected;
+                            });
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText: item,
-                                lastItemIndex: frequencyDropdowItems.length - 1,
-                                menuItemHeight: 50,
-                                onItemTap: () {
-                                  setState(() {
-                                    selectedFrequency = item;
-                                    isFrequencySelected = !isFrequencySelected;
-                                  });
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                  Margins.horizontal14,
+                            context.insertOverlay(
+                              context,
+                              height: 250,
+                              width: 64,
+                              bottom: 42,
+                              right: 117,
+                              onTapOutsideOverlay: () {
+                                setState(() {
+                                  isFrequencySelected = !isFrequencySelected;
+                                });
+                                context.removeOverlay();
+                              },
+                              listViewBuilder: ListView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  itemCount: frequencyDropdowItems.length,
+                                  itemBuilder: (context, index) {
+                                    String item = frequencyDropdowItems[index];
 
-                  //Quantity DropDown Menu
-                  DropdownMenuTile(
-                    labelText: "Quantity",
-                    selectedItem: selectedQuantity,
-                    isSelected: isQuantitySelected,
-                    arrowRightPosition: 2,
-                    arrowTopPosition: 12,
-                    menuInkHeight: 47,
-                    menuInkWidth: 55,
-                    menuBoxWidth: 55,
-                    onTapMenuBox: () {
-                      setState(() {
-                        isQuantitySelected = !isQuantitySelected;
-                      });
+                                    return DropdownItemTile(
+                                      currentMenuIndex: index,
+                                      itemText: item,
+                                      lastItemIndex:
+                                          frequencyDropdowItems.length - 1,
+                                      menuItemHeight: 50,
+                                      onItemTap: () {
+                                        setState(() {
+                                          frequencyController.text = item;
+                                          isFrequencySelected =
+                                              !isFrequencySelected;
+                                        });
+                                        context.removeOverlay();
+                                      },
+                                    );
+                                  }),
+                            );
+                          },
+                        ),
+                        Margins.horizontal14,
 
-                      context.insertOverlay(
-                        context,
-                        height: 310,
-                        width: 53,
-                        bottom: 0,
-                        right: 48,
-                        onTapOutsideOverlay: () {
-                          setState(() {
-                            isQuantitySelected = !isQuantitySelected;
-                          });
-                          context.removeOverlay();
-                        },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: quantityDropdownItems.length,
-                            itemBuilder: (context, index) {
-                              String item = "${quantityDropdownItems[index]}";
+                        //Quantity DropDown Menu
+                        DropdownMenuTile(
+                          labelText: "Quantity*",
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Invalid';
+                            }
+                            return null;
+                          },
+                          controller: quantityController,
+                          isSelected: isQuantitySelected,
+                          menuInkHeight: 47,
+                          menuInkWidth: 59,
+                          menuBoxWidth: 59,
+                          onTapMenuBox: () {
+                            setState(() {
+                              isQuantitySelected = !isQuantitySelected;
+                            });
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText: item,
-                                lastItemIndex: quantityDropdownItems.length - 1,
-                                menuItemHeight: 50,
-                                onItemTap: () {
-                                  setState(() {
-                                    selectedQuantity = item;
-                                    isQuantitySelected = !isQuantitySelected;
-                                  });
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
-                      );
-                    },
-                  ),
-                ],
-              )
-            ],
+                            context.insertOverlay(
+                              context,
+                              height: 292,
+                              width: 57,
+                              bottom: 0,
+                              right: 44,
+                              onTapOutsideOverlay: () {
+                                setState(() {
+                                  isQuantitySelected = !isQuantitySelected;
+                                });
+                                context.removeOverlay();
+                              },
+                              listViewBuilder: ListView.builder(
+                                  padding: const EdgeInsets.all(0),
+                                  itemCount: quantityDropdownItems.length,
+                                  itemBuilder: (context, index) {
+                                    String item =
+                                        "${quantityDropdownItems[index]}";
+
+                                    return DropdownItemTile(
+                                      currentMenuIndex: index,
+                                      itemText: item,
+                                      lastItemIndex:
+                                          quantityDropdownItems.length - 1,
+                                      menuItemHeight: 50,
+                                      onItemTap: () {
+                                        setState(() {
+                                          quantityController.text = item;
+                                          isQuantitySelected =
+                                              !isQuantitySelected;
+                                        });
+                                        context.removeOverlay();
+                                      },
+                                    );
+                                  }),
+                            );
+                          },
+                        ),
+                      ],
+                    )
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),

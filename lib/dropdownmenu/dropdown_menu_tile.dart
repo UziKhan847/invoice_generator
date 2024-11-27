@@ -3,22 +3,29 @@ import 'package:flutter/material.dart';
 class DropdownMenuTile extends StatelessWidget {
   const DropdownMenuTile(
       {super.key,
+      this.controller,
       required this.labelText,
-      required this.selectedItem,
+      this.labelTextSize = 10,
       required this.isSelected,
-      required this.onTapMenuBox,
+      this.onTapMenuBox,
       this.arrowBottomPosition,
       this.arrowLeftPosition,
-      this.arrowRightPosition,
-      this.arrowTopPosition,
+      this.arrowRightPosition = 2,
+      this.arrowTopPosition = 12,
       required this.menuInkHeight,
-      required this.menuInkWidth,
-      required this.menuBoxWidth});
+      this.menuInkWidth,
+      this.menuBoxWidth,
+      this.validator,
+      this.textPadding,
+      this.textStyle,
+      this.arrowDownColor,
+      this.arrowUpColor});
 
-  final String? labelText;
-  final String selectedItem;
-  final bool isSelected;
+  final TextEditingController? controller;
   final void Function()? onTapMenuBox;
+  final String? Function(String?)? validator;
+  final String? labelText;
+  final bool isSelected;
   final double? arrowBottomPosition;
   final double? arrowLeftPosition;
   final double? arrowRightPosition;
@@ -26,17 +33,28 @@ class DropdownMenuTile extends StatelessWidget {
   final double? menuInkHeight;
   final double? menuInkWidth;
   final double? menuBoxWidth;
+  final double labelTextSize;
+  final EdgeInsetsGeometry? textPadding;
+  final TextStyle? textStyle;
+  final Color? arrowUpColor;
+  final Color? arrowDownColor;
 
   @override
   Widget build(BuildContext context) {
     return Stack(
       children: [
         SizedBox(
+          height: 65,
           width: menuBoxWidth,
-          child: InputDecorator(
+          child: TextFormField(
+            style: textStyle,
+            readOnly: true,
+            controller: controller,
+            validator: validator,
             decoration: InputDecoration(
+              contentPadding: textPadding,
               labelText: labelText,
-              labelStyle: const TextStyle(fontSize: 10),
+              labelStyle: TextStyle(fontSize: labelTextSize),
               enabledBorder: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(4),
                   borderSide: isSelected
@@ -49,11 +67,6 @@ class DropdownMenuTile extends StatelessWidget {
                           .border!
                           .borderSide),
             ),
-            child: Text(
-              selectedItem,
-              style: const TextStyle(
-                  fontSize: 16, color: Color(0xFF424242), height: 1.47),
-            ),
           ),
         ),
         Positioned(
@@ -62,8 +75,14 @@ class DropdownMenuTile extends StatelessWidget {
           right: arrowRightPosition,
           bottom: arrowBottomPosition,
           child: isSelected
-              ? const Icon(Icons.arrow_drop_up)
-              : const Icon(Icons.arrow_drop_down),
+              ? Icon(
+                  Icons.arrow_drop_up,
+                  color: arrowUpColor,
+                )
+              : Icon(
+                  Icons.arrow_drop_down,
+                  color: arrowDownColor,
+                ),
         ),
         Container(
           height: menuInkHeight,

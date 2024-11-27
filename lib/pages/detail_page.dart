@@ -24,7 +24,7 @@ class _DetailPageState extends State<DetailPage> {
   Widget build(BuildContext context) {
     Sender sender = widget.invoice.senders;
     Recipient recipient = widget.invoice.recipients;
-    List<Course> courses = widget.invoice.courses;
+    List<Course>? courses = widget.invoice.courses;
 
     return Scaffold(
       appBar: AppBar(
@@ -229,6 +229,7 @@ class _DetailPageState extends State<DetailPage> {
             ),
             ElevatedButton(
               style: const ButtonStyle(
+                fixedSize: WidgetStatePropertyAll(Size(170, 20)),
                 backgroundColor: WidgetStatePropertyAll(Colors.white),
                 foregroundColor: WidgetStatePropertyAll(Color(0xFF951414)),
                 elevation: WidgetStatePropertyAll(4),

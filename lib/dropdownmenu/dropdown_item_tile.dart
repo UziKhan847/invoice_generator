@@ -8,6 +8,7 @@ class DropdownItemTile extends StatelessWidget {
     required this.lastItemIndex,
     required this.menuItemHeight,
     required this.onItemTap,
+    this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
   final double? menuItemHeight;
@@ -15,6 +16,7 @@ class DropdownItemTile extends StatelessWidget {
   final int lastItemIndex;
   final String itemText;
   final void Function()? onItemTap;
+  final MainAxisAlignment mainAxisAlignment;
 
   BorderRadius itemBorderRadius() {
     if (currentMenuIndex == 0) {
@@ -38,7 +40,9 @@ class DropdownItemTile extends StatelessWidget {
           child: InkWell(
             borderRadius: itemBorderRadius(),
             onTap: onItemTap,
-            child: Center(child: Text(itemText)),
+            child: Row(
+                mainAxisAlignment: mainAxisAlignment,
+                children: [Text(itemText)]),
           ),
         ));
   }

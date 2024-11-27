@@ -46,4 +46,5 @@ app.*.map.json
 /lib/models/sender.g.dart
 /lib/models/recipient.g.dart
 /lib/models/invoice.g.dart
+/lib/models/receipt.g.dart
 

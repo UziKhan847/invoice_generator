@@ -22,8 +22,8 @@ class AddDialogTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      contentPadding: EdgeInsets.only(top: 16, bottom: 8, left: 20, right: 20),
-      insetPadding: EdgeInsets.all(0),
+      contentPadding: const EdgeInsets.only(top: 16, bottom: 8, left: 20, right: 20),
+      insetPadding: const EdgeInsets.all(0),
       title: Text(
         dialogTitle,
         style: const TextStyle(fontSize: 20),
@@ -33,7 +33,7 @@ class AddDialogTile extends StatelessWidget {
         SizedBox(
           height: 50,
           child: isLoading
-              ? Center(
+              ? const Center(
                   child: CircularProgressIndicator(),
                 )
               : Row(

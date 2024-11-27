@@ -10,7 +10,7 @@ class InvoiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-   // invoice.courses.removeWhere((e) => e == null); //TO GET RID OF THE NULL |||||||||||||||||||||||||||||||||
+    // invoice.courses.removeWhere((e) => e == null); //TO GET RID OF THE NULL |||||||||||||||||||||||||||||||||
 
     return GestureDetector(
       onTap: () {
@@ -81,7 +81,7 @@ class InvoiceTile extends StatelessWidget {
                             fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        invoice.courses[i]!.name,
+                        invoice.courses[i].name,
                         style: const TextStyle(fontSize: 12),
                       )
                     ],

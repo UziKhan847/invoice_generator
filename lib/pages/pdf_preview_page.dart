@@ -7,7 +7,7 @@ import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
- PdfPreviewPage({
+  const PdfPreviewPage({
     super.key,
     required this.invoice,
     required this.sender,
@@ -20,7 +20,7 @@ class PdfPreviewPage extends StatelessWidget {
   final Sender sender;
   final Recipient recipient;
   final Map<int, Course> courses;
-  bool showName;
+  final bool showName;
 
   @override
   Widget build(BuildContext context) {
