@@ -66,11 +66,6 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
       isLoading: isLoading,
       dialogTitle: "Add Receipt",
       onTapAdd: () async {
-        PostgrestList courseIds = await supabase
-            .from("invoice_courses")
-            .select('course_id')
-            .eq('invoice_id', 1);
-
         if (_formKey.currentState!.validate()) {
           loadCircle();
           if (context.mounted) {

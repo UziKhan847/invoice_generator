@@ -196,7 +196,7 @@ class _DetailPageState extends State<DetailPage> {
                   Margins.vertical26,
                   const GeneralText(
                     text:
-                        "Thank you for you business!\nWe look forward to serving you again",
+                        "Thank you for your business!\nWe look forward to serving you again",
                     textAlign: TextAlign.center,
                     fontSize: 9.0,
                   ),

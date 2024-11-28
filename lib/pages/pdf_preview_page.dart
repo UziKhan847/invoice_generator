@@ -4,8 +4,7 @@ import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
-import 'package:markaz_umaza_invoice_generator/pdf/generate_invoice_pdf.dart';
-import 'package:markaz_umaza_invoice_generator/pdf/generate_receipt_pdf.dart';
+import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
@@ -36,20 +35,14 @@ class PdfPreviewPage extends StatelessWidget {
         title: const Text("PDF Preview"),
       ),
       body: PdfPreview(
-          build: (context) => isInvoice
-              ? generateInvoicePdf(
-                  invoice: invoice,
-                  sender: sender,
-                  recipient: recipient,
-                  courses: courses,
-                )
-              : generateReceiptPdf(
-                  receipt: receipt!,
-                  invoice: invoice,
-                  sender: sender,
-                  recipient: recipient,
-                  courses: courses,
-                )),
+          build: (context) => generatePdf(
+                isInvoice: isInvoice,
+                receipt: receipt,
+                invoice: invoice,
+                sender: sender,
+                recipient: recipient,
+                courses: courses,
+              )),
     );
   }
 }
