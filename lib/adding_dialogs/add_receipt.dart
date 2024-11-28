@@ -1,11 +1,17 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables, prefer_const_constructors
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:markaz_umaza_invoice_generator/datepickermenu/datepicker_menu.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
+import 'package:markaz_umaza_invoice_generator/main.dart';
+import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/add_dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class AddReceipt extends ConsumerStatefulWidget {
   const AddReceipt({super.key});
@@ -18,62 +24,31 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
-  final nameController = TextEditingController();
-  final streetController = TextEditingController();
-  final cityController = TextEditingController();
-  final provController = TextEditingController();
-  final zipController = TextEditingController();
-  final phoneController = TextEditingController();
-  final emailController = TextEditingController();
-  final eTransferController = TextEditingController();
+  final invoiceController = TextEditingController();
+  final dateController = TextEditingController();
+  final paidController = TextEditingController();
 
-  String selectedProv = 'ON';
-  bool isProvSelected = false;
-  List<String> provDropdowItems = [
-    "AB",
-    "BC",
-    "MB",
-    "NB",
-    "NL",
-    "NS",
-    "NT",
-    "NU",
-    "ON",
-    "PE",
-    "QC",
-    "SK",
-    "YT"
-  ];
+  final paidFocus = FocusNode();
+
+  bool isInvoiceSelected = false;
+
+  late Invoice selectedInvoice;
+  late double paid;
+
+  double shadowHeight = 0;
+  double menuHeight = 0;
+
   late AppData provider;
-  final nameFocus = FocusNode();
-  final streetFocus = FocusNode();
-  final cityFocus = FocusNode();
-  final zipFocus = FocusNode();
-  final phoneFocus = FocusNode();
-  final emailFocus = FocusNode();
-  final eTransferFocus = FocusNode();
-  final zipRegex = RegExp(r'^\w\d\w\s?\d\w\d$');
-  final emailRegex = RegExp(r'^.+@[0-z]+\.[A-z]+$');
-  final phoneRegex =
-      RegExp(r'^\+?1?\s?(\(\d{3}\)|\d{3})(-|\s)?\d{3}(-|\s)?\d{4}$');
+  DateTime now = DateTime.now();
 
-  String get zipWithSpace => switch (zipController.text.length) {
-        6 =>
-          '${zipController.text.substring(0, 3)} ${zipController.text.substring(3, 6)}'
-              .toUpperCase(),
-        _ => zipController.text.toUpperCase()
-      };
+  final moneyRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+  final moneyZeroRegex = RegExp(r'^0+\d');
 
   @override
   void dispose() {
-    nameController.dispose();
-    streetController.dispose();
-    cityController.dispose();
-    provController.dispose();
-    zipController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    eTransferController.dispose();
+    dateController.dispose();
+    invoiceController.dispose();
+    paidController.dispose();
     super.dispose();
   }
 
@@ -89,20 +64,28 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
 
     return AddDialogTile(
       isLoading: isLoading,
-      dialogTitle: "Add Sender",
+      dialogTitle: "Add Receipt",
       onTapAdd: () async {
+        PostgrestList courseIds = await supabase
+            .from("invoice_courses")
+            .select('course_id')
+            .eq('invoice_id', 1);
+
         if (_formKey.currentState!.validate()) {
           loadCircle();
-          await provider.insertSender(
+          if (context.mounted) {
+            await provider.insertReceipt(
               context: context,
-              name: nameController.text,
-              street: streetController.text,
-              city: cityController.text,
-              prov: provController.text,
-              zip: zipWithSpace,
-              phone: phoneController.text,
-              email: emailController.text,
-              eTransfer: eTransferController.text);
+              receiptDate: dateController.text,
+              senderId: selectedInvoice.senderId,
+              recipientId: selectedInvoice.recipientId,
+              invoiceId: selectedInvoice.invoiceId,
+              paid: paidController.text.isNotEmpty
+                  ? double.parse(paidController.text)
+                  : selectedInvoice.total,
+            );
+          }
+
           loadCircle();
 
           if (context.mounted) {
@@ -114,7 +97,7 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
         Navigator.pop(context);
       },
       dialogContent: SizedBox(
-        height: 250,
+        height: 300,
         child: Form(
           key: _formKey,
           child: SizedBox(
@@ -129,221 +112,136 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
                         Text(
-                          "* required fields",
+                          "* required fields\nauto - if left blank, autogenerated",
                           style: TextStyle(color: Colors.grey.shade600),
                         ),
                       ],
                     ),
                     Margins.vertical26,
 
-                    //Name Field
+                    //Receipt Date
+                    SizedBox(
+                      height: 65,
+                      child: DatepickerMenu(
+                        controller: dateController,
+                        labelText: "Receipt Date (auto)",
+                        isSelected: false,
+                        menuInkHeight: 46,
+                        menuInkWidth: 155,
+                        menuBoxWidth: 155,
+                        iconRightPosition: 8,
+                        iconTopPosition: 10,
+                        onTapMenuBox: () async {
+                          DateTime? newDate = await showDatePicker(
+                            context: context,
+                            firstDate: DateTime(2000, 01, 01),
+                            lastDate: DateTime(2100, 12, 31),
+                          );
+
+                          if (newDate == null) return;
+
+                          setState(() {
+                            dateController.text =
+                                '${newDate.year}-${newDate.month}-${newDate.day}';
+                          });
+                        },
+                        onTapDelete: () {
+                          setState(() {
+                            dateController.clear();
+                          });
+                        },
+                      ),
+                    ),
+                    Margins.vertical14,
+
+                    //Paid Field
                     SizedBox(
                       height: 65,
                       child: TextFormField(
-                        focusNode: nameFocus,
-                        controller: nameController,
-                        onTapOutside: (_) => nameFocus.unfocus(),
+                        keyboardType: const TextInputType.numberWithOptions(),
+                        focusNode: paidFocus,
+                        controller: paidController,
+                        onTapOutside: (_) => paidFocus.unfocus(),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a name';
+                          if (value != null &&
+                              value.isNotEmpty &&
+                              (!moneyRegex.hasMatch(value) ||
+                                  moneyZeroRegex.hasMatch(value))) {
+                            return 'Invalid value';
                           }
                           return null;
                         },
                         decoration: const InputDecoration(
-                          labelText: "Sender Name",
+                          prefix: Text("\$"),
+                          labelText:
+                              "Paid (if blank, will equal the total invoice)",
                         ),
                       ),
                     ),
-                    Margins.vertical8,
+                    Margins.vertical14,
 
-                    //Street
-                    SizedBox(
-                      height: 65,
-                      child: TextFormField(
-                        focusNode: streetFocus,
-                        controller: streetController,
-                        onTapOutside: (_) => streetFocus.unfocus(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter the street';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Street (#, Name, etc.)",
-                        ),
-                      ),
-                    ),
-                    Margins.vertical8,
+                    //Invoice DropDown
+                    DropdownMenuTile(
+                      controller: invoiceController,
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return "Please select Invoice";
+                        }
+                        return null;
+                      },
+                      textPadding: EdgeInsets.only(
+                          top: 12, bottom: 12, right: 22, left: 10),
+                      labelText: "Invoice*",
+                      labelTextSize: 16,
+                      isSelected: isInvoiceSelected,
+                      arrowRightPosition: 2,
+                      arrowTopPosition: 12,
+                      menuInkHeight: 47,
+                      onTapMenuBox: () {
+                        setState(() {
+                          isInvoiceSelected = !isInvoiceSelected;
+                        });
 
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        //City
-                        SizedBox(
-                          height: 65,
-                          width: 190,
-                          child: TextFormField(
-                            focusNode: cityFocus,
-                            controller: cityController,
-                            onTapOutside: (_) => cityFocus.unfocus(),
-                            validator: (value) {
-                              if (value == null || value.isEmpty) {
-                                return 'Please enter City name';
-                              }
-                              return null;
-                            },
-                            decoration: const InputDecoration(
-                              labelText: "City",
-                            ),
-                          ),
-                        ),
-
-                        //Province DropDown Menu
-                        DropdownMenuTile(
-                          controller: provController,
-                          labelText: "Province",
-                          labelTextSize: 12.5,
-                          isSelected: isProvSelected,
-                          arrowRightPosition: 2,
-                          arrowTopPosition: 12,
-                          menuInkHeight: 47,
-                          menuInkWidth: 64,
-                          menuBoxWidth: 64,
-                          onTapMenuBox: () {
+                        context.insertOverlay(
+                          context,
+                          height: 200,
+                          width: 260,
+                          bottom: 200,
+                          right: 50,
+                          onTapOutsideOverlay: () {
                             setState(() {
-                              isProvSelected = !isProvSelected;
+                              isInvoiceSelected = !isInvoiceSelected;
                             });
-
-                            context.insertOverlay(
-                              context,
-                              height: 650,
-                              width: 62,
-                              bottom: 0,
-                              right: 46,
-                              onTapOutsideOverlay: () {
-                                setState(() {
-                                  isProvSelected = !isProvSelected;
-                                });
-                                context.removeOverlay();
-                              },
-                              listViewBuilder: ListView.builder(
-                                  padding: const EdgeInsets.all(0),
-                                  itemCount: provDropdowItems.length,
-                                  itemBuilder: (context, index) {
-                                    String item = provDropdowItems[index];
-
-                                    return DropdownItemTile(
-                                      currentMenuIndex: index,
-                                      itemText: item,
-                                      lastItemIndex:
-                                          provDropdowItems.length - 1,
-                                      menuItemHeight: 50,
-                                      onItemTap: () {
-                                        setState(() {
-                                          provController.text = item;
-                                          isProvSelected = !isProvSelected;
-                                        });
-                                        context.removeOverlay();
-                                      },
-                                    );
-                                  }),
-                            );
+                            context.removeOverlay();
                           },
-                        ),
-                      ],
-                    ),
-                    Margins.vertical8,
+                          listViewBuilder: ListView.builder(
+                              padding: const EdgeInsets.all(0),
+                              itemCount: provider.invoices.length,
+                              itemBuilder: (context, index) {
+                                Invoice item = provider.invoices[index];
 
-                    //Zip
-                    SizedBox(
-                      width: 100,
-                      height: 65,
-                      child: TextFormField(
-                        focusNode: zipFocus,
-                        controller: zipController,
-                        onTapOutside: (_) => zipFocus.unfocus(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Enter Zipcode';
-                          } else if (!zipRegex.hasMatch(value)) {
-                            return 'Invalid Zip';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Zipcode",
-                        ),
-                      ),
-                    ),
-                    Margins.vertical8,
+                                return DropdownItemTile(
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  currentMenuIndex: index,
+                                  itemText:
+                                      "Id: ${item.invoiceId},\nDate: ${item.invoiceDate},\nSender: ${item.senders!.name},\nRecipient: ${item.recipients!.name},\nTotal: ${item.total}",
+                                  lastItemIndex: provider.invoices.length - 1,
+                                  menuItemHeight: 100,
+                                  onItemTap: () {
+                                    selectedInvoice = item;
+                                    invoiceController.text =
+                                        "#${item.invoiceId}, ${item.invoiceDate}, From: ${item.senders!.name}, To: ${item.recipients!.name}, Total: ${item.total}";
+                                    isInvoiceSelected = !isInvoiceSelected;
 
-                    //Phone
-                    SizedBox(
-                      height: 65,
-                      child: TextFormField(
-                        focusNode: phoneFocus,
-                        controller: phoneController,
-                        onTapOutside: (_) => phoneFocus.unfocus(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a Phone Number';
-                          } else if (!phoneRegex.hasMatch(value)) {
-                            return 'Please enter a valid Phone Number';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Phone #",
-                        ),
-                      ),
+                                    setState(() {});
+                                    context.removeOverlay();
+                                  },
+                                );
+                              }),
+                        );
+                      },
                     ),
-                    Margins.vertical8,
-
-                    //Email
-                    SizedBox(
-                      height: 65,
-                      child: TextFormField(
-                        focusNode: emailFocus,
-                        controller: emailController,
-                        onTapOutside: (_) => emailFocus.unfocus(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter an Email';
-                          } else if (!emailRegex.hasMatch(value)) {
-                            return 'Please enter a valid Email';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Email",
-                        ),
-                      ),
-                    ),
-                    Margins.vertical8,
-
-                    //Etransfer
-                    SizedBox(
-                      height: 65,
-                      child: TextFormField(
-                        focusNode: eTransferFocus,
-                        controller: eTransferController,
-                        onTapOutside: (_) => eTransferFocus.unfocus(),
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter your Etransfer email';
-                          } else if (!emailRegex.hasMatch(value)) {
-                            return 'Please enter a valid Email';
-                          }
-                          return null;
-                        },
-                        decoration: const InputDecoration(
-                          labelText: "Etransfer Email",
-                        ),
-                      ),
-                    ),
-                    Margins.vertical8,
+                    Margins.vertical18,
                   ],
                 ),
               ],

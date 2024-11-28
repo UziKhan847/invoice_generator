@@ -209,7 +209,6 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                           labelText: "Province*",
                           labelTextSize: 12.5,
                           isSelected: isProvSelected,
-          
                           menuInkHeight: 47,
                           menuInkWidth: 68,
                           menuBoxWidth: 68,
@@ -287,6 +286,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       child: TextFormField(
                         focusNode: phoneFocus,
                         controller: phoneController,
+                        keyboardType: TextInputType.phone,
                         onTapOutside: (_) => phoneFocus.unfocus(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -309,6 +309,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       child: TextFormField(
                         focusNode: emailFocus,
                         controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
                         onTapOutside: (_) => emailFocus.unfocus(),
                         validator: (value) {
                           if (value == null || value.isEmpty) {

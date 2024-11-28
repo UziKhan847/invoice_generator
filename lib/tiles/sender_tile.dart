@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 
 class SenderTile extends StatelessWidget {
   const SenderTile({super.key, required this.sender});
@@ -20,89 +21,20 @@ class SenderTile extends StatelessWidget {
             ),
             title: Column(
               children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Sender Id: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${sender.senderId}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Name: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      sender.name,
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Address: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${sender.city}, ${sender.city}, ${sender.province}, ${sender.zip}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Phone: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      sender.phone,
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Email: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      sender.email,
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "E-Transfer: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${sender.eTransfer}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                )
+                for (int i = 0; i < 6; i++) ...[
+                  switch (i) {
+                    1 => TileRow("Name: ", sender.name),
+                    2 => TileRow("Address: ",
+                        "${sender.street}, ${sender.city}, ${sender.province}"),
+                    3 => TileRow("Phone: ", sender.phone),
+                    4 => TileRow("Email: ", sender.email),
+                    5 => TileRow("E-Transfer: ", '${sender.eTransfer}'),
+                    _ => TileRow("Sender Id: ", "${sender.senderId}")
+                  },
+                  if (i != 5) ...[
+                    Margins.vertical4,
+                  ]
+                ],
               ],
             ),
           ),

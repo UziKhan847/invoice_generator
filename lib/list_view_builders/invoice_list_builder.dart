@@ -13,6 +13,7 @@ class InvoiceListBuilder extends StatelessWidget {
         padding: const EdgeInsets.only(top: 0, bottom: 0),
         itemCount: invoices.length,
         itemBuilder: (context, index) => InvoiceTile(
+          isInvoice: true,
               invoice: invoices[index],
             ));
   }

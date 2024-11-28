@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/pages/detail_page.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 
-class InvoiceTile extends StatelessWidget {
-  const InvoiceTile(
-      {super.key, required this.invoice, required this.isInvoice});
+class ReceiptTile extends StatelessWidget {
+  const ReceiptTile({super.key, required this.receipt});
 
-  final bool isInvoice;
-  final Invoice invoice;
+  final Receipt receipt;
 
   @override
   Widget build(BuildContext context) {
@@ -19,32 +17,35 @@ class InvoiceTile extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => DetailPage(
-                      isInvoice: true,
-                      invoice: invoice,
-                      sender: invoice.senders!,
-                      recipient: invoice.recipients!,
-                      courses: invoice.courses,
+                      isInvoice: false,
+                      receipt: receipt,
+                      invoice: receipt.invoices,
+                      sender: receipt.senders,
+                      recipient: receipt.recipients,
+                      courses: receipt.courses,
                     )));
       },
       child: Column(
         children: [
           ListTile(
             leading: const Icon(
-              Icons.receipt,
+              Icons.receipt_long_rounded,
               size: 20,
             ),
             title: Column(
               children: [
-                for (int i = 0; i < 3; i++) ...[
+                for (int i = 0; i < 6; i++) ...[
                   switch (i) {
-                    1 => TileRow("Invoice Date: ", invoice.invoiceDate),
-                    2 => TileRow("Sender: ", invoice.senders!.name),
-                    3 => TileRow("Recipient: ", invoice.recipients!.name),
-                    _ => TileRow("Invoice Id: ", '${invoice.invoiceId}')
+                    1 => TileRow("Receipt Date: ", receipt.receiptDate),
+                    2 => TileRow("Invoice #: ", "${receipt.invoiceId}"),
+                    3 => TileRow("Amount Due: ", "\$${receipt.invoices.total}"),
+                    4 => TileRow("Sender: ", receipt.senders.name),
+                    5 => TileRow("Recipient: ", receipt.recipients.name),
+                    _ => TileRow("Receipt Id: ", '${receipt.invoiceId}')
                   },
                   Margins.vertical4,
                 ],
-                for (int i = 0; i < invoice.courses!.length; i++) ...[
+                for (int i = 0; i < receipt.courses.length; i++) ...[
                   Row(
                     children: [
                       Text(
@@ -53,7 +54,7 @@ class InvoiceTile extends StatelessWidget {
                             fontSize: 12, fontWeight: FontWeight.bold),
                       ),
                       Text(
-                        invoice.courses![i].name,
+                        receipt.courses[i].name,
                         style: const TextStyle(fontSize: 12),
                       )
                     ],
@@ -63,7 +64,7 @@ class InvoiceTile extends StatelessWidget {
               ],
             ),
             trailing: Text(
-              "Due\n\$${invoice.total}",
+              "Paid\n\$${receipt.paid}",
               textAlign: TextAlign.center,
               style: const TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
             ),

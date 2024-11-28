@@ -7,6 +7,7 @@ class Sender {
   Sender({
     required this.senderId,
     required this.name,
+    required this.businessNumber,
     required this.street,
     required this.city,
     required this.province,
@@ -16,9 +17,8 @@ class Sender {
     required this.eTransfer,
   });
 
-  @JsonKey(name: 'sender_id')
   int senderId;
-
+  String businessNumber;
   String name;
   String street;
   String city;
@@ -26,8 +26,6 @@ class Sender {
   String zip;
   String phone;
   String email;
-
-  @JsonKey(name: 'e_transfer')
   String? eTransfer;
 
   factory Sender.fromJson(Map<String, dynamic> json) => _$SenderFromJson(json);

@@ -7,6 +7,7 @@ import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_recipient.dart
 import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_sender.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/invoice_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
@@ -150,12 +151,7 @@ class _TabPageState extends ConsumerState<TabsPage>
               SenderListBuilder(senders: provider.senders),
               RecipientListBuilder(recipients: provider.recipients),
               CourseListBuilder(courses: provider.courses),
-              const Center(child: Text("RECEIPTS"))
-              // for (int i = 0; i < 5; i++) ...[
-              //   Center(
-              //     child: Text('Tab: ${i + 1}'),
-              //   )
-              // ]
+              ReceiptListBuilder(receipts: provider.receipts)
             ],
           ),
         ),

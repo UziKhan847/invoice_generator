@@ -1,4 +1,8 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
+import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
+import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 
 part 'receipt.g.dart';
 
@@ -9,18 +13,25 @@ class Receipt {
     required this.receiptDate,
     required this.paid,
     required this.invoiceId,
+     required this.invoices,
+     required this.senderId,
+    required this.senders,
+    required this.recipientId,
+    required this.recipients,
+    required this.courses,
   });
 
-  @JsonKey(name: 'receipt_id')
   int receiptId;
-
-  @JsonKey(name: 'receipt_date')
   String receiptDate;
-
   double paid;
-
-  @JsonKey(name: 'invoice_id')
   int invoiceId;
+  Invoice invoices;
+  int senderId;
+  Sender senders;
+  int recipientId;
+  Recipient recipients;
+
+  List<Course> courses;
 
   factory Receipt.fromJson(Map<String, dynamic> json) =>
       _$ReceiptFromJson(json);

@@ -5,6 +5,8 @@ import 'package:pdf/widgets.dart' as pw;
 
 class PdfTable {
   static pw.Table table({
+    double? paid,
+    required bool isInvoice,
     required Map<int, Course?> courses,
     required double subtotal,
     required double? hst,
@@ -83,21 +85,42 @@ class PdfTable {
             columnOne: "HST %13",
             columnFour: "\$$hst",
           ),
-          //Bold Final Top Border
-          pw.TableRow(
-            children: [
-              for (int i = 0; i < 4; i++) ...[
-                pw.SizedBox(
-                  height: 1,
-                ),
+          if (isInvoice) ...[
+            pw.TableRow(
+              children: [
+                for (int i = 0; i < 4; i++) ...[
+                  pw.SizedBox(
+                    height: 1,
+                  ),
+                ],
               ],
-            ],
-          ),
-          PdfTableRow.row(
-              fontWeight: pw.FontWeight.bold,
-              font: pw.Font.timesBold(),
-              columnOne: "TOTAL",
-              columnFour: "\$$total"),
+            ),
+            PdfTableRow.row(
+                fontWeight: pw.FontWeight.bold,
+                font: pw.Font.timesBold(),
+                columnOne: "TOTAL",
+                columnFour: "\$$total"),
+          ],
+          if (!isInvoice) ...[
+            PdfTableRow.row(
+                font: pw.Font.times(),
+                columnOne: "TOTAL",
+                columnFour: "\$$total"),
+            pw.TableRow(
+              children: [
+                for (int i = 0; i < 4; i++) ...[
+                  pw.SizedBox(
+                    height: 1,
+                  ),
+                ],
+              ],
+            ),
+            PdfTableRow.row(
+                fontWeight: pw.FontWeight.bold,
+                font: pw.Font.timesBold(),
+                columnOne: "PAID",
+                columnFour: "\$$paid"),
+          ],
         ],
       );
 }

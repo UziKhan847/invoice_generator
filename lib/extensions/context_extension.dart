@@ -13,6 +13,7 @@ extension ContextExtension on BuildContext {
         ),
       );
 
+
   void dialog(
           {bool barrierDismissible = true,
           required String title,

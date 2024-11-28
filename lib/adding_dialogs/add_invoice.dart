@@ -98,9 +98,7 @@ class _AddInvoiceState extends ConsumerState<AddInvoice> {
           await provider.insertInvoice(
               context: context,
               invoiceDate: dateController.text,
-              dueDate: dueDateController.text.isEmpty
-                  ? null
-                  : dueDateController.text,
+              dueDate: dueDateController.text,
               senderId: selectedSender.senderId,
               recipientId: selectedRecipient.recipientId,
               selectedCourses: selectedCourses,

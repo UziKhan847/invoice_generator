@@ -15,9 +15,7 @@ Recipient({
   required this.email,
 });
 
-@JsonKey(name: 'recipient_id')
 int recipientId;
-
 String name;
 String street;
 String city;

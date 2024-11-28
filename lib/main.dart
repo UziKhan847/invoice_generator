@@ -79,7 +79,7 @@ class MyApp extends ConsumerWidget {
           FutureBuilder(
               future: data,
               builder: (context, snapshot) {
-                if (snapshot.connectionState == ConnectionState.done) {
+                if (snapshot.connectionState == ConnectionState.done && !snapshot.hasError) {
                   return const TabsPage();
                 }
 

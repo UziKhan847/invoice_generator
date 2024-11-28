@@ -21,28 +21,18 @@ class Invoice {
     required this.courses,
   });
 
-  @JsonKey(name: 'invoice_id')
   int invoiceId;
-
-  @JsonKey(name: 'invoice_date')
   String invoiceDate;
-
-  @JsonKey(name: 'due_date')
   String? dueDate;
-
   double subtotal;
   double? hst;
   double total;
-
-  @JsonKey(name: 'sender_id')
   int senderId;
-  Sender senders;
-
-  @JsonKey(name: 'recipient_id')
+  Sender? senders;
   int recipientId;
-  Recipient recipients;
+  Recipient? recipients;
 
-  List<Course> courses;
+  List<Course>? courses;
 
   factory Invoice.fromJson(Map<String, dynamic> json) =>
       _$InvoiceFromJson(json);

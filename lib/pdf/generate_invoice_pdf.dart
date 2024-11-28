@@ -9,12 +9,11 @@ import 'package:markaz_umaza_invoice_generator/pdf/pdf_text.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
-Future<Uint8List> generatePdf({
+Future<Uint8List> generateInvoicePdf({
   required Invoice invoice,
   required Sender sender,
   required Recipient recipient,
   required Map<int, Course> courses,
-  required bool showName,
 }) async {
   final pdf = pw.Document();
 
@@ -41,7 +40,7 @@ Future<Uint8List> generatePdf({
                 ),
                 PdfMargins.vertical6,
                 PdfText.general(
-                  text: showName ? sender.name : "",
+                  text: "BN: ${sender.businessNumber}",
                 ),
                 PdfText.general(
                   text: "${sender.street}, ${sender.city}, ${sender.province}",
@@ -146,6 +145,7 @@ Future<Uint8List> generatePdf({
         ),
         PdfMargins.vertical48,
         PdfTable.table(
+          isInvoice: true,
           courses: courses,
           subtotal: invoice.subtotal,
           hst: invoice.hst,
@@ -199,34 +199,3 @@ Future<Uint8List> generatePdf({
 
   return pdf.save();
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// import 'package:flutter/services.dart';
-// import 'package:pdf/widgets.dart';
-
-// Future<Uint8List> generatePdf() async {
-//   final pdf = Document();
-
-//   //Logo
-//   final img = await rootBundle.load("/images/markaz_umaza_logo.png");
-//   final ImageBytes = img.buffer.asUint8List();
-//   Image logo = Image(MemoryImage(ImageBytes));
-
-//   pdf.addPage(Page(build: (context) {
-//     return Column(children: []);
-//   }));
-
-//   return pdf.save();
-// }

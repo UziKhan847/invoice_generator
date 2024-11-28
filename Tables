@@ -5,10 +5,13 @@ Invoice_Courses:
 invoice_id, course_id
 
 Senders:
-sender_id, name, street, city, province, zip, phone, email, e_transfer
+sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number
 
 Recipeints:
 recipient_id, name, street, city, province, zip, phone, email
 
 Invoices:
 invoice_id, invoice_date, due_date, subtotal, hst, total, sender_id, recipient_id
+
+Receipts:
+receipt_id, receipt_date (auto), invoice_id, sender_id, recipient_id (auto),

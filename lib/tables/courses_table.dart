@@ -5,15 +5,19 @@ import 'package:markaz_umaza_invoice_generator/utils/general_table_row.dart';
 class CoursesTable extends StatelessWidget {
   const CoursesTable(
       {super.key,
+      required this.isInvoice,
+      this.paid,
       required this.courses,
       required this.subtotal,
       required this.hst,
       required this.total});
 
   final Map<int, Course> courses;
+  final double? paid;
   final double subtotal;
   final double? hst;
   final double total;
+  final bool isInvoice;
 
   @override
   Widget build(BuildContext context) {
@@ -56,21 +60,42 @@ class CoursesTable extends StatelessWidget {
           columnOne: "HST %13",
           columnFour: "\$$hst",
         ),
-        //Bold Final Top Border
-        TableRow(
-          children: [
-            for (int i = 0; i < 4; i++) ...[
-              const SizedBox(
-                height: 1,
-              )
-            ]
-          ],
-        ),
-        GeneralTableRow.row(
-          fontWeight: FontWeight.bold,
-          columnOne: "TOTAL",
-          columnFour: "\$$total",
-        ),
+        if (isInvoice) ...[
+          TableRow(
+            children: [
+              for (int i = 0; i < 4; i++) ...[
+                const SizedBox(
+                  height: 1,
+                )
+              ]
+            ],
+          ),
+          GeneralTableRow.row(
+            fontWeight: FontWeight.bold,
+            columnOne: "TOTAL",
+            columnFour: "\$$total",
+          ),
+        ],
+        if (!isInvoice) ...[
+          GeneralTableRow.row(
+            columnOne: "TOTAL",
+            columnFour: "\$$total",
+          ),
+          TableRow(
+            children: [
+              for (int i = 0; i < 4; i++) ...[
+                const SizedBox(
+                  height: 1,
+                )
+              ]
+            ],
+          ),
+          GeneralTableRow.row(
+            fontWeight: FontWeight.bold,
+            columnOne: "PAID",
+            columnFour: "\$$paid",
+          ),
+        ]
       ],
     );
   }

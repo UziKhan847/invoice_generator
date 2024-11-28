@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 
 class CourseTile extends StatelessWidget {
   const CourseTile({super.key, required this.course});
@@ -20,75 +21,20 @@ class CourseTile extends StatelessWidget {
             ),
             title: Column(
               children: [
-                Row(
-                  children: [
-                    const Text(
-                      "Course Id: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${course.courseId}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Course Name: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      course.name,
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Course Cost: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "\$${course.cost}/${course.costFrequency}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Course Quantity: ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "${course.quantity}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
-                Margins.vertical4,
-                Row(
-                  children: [
-                    const Text(
-                      "Total Amount (Excluding Tax): ",
-                      style:
-                          TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      "\$${course.amount}",
-                      style: const TextStyle(fontSize: 12),
-                    )
-                  ],
-                ),
+                for (int i = 0; i < 5; i++) ...[
+                  switch (i) {
+                    1 => TileRow("Course Name: ", course.name),
+                    2 => TileRow("Course Cost: ",
+                        "\$${course.cost}/${course.costFrequency}"),
+                    3 => TileRow("Course Quantity: ", "${course.quantity}"),
+                    4 =>
+                      TileRow("Total Amount (w/o Tax): ", "\$${course.amount}"),
+                    _ => TileRow("Course Id: ", "${course.courseId}")
+                  },
+                  if (i != 4) ...[
+                    Margins.vertical4,
+                  ]
+                ],
               ],
             ),
           ),

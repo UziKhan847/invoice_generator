@@ -31,8 +31,8 @@ class _AddCourseState extends ConsumerState<AddCourse> {
   late AppData provider;
   final nameFocus = FocusNode();
   final costFocus = FocusNode();
-  final costRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-  final costZeroRegex = RegExp(r'^0+\d');
+  final moneyRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+  final moneyZeroRegex = RegExp(r'^0+\d');
 
   @override
   void dispose() {
@@ -136,8 +136,8 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                             validator: (value) {
                               if (value == null || value.isEmpty) {
                                 return 'Enter cost';
-                              } else if (!costRegex.hasMatch(value) ||
-                                  costZeroRegex.hasMatch(value)) {
+                              } else if (!moneyRegex.hasMatch(value) ||
+                                  moneyZeroRegex.hasMatch(value)) {
                                 return 'Invalid cost';
                               }
                               return null;

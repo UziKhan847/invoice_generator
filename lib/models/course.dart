@@ -13,15 +13,10 @@ class Course {
     required this.amount,
   });
 
-  @JsonKey(name: 'course_id')
   int courseId;
-
   String name;
   double cost;
-
-  @JsonKey(name: "cost_frequency")
   String costFrequency;
-
   int quantity;
   double amount;
 

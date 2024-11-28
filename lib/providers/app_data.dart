@@ -4,6 +4,7 @@ import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart
 import 'package:markaz_umaza_invoice_generator/main.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -13,9 +14,15 @@ final appData = ChangeNotifierProvider<AppData>((ref) {
 });
 
 class AppData extends ChangeNotifier {
+  late PostgrestList receiptData;
+  late List<Receipt> receipts;
+  late PostgrestList receiptIdData;
+  late int newReceiptId;
+  late PostgrestList newReceipt;
+  late PostgrestList invoiceCourseIds;
+
   late PostgrestList invoiceData;
   late List<Invoice> invoices;
-  late PostgrestList invoiceId;
   late PostgrestList invoiceIdData;
   late int newInvoiceId;
   late PostgrestList newInvoice;
@@ -35,6 +42,11 @@ class AppData extends ChangeNotifier {
   //Fetch Data Methods
   Future<void> getData() async {
     try {
+      receiptData = await supabase
+          .from("receipts")
+          .select("*, invoices(*), senders(*), recipients(*), courses(*)")
+          .order("receipt_id", ascending: true);
+
       invoiceData = await supabase
           .from("invoices")
           .select("*, senders(*), recipients(*), courses(*)")
@@ -55,46 +67,95 @@ class AppData extends ChangeNotifier {
           .select()
           .order("course_id", ascending: true);
 
-      invoices = invoiceData.map(Invoice.fromJson).toList();
-      senders = senderData.map(Sender.fromJson).toList();
-      recipients = recipientData.map(Recipient.fromJson).toList();
-      courses = courseData.map(Course.fromJson).toList();
+      receipts = receiptData.map(Receipt.fromJson).toList();
 
-      print("SUCCESS!");
+      invoices = invoiceData.map(Invoice.fromJson).toList();
+
+      senders = senderData.map(Sender.fromJson).toList();
+
+      recipients = recipientData.map(Recipient.fromJson).toList();
+
+      courses = courseData.map(Course.fromJson).toList();
     } catch (e) {
-      print(e);
+      rethrow;
     }
   }
 
   //Insert Data Methods
+
+  //Receipt
+  Future<void> insertReceipt({
+    required BuildContext context,
+    required String receiptDate,
+    required double paid,
+    required int senderId,
+    required int recipientId,
+    required int invoiceId,
+  }) async {
+    try {
+      receiptIdData = await supabase.from("receipts").insert(
+        {
+          if (receiptDate.isNotEmpty) 'receipt_date': receiptDate,
+          'paid': paid,
+          'invoice_id': invoiceId,
+          'sender_id': senderId,
+          'recipient_id': recipientId
+        },
+      ).select("receipt_id");
+
+      newReceiptId = receiptIdData[0]['receipt_id'];
+
+      invoiceCourseIds = await supabase
+          .from("invoice_courses")
+          .select('course_id')
+          .eq('invoice_id', invoiceId);
+
+      for (int i = 0; i < invoiceCourseIds.length; i++) {
+        await supabase.from("receipt_courses").insert({
+          'receipt_id': newReceiptId,
+          'course_id': invoiceCourseIds[i]["course_id"]
+        });
+      }
+
+      newReceipt = await supabase
+          .from('receipts')
+          .select("*, invoices(*), senders(*), recipients(*), courses(*)")
+          .eq('receipt_id', newReceiptId);
+
+      receipts.add(Receipt.fromJson(newReceipt[0]));
+
+      notifyListeners();
+
+      if (context.mounted) {
+        context.showSnackBar('Successfully Added a Receipt');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
+    }
+  }
+
+  //Invoice
   Future<void> insertInvoice({
     required BuildContext context,
     required String invoiceDate,
-    required String? dueDate,
+    required String dueDate,
     required double subtotal,
     required int senderId,
     required int recipientId,
     required Map<int, Course> selectedCourses,
   }) async {
     try {
-      invoiceIdData = invoiceDate.isEmpty
-          ? await supabase.from("invoices").insert(
-              {
-                'due_date': dueDate,
-                'subtotal': subtotal,
-                'sender_id': senderId,
-                'recipient_id': recipientId
-              },
-            ).select("invoice_id")
-          : await supabase.from("invoices").insert(
-              {
-                'invoice_date': invoiceDate,
-                'due_date': dueDate,
-                'subtotal': subtotal,
-                'sender_id': senderId,
-                'recipient_id': recipientId
-              },
-            ).select("invoice_id");
+      invoiceIdData = await supabase.from("invoices").insert(
+        {
+          if (invoiceDate.isNotEmpty) 'invoice_date': invoiceDate,
+          'due_date': dueDate.isNotEmpty ? dueDate : null,
+          'subtotal': subtotal,
+          'sender_id': senderId,
+          'recipient_id': recipientId
+        },
+      ).select("invoice_id");
 
       newInvoiceId = invoiceIdData[0]['invoice_id'];
 
