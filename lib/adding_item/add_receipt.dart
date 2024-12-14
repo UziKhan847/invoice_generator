@@ -15,10 +15,10 @@ class AddReceipt extends ConsumerStatefulWidget {
   const AddReceipt({super.key});
 
   @override
-  ConsumerState<AddReceipt> createState() => _AddReceiptState();
+  ConsumerState<AddReceipt> createState() => _AddReceiptConsumerState();
 }
 
-class _AddReceiptState extends ConsumerState<AddReceipt> {
+class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -39,8 +39,8 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
   late AppData provider;
   DateTime now = DateTime.now();
 
-  final moneyRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-  final moneyZeroRegex = RegExp(r'^0+\d');
+  final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+  final leadingZerosRegex = RegExp(r'^0+\d');
 
   @override
   void dispose() {
@@ -157,8 +157,8 @@ class _AddReceiptState extends ConsumerState<AddReceipt> {
                       validator: (value) {
                         if (value != null &&
                             value.isNotEmpty &&
-                            (!moneyRegex.hasMatch(value) ||
-                                moneyZeroRegex.hasMatch(value))) {
+                            (!numTwoDecimalsRegex.hasMatch(value) ||
+                                leadingZerosRegex.hasMatch(value))) {
                           return 'Invalid value';
                         }
                         return null;

@@ -11,10 +11,10 @@ class AddRecipient extends ConsumerStatefulWidget {
   const AddRecipient({super.key});
 
   @override
-  ConsumerState<AddRecipient> createState() => _AddRecipientState();
+  ConsumerState<AddRecipient> createState() => _AddRecipientConsumerState();
 }
 
-class _AddRecipientState extends ConsumerState<AddRecipient> {
+class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 

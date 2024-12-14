@@ -18,10 +18,10 @@ class AddInvoice extends ConsumerStatefulWidget {
   const AddInvoice({super.key});
 
   @override
-  ConsumerState<AddInvoice> createState() => _AddInvoiceState();
+  ConsumerState<AddInvoice> createState() => _AddInvoiceConsumerState();
 }
 
-class _AddInvoiceState extends ConsumerState<AddInvoice> {
+class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
@@ -327,11 +327,12 @@ class _AddInvoiceState extends ConsumerState<AddInvoice> {
                               Recipient item = provider.recipients[index];
 
                               return DropdownItemTile(
+                                mainAxisAlignment: MainAxisAlignment.start,
                                 currentMenuIndex: index,
                                 itemText:
-                                    "#${item.recipientId}- ${item.name}\n${item.street}, ${item.city}, ${item.province}\n${item.email}",
+                                    "#${item.recipientId}- ${item.name}\n${item.street}\n${item.city}, ${item.province}\n${item.email}",
                                 lastItemIndex: provider.recipients.length - 1,
-                                menuItemHeight: 75,
+                                menuItemHeight: 90,
                                 onItemTap: () {
                                   selectedRecipient = item;
                                   recipientController.text =
@@ -359,10 +360,12 @@ class _AddInvoiceState extends ConsumerState<AddInvoice> {
                             style: const ButtonStyle(
                                 iconSize: WidgetStatePropertyAll(20),
                                 shape: WidgetStatePropertyAll(CircleBorder()),
-                                //backgroundColor: WidgetStatePropertyAll(Color(0xFFFFFFFF)),
                                 overlayColor:
                                     WidgetStatePropertyAll(Color(0xFFD7FFD8))),
                             onPressed: selectedCourses[courseIndex] == null ||
+                                    quantityControllers[courseIndex]
+                                        .text
+                                        .isEmpty ||
                                     numberOfCourses == 5
                                 ? null
                                 : () {
@@ -376,13 +379,13 @@ class _AddInvoiceState extends ConsumerState<AddInvoice> {
                             style: const ButtonStyle(
                                 iconSize: WidgetStatePropertyAll(20),
                                 shape: WidgetStatePropertyAll(CircleBorder()),
-                                //backgroundColor: WidgetStatePropertyAll(Color(0xFFFFFFFF)),
                                 overlayColor:
                                     WidgetStatePropertyAll(Color(0xFFFFD7D7))),
                             onPressed: numberOfCourses == 1
                                 ? null
                                 : () {
                                     courseControllers[courseIndex].clear();
+                                    quantityControllers[courseIndex].clear();
 
                                     courseMenuItems
                                         .add(selectedCourses[courseIndex - 1]!);
@@ -442,6 +445,8 @@ class _AddInvoiceState extends ConsumerState<AddInvoice> {
                                       Course item = courseMenuItems[index];
 
                                       return DropdownItemTile(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.start,
                                         currentMenuIndex: index,
                                         itemText:
                                             "#${item.courseId}- ${item.name}\n\$${item.cost}/${item.costFrequency}",

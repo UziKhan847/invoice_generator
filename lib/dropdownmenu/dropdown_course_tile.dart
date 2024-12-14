@@ -33,8 +33,8 @@ class DropdownCourseTile extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? arrowUpColor;
   final Color? arrowDownColor;
-  final moneyRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-  final moneyZeroRegex = RegExp(r'^0+\d');
+  final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+  final leadingZerosRegex = RegExp(r'^0+\d');
 
   @override
   Widget build(BuildContext context) {
@@ -77,8 +77,8 @@ class DropdownCourseTile extends StatelessWidget {
             validator: (value) {
               if (value == null || value.isEmpty) {
                 return 'Invalid';
-              } else if (!moneyRegex.hasMatch(value) ||
-                  moneyZeroRegex.hasMatch(value)) {
+              } else if (!numTwoDecimalsRegex.hasMatch(value) ||
+                  leadingZerosRegex.hasMatch(value)) {
                 return 'Invalid';
               }
               return null;

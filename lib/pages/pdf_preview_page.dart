@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice_course.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';

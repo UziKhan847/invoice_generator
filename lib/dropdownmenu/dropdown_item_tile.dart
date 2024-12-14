@@ -40,9 +40,12 @@ class DropdownItemTile extends StatelessWidget {
           child: InkWell(
             borderRadius: itemBorderRadius(),
             onTap: onItemTap,
-            child: Row(
-                mainAxisAlignment: mainAxisAlignment,
-                children: [Text(itemText)]),
+            child: Row(mainAxisAlignment: mainAxisAlignment, children: [
+              Text(
+                itemText,
+                
+              )
+            ]),
           ),
         ));
   }

@@ -1,82 +1,64 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
-import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 
-class AddCourse extends ConsumerStatefulWidget {
-  const AddCourse({super.key});
+class CourseDialog extends StatefulWidget {
+  const CourseDialog({
+    super.key,
+    this.isLoading = false,
+    this.item,
+    required this.onTapAffirm,
+    required this.formKey,
+    required this.costController,
+    required this.frequencyController,
+    required this.nameController,
+  });
+
+  final bool isLoading;
+  final void Function()? onTapAffirm;
+  final GlobalKey<FormState> formKey;
+  final TextEditingController nameController;
+  final TextEditingController costController;
+  final TextEditingController frequencyController;
+  final Course? item;
 
   @override
-  ConsumerState<AddCourse> createState() => _AddCourseState();
+  State<CourseDialog> createState() => _CourseDialogState();
 }
 
-class _AddCourseState extends ConsumerState<AddCourse> {
-  final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
-
-  final nameController = TextEditingController();
-  final costController = TextEditingController();
-  final frequencyController = TextEditingController();
-
+class _CourseDialogState extends State<CourseDialog> {
   bool isFrequencySelected = false;
   List<String> frequencyDropdowItems = ["Hr", "Day", "Wk", "Mo", "Yr"];
-  late AppData provider;
   final nameFocus = FocusNode();
   final costFocus = FocusNode();
   final quantityFocus = FocusNode();
-  final moneyRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-  final moneyZeroRegex = RegExp(r'^0+\d');
-
-  @override
-  void dispose() {
-    nameController.dispose();
-    costController.dispose();
-    frequencyController.dispose();
-    super.dispose();
-  }
-
-  void loadCircle() {
-    setState(() {
-      isLoading = !isLoading;
-    });
-  }
+  final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+  final leadingZerosRegex = RegExp(r'^0+\d');
 
   @override
   Widget build(BuildContext context) {
-    provider = ref.watch(appData);
+    if (widget.item != null) {
+      widget.nameController.text = widget.item!.name;
+      widget.costController.text = "${widget.item!.cost}";
+      widget.frequencyController.text = widget.item!.costFrequency;
+    }
 
     return DialogTile(
       affirmButtonText: "Add",
       cancelButtonText: "Cancel",
-      isLoading: isLoading,
+      isLoading: widget.isLoading,
       dialogHeight: 200,
       dialogTitle: "Add Course",
-      onTapAffirm: () async {
-        if (_formKey.currentState!.validate()) {
-          loadCircle();
-          await provider.insertCourse(
-            context: context,
-            name: nameController.text,
-            cost: double.parse(costController.text),
-            frequency: frequencyController.text,
-            // quantity: double.parse(quantityController.text),
-          );
-          loadCircle();
-
-          if (context.mounted) {
-            Navigator.pop(context);
-          }
-        }
-      },
+      onTapAffirm: widget.onTapAffirm,
       onTapCancel: () {
         Navigator.pop(context);
       },
       dialogContent: Form(
-        key: _formKey,
+        key: widget.formKey,
         child: SizedBox(
           width: 290,
           child: ListView(
@@ -100,7 +82,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                     height: 65,
                     child: TextFormField(
                       focusNode: nameFocus,
-                      controller: nameController,
+                      controller: widget.nameController,
                       onTapOutside: (_) => nameFocus.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
@@ -127,13 +109,13 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                         child: TextFormField(
                           keyboardType: const TextInputType.numberWithOptions(),
                           focusNode: costFocus,
-                          controller: costController,
+                          controller: widget.costController,
                           onTapOutside: (_) => costFocus.unfocus(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Enter cost';
-                            } else if (!moneyRegex.hasMatch(value) ||
-                                moneyZeroRegex.hasMatch(value)) {
+                            } else if (!numTwoDecimalsRegex.hasMatch(value) ||
+                                leadingZerosRegex.hasMatch(value)) {
                               return 'Invalid cost';
                             }
                             return null;
@@ -145,16 +127,16 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                         ),
                       ),
 
-                      Text(
+                      const Text(
                         "/",
-                        style: TextStyle(
-                            fontSize: 35, color: const Color(0xFF868686)),
+                        style:
+                            TextStyle(fontSize: 35, color: Color(0xFF868686)),
                       ),
 
                       //Frequency DropDown Menu
                       DropdownMenuTile(
                         labelText: "Frequency*",
-                        controller: frequencyController,
+                        controller: widget.frequencyController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Invalid';
@@ -175,7 +157,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                             height: 250,
                             width: 64,
                             bottom: 42,
-                            right: 117,
+                            right: 35,
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isFrequencySelected = !isFrequencySelected;
@@ -196,7 +178,7 @@ class _AddCourseState extends ConsumerState<AddCourse> {
                                     menuItemHeight: 50,
                                     onItemTap: () {
                                       setState(() {
-                                        frequencyController.text = item;
+                                        widget.frequencyController.text = item;
                                         isFrequencySelected =
                                             !isFrequencySelected;
                                       });

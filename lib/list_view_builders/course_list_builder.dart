@@ -5,26 +5,53 @@ import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/course_tile.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 
-class CourseListBuilder extends ConsumerWidget {
-  CourseListBuilder({super.key, required this.courses});
+class CourseListBuilder extends ConsumerStatefulWidget {
+  const CourseListBuilder({super.key, required this.courses});
 
   final List<Course> courses;
 
+  @override
+  ConsumerState<CourseListBuilder> createState() =>
+      _CourseListBuilderConsumerState();
+}
+
+class _CourseListBuilderConsumerState extends ConsumerState<CourseListBuilder> {
+  bool isLoading = false;
+  final formKey = GlobalKey<FormState>();
+  final costController = TextEditingController();
+  final frequencyController = TextEditingController();
+  final nameController = TextEditingController();
   late AppData provider;
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  void dispose() {
+    nameController.dispose();
+    costController.dispose();
+    frequencyController.dispose();
+    super.dispose();
+  }
+
+  void loadCircle() => setState(() {
+        isLoading = !isLoading;
+      });
+
+  @override
+  Widget build(BuildContext context) {
     provider = ref.watch(appData);
 
     return ListView.builder(
         padding: const EdgeInsets.only(top: 0, bottom: 0),
-        itemCount: courses.length,
+        itemCount: widget.courses.length,
         itemBuilder: (context, index) {
-          Course item = courses[index];
+          Course item = widget.courses[index];
+
+          //         nameController.text = item.name;
+          // costController.text = "${item.cost}";
+          // frequencyController.text = item.costFrequency;
 
           return CourseTile(
             course: item,
-            isLastIndex: index == courses.length - 1,
+            isLastIndex: index == widget.courses.length - 1,
             onTapDelete: () {
               showDialog(
                   context: context,
@@ -48,19 +75,31 @@ class CourseListBuilder extends ConsumerWidget {
                     );
                   });
             },
-            onTapEdit: () => showDialog<String>(
-                barrierDismissible: false,
-                context: context,
-                builder: (BuildContext context) => DialogTile(
-                      dialogTitle: "Edit Course",
-                      dialogHeight: 200,
-                      affirmButtonText: "Update",
-                      cancelButtonText: "Cancel",
-                      onTapCancel: () {
-                        Navigator.pop(context);
-                      },
-                      onTapAffirm: null,
-                    )),
+            // onTapEdit: () => showDialog<String>(
+            //     barrierDismissible: false,
+            //     context: context,
+            //     builder: (BuildContext context) => CourseDialog(
+            //           formKey: formKey,
+            //           item: item,
+            //           costController: costController,
+            //           nameController: nameController,
+            //           frequencyController: frequencyController,
+            //           onTapAffirm: () async {
+            //             loadCircle();
+            //             await provider.updateCourse(
+            //               context: context,
+            //               courseId: item.courseId,
+            //               name: nameController.text,
+            //               cost: double.parse(costController.text),
+            //               frequency: frequencyController.text,
+            //             );
+            //             loadCircle();
+
+            //             if (context.mounted) {
+            //               Navigator.pop(context);
+            //             }
+            //           },
+            //         )),
           );
         });
   }

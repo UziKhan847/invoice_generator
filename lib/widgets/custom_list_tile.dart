@@ -57,10 +57,10 @@ class CustomListTile extends StatelessWidget {
                       color: Color(0xFFB71C1C),
                     ),
                   ),
-                  IconButton(
-                    onPressed: onTapEdit,
-                    icon: const Icon(Icons.edit),
-                  ),
+                  // IconButton(
+                  //   onPressed: onTapEdit,
+                  //   icon: const Icon(Icons.edit),
+                  // ),
                 ],
               ),
             ),

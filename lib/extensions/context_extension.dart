@@ -13,28 +13,6 @@ extension ContextExtension on BuildContext {
         ),
       );
 
-
-  void dialog(
-          {bool barrierDismissible = true,
-          required String title,
-          Widget? content,
-          List<Widget>? actions,
-          required BuildContext context}) =>
-      showDialog<void>(
-          barrierDismissible: barrierDismissible,
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: Text(
-                title,
-                style:
-                    const TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
-              ),
-              content: content,
-              actions: actions,
-            );
-          });
-
   void insertOverlay(
     BuildContext context, {
     required Widget? listViewBuilder,

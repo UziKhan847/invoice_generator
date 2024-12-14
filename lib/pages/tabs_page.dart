@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_course.dart';
-import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_invoice.dart';
-import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_receipt.dart';
-import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_recipient.dart';
-import 'package:markaz_umaza_invoice_generator/adding_dialogs/add_sender.dart';
+import 'package:markaz_umaza_invoice_generator/adding_item/add_course.dart';
+import 'package:markaz_umaza_invoice_generator/adding_item/add_invoice.dart';
+import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
+import 'package:markaz_umaza_invoice_generator/adding_item/add_recipient.dart';
+import 'package:markaz_umaza_invoice_generator/adding_item/add_sender.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/invoice_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
@@ -101,73 +101,78 @@ class _TabPageState extends ConsumerState<TabsPage>
 
     return DefaultTabController(
       length: 5,
-      child: Scaffold(
-        body: NestedScrollView(
-          headerSliverBuilder: (BuildContext context, bool innerBoxIsScrolled) {
-            return <Widget>[
-              SliverAppBar(
-                backgroundColor: appBarColor,
-                foregroundColor: Theme.of(context).appBarTheme.foregroundColor,
-                title: const GeneralText(
-                  text: "Invoice Generator",
-                  fontFamily: "LiberationSans",
-                  fontWeight: FontWeight.bold,
-                  fontSize: 20,
-                ),
-                pinned: true,
-                floating: true,
-                bottom: TabBar(
-                  onTap: null,
-                  tabAlignment: TabAlignment.start,
-                  indicatorWeight: 2,
-                  overlayColor:
-                      const WidgetStatePropertyAll(Colors.transparent),
-                  indicatorSize: TabBarIndicatorSize.tab,
-                  indicator: BoxDecoration(
-                      color: indicatorColor ?? const Color(0xFFF6857D),
-                      borderRadius: const BorderRadius.only(
-                          topRight: Radius.circular(10),
-                          topLeft: Radius.circular(10))),
-                  labelPadding: const EdgeInsets.only(right: 15, left: 15),
-                  labelColor: Colors.black,
-                  unselectedLabelColor: Colors.white,
-                  controller: tabController,
-                  isScrollable: true,
-                  tabs: const [
-                    Tab(text: "Invoices"),
-                    Tab(text: "Senders"),
-                    Tab(text: "Recipients"),
-                    Tab(text: "Courses"),
-                    Tab(text: "Receipts"),
-                  ],
-                ),
-              )
-            ];
-          },
-          body: TabBarView(
-            controller: tabController,
-            children: [
-              InvoiceListBuilder(invoices: provider.invoices),
-              SenderListBuilder(senders: provider.senders),
-              RecipientListBuilder(recipients: provider.recipients),
-              CourseListBuilder(courses: provider.courses),
-              ReceiptListBuilder(receipts: provider.receipts)
-            ],
+      child: PopScope(
+        canPop: false,
+        child: Scaffold(
+          body: NestedScrollView(
+            headerSliverBuilder:
+                (BuildContext context, bool innerBoxIsScrolled) {
+              return <Widget>[
+                SliverAppBar(
+                  backgroundColor: appBarColor,
+                  foregroundColor:
+                      Theme.of(context).appBarTheme.foregroundColor,
+                  title: const GeneralText(
+                    text: "Invoice Generator",
+                    fontFamily: "LiberationSans",
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                  ),
+                  pinned: true,
+                  floating: true,
+                  bottom: TabBar(
+                    onTap: null,
+                    tabAlignment: TabAlignment.start,
+                    indicatorWeight: 2,
+                    overlayColor:
+                        const WidgetStatePropertyAll(Colors.transparent),
+                    indicatorSize: TabBarIndicatorSize.tab,
+                    indicator: BoxDecoration(
+                        color: indicatorColor ?? const Color(0xFFF6857D),
+                        borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(10),
+                            topLeft: Radius.circular(10))),
+                    labelPadding: const EdgeInsets.only(right: 15, left: 15),
+                    labelColor: Colors.black,
+                    unselectedLabelColor: Colors.white,
+                    controller: tabController,
+                    isScrollable: true,
+                    tabs: const [
+                      Tab(text: "Invoices"),
+                      Tab(text: "Senders"),
+                      Tab(text: "Recipients"),
+                      Tab(text: "Courses"),
+                      Tab(text: "Receipts"),
+                    ],
+                  ),
+                )
+              ];
+            },
+            body: TabBarView(
+              controller: tabController,
+              children: [
+                InvoiceListBuilder(invoices: provider.invoices),
+                SenderListBuilder(senders: provider.senders),
+                RecipientListBuilder(recipients: provider.recipients),
+                CourseListBuilder(courses: provider.courses),
+                ReceiptListBuilder(receipts: provider.receipts)
+              ],
+            ),
           ),
-        ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: () => showDialog<String>(
-              barrierDismissible: false,
-              context: context,
-              builder: (BuildContext context) => switch (currentIndex) {
-                    1 => const AddSender(),
-                    2 => const AddRecipient(),
-                    3 => const AddCourse(),
-                    4 => const AddReceipt(),
-                    _ => const AddInvoice(),
-                  }),
-          backgroundColor: appBarColor,
-          child: const Icon(Icons.add),
+          floatingActionButton: FloatingActionButton(
+            onPressed: () => showDialog<String>(
+                barrierDismissible: false,
+                context: context,
+                builder: (BuildContext context) => switch (currentIndex) {
+                      1 => const AddSender(),
+                      2 => const AddRecipient(),
+                      3 => const AddCourse(),
+                      4 => const AddReceipt(),
+                      _ => const AddInvoice(),
+                    }),
+            backgroundColor: appBarColor,
+            child: const Icon(Icons.add),
+          ),
         ),
       ),
     );

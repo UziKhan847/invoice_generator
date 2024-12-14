@@ -11,10 +11,10 @@ class AddSender extends ConsumerStatefulWidget {
   const AddSender({super.key});
 
   @override
-  ConsumerState<AddSender> createState() => _AddSenderState();
+  ConsumerState<AddSender> createState() => _AddSenderConsumerState();
 }
 
-class _AddSenderState extends ConsumerState<AddSender> {
+class _AddSenderConsumerState extends ConsumerState<AddSender> {
   final _formKey = GlobalKey<FormState>();
   bool isLoading = false;
 
