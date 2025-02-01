@@ -56,22 +56,23 @@ class MyApp extends ConsumerWidget {
           overlayColor: WidgetStatePropertyAll(Color(0xFFDDDDDD)),
         )),
         inputDecorationTheme: const InputDecorationTheme(
-          isDense: true,
-          iconColor: Color(0xFF6A6A6A),
-          floatingLabelBehavior: FloatingLabelBehavior.always,
-          labelStyle: TextStyle(
-            color: Color(0xFF6A6A6A),
-          ),
-          errorStyle: TextStyle(height: 0, fontSize: 11),
-          border: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF616161))),
-          focusedBorder: OutlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF135993))),
-          errorBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-          focusedErrorBorder:
-              OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-        ),
+            isDense: true,
+            iconColor: Color(0xFF6A6A6A),
+            floatingLabelBehavior: FloatingLabelBehavior.always,
+            labelStyle: TextStyle(
+              color: Color(0xFF6A6A6A),
+            ),
+            errorStyle: TextStyle(height: 0, fontSize: 11),
+            border: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF616161))),
+            focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF135993))),
+            errorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            focusedErrorBorder:
+                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
+            disabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF616161)))),
         dialogTheme: const DialogTheme(backgroundColor: Color(0xFFF7F7F7)),
       ),
       home:

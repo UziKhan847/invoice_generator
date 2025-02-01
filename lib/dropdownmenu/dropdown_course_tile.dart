@@ -18,11 +18,13 @@ class DropdownCourseTile extends StatelessWidget {
     this.textStyle,
     this.arrowDownColor,
     this.arrowUpColor,
+    this.isEnabled = true,
   });
 
   final bool isFirstCourse;
   final bool isLastCourse;
   final bool isSelected;
+  final bool isEnabled;
   final TextEditingController? courseController;
   final TextEditingController? quantityController;
   final FocusNode? quantityFocus;
@@ -72,6 +74,7 @@ class DropdownCourseTile extends StatelessWidget {
           child: TextFormField(
             keyboardType: const TextInputType.numberWithOptions(),
             focusNode: quantityFocus,
+            enabled: isEnabled,
             controller: quantityController,
             onTapOutside: (_) => quantityFocus!.unfocus(),
             validator: (value) {

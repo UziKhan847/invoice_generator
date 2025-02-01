@@ -35,6 +35,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
       List<TextEditingController>.generate(5, (_) => TextEditingController());
   final List<FocusNode> quantityFocusNodes =
       List<FocusNode>.generate(5, (_) => FocusNode());
+  final List<bool> isEnabled = List<bool>.generate(5, (_) => true);
 
   bool isSenderSelected = false;
   bool isRecipientSelected = false;
@@ -56,6 +57,17 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
   late AppData provider;
   DateTime now = DateTime.now();
+
+  @override
+  void initState() {
+    super.initState();
+
+    for (TextEditingController e in quantityControllers) {
+      e.addListener(() {
+        setState(() {});
+      });
+    }
+  }
 
   @override
   void dispose() {
@@ -169,7 +181,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                       onTapMenuBox: () async {
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          firstDate: DateTime(2000, 01, 01),
+                          firstDate: DateTime(2020, 01, 01),
                           lastDate: DateTime(2100, 12, 31),
                         );
 
@@ -204,7 +216,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                       onTapMenuBox: () async {
                         DateTime? newDate = await showDatePicker(
                           context: context,
-                          firstDate: DateTime.now(),
+                          firstDate: DateTime(2020, 01, 01),
                           lastDate: DateTime(2100, 12, 31),
                         );
 
@@ -371,6 +383,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                 : () {
                                     isCourseAdded = true;
                                     numberOfCourses++;
+                                    isEnabled[courseIndex] = false;
                                     setState(() {});
                                   },
                             icon: const Icon(Icons.add),
@@ -394,6 +407,8 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                         a.courseId.compareTo(b.courseId));
 
                                     selectedCourses.remove(courseIndex);
+
+                                    isEnabled[courseIndex - 1] = true;
                                     numberOfCourses--;
                                     setState(() {});
                                   },
@@ -419,6 +434,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                       courseController: courseControllers[i],
                       quantityController: quantityControllers[i],
                       quantityFocus: quantityFocusNodes[i],
+                      isEnabled: isEnabled[i],
                       onTapMenuBox: numberOfCourses != i + 1
                           ? null
                           : () {
