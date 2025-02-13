@@ -21,28 +21,88 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   final nameController = TextEditingController();
   final streetController = TextEditingController();
   final cityController = TextEditingController();
+  final countryController = TextEditingController()..text = 'Canada';
   final provController = TextEditingController();
   final zipController = TextEditingController();
   final phoneController = TextEditingController();
   final emailController = TextEditingController();
 
-  String selectedProv = 'ON';
   bool isProvSelected = false;
-  List<String> provDropdowItems = [
-    "AB",
-    "BC",
-    "MB",
-    "NB",
-    "NL",
-    "NS",
-    "NT",
-    "NU",
-    "ON",
-    "PE",
-    "QC",
-    "SK",
-    "YT"
-  ];
+  bool isCountrySelected = false;
+
+  final Map<String, List<String>> provStateMap = {
+    'Canada': [
+      "AB", // Alberta
+      "BC", // British Columbia
+      "MB", // Manitoba
+      "NB", // New Brunswick
+      "NL", // Newfoundland and Labrador
+      "NS", // Nova Scotia
+      "NT", // Northwest Territories
+      "NU", // Nunavut
+      "ON", // Ontario
+      "PE", // Prince Edward Island
+      "QC", // Quebec
+      "SK", // Saskatchewan
+      "YT" // Yukon
+    ],
+    'USA': [
+      "AL", // Alabama
+      "AK", // Alaska
+      "AZ", // Arizona
+      "AR", // Arkansas
+      "CA", // California
+      "CO", // Colorado
+      "CT", // Connecticut
+      "DE", // Delaware
+      "FL", // Florida
+      "GA", // Georgia
+      "HI", // Hawaii
+      "ID", // Idaho
+      "IL", // Illinois
+      "IN", // Indiana
+      "IA", // Iowa
+      "KS", // Kansas
+      "KY", // Kentucky
+      "LA", // Louisiana
+      "ME", // Maine
+      "MD", // Maryland
+      "MA", // Massachusetts
+      "MI", // Michigan
+      "MN", // Minnesota
+      "MS", // Mississippi
+      "MO", // Missouri
+      "MT", // Montana
+      "NE", // Nebraska
+      "NV", // Nevada
+      "NH", // New Hampshire
+      "NJ", // New Jersey
+      "NM", // New Mexico
+      "NY", // New York
+      "NC", // North Carolina
+      "ND", // North Dakota
+      "OH", // Ohio
+      "OK", // Oklahoma
+      "OR", // Oregon
+      "PA", // Pennsylvania
+      "RI", // Rhode Island
+      "SC", // South Carolina
+      "SD", // South Dakota
+      "TN", // Tennessee
+      "TX", // Texas
+      "UT", // Utah
+      "VT", // Vermont
+      "VA", // Virginia
+      "WA", // Washington
+      "WV", // West Virginia
+      "WI", // Wisconsin
+      "WY" // Wyoming
+    ],
+  };
+
+  List<String> get provDropdowItems => provStateMap[countryController.text]!;
+
+  List<String> countryDropdowItems = ["Canada", "USA"];
   late AppData provider;
   final nameFocus = FocusNode();
   final streetFocus = FocusNode();
@@ -50,7 +110,14 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   final zipFocus = FocusNode();
   final phoneFocus = FocusNode();
   final emailFocus = FocusNode();
-  final zipRegex = RegExp(r'^\w\d\w\s?\d\w\d$');
+
+  final Map<String, String> zipMapRegex = {
+    'Canada': r'^\w\d\w\s?\d\w\d$',
+    'USA': r'^\d{5}$',
+  };
+
+  RegExp get zipRegex => RegExp(zipMapRegex[countryController.text]!);
+
   final emailRegex = RegExp(r'^.+@[0-z]+\.[A-z]+$');
   final phoneRegex =
       RegExp(r'^\+?1?\s?(\(\d{3}\)|\d{3})(-|\s)?\d{3}(-|\s)?\d{4}$');
@@ -67,6 +134,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
     nameController.dispose();
     streetController.dispose();
     cityController.dispose();
+    countryController.dispose();
     provController.dispose();
     zipController.dispose();
     phoneController.dispose();
@@ -154,6 +222,63 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                   ),
                   Margins.vertical18,
 
+                  //Country DropDown Menu
+                  DropdownMenuTile(
+                    controller: countryController,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Invalid';
+                      }
+                      return null;
+                    },
+                    labelText: "Country*",
+                    labelTextSize: 12.5,
+                    isSelected: isCountrySelected,
+                    menuInkHeight: 47,
+                    menuInkWidth: 150,
+                    menuBoxWidth: 150,
+                    onTapMenuBox: () {
+                      setState(() {
+                        isCountrySelected = !isCountrySelected;
+                      });
+
+                      context.insertOverlay(
+                        context,
+                        height: 100,
+                        width: 150,
+                        bottom: 400,
+                        right: 40,
+                        onTapOutsideOverlay: () {
+                          setState(() {
+                            isCountrySelected = !isCountrySelected;
+                          });
+                          context.removeOverlay();
+                        },
+                        listViewBuilder: ListView.builder(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              String item = countryDropdowItems[index];
+
+                              return DropdownItemTile(
+                                currentMenuIndex: index,
+                                itemText: item,
+                                lastItemIndex: countryDropdowItems.length - 1,
+                                menuItemHeight: 50,
+                                onItemTap: () {
+                                  setState(() {
+                                    countryController.text = item;
+                                    isCountrySelected = !isCountrySelected;
+                                  });
+                                  context.removeOverlay();
+                                },
+                              );
+                            }),
+                      );
+                    },
+                  ),
+                  Margins.vertical18,
+
                   //Street
                   SizedBox(
                     height: 65,
@@ -223,7 +348,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                             height: 650,
                             width: 66,
                             bottom: 0,
-                            right: 46,
+                            right: 140,
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isProvSelected = !isProvSelected;
