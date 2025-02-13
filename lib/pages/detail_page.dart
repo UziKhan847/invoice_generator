@@ -90,7 +90,7 @@ class _DetailPageState extends State<DetailPage> {
                       Column(
                         children: [
                           Image.asset(
-                            "images/markaz_umaza_logo.png",
+                            "assets/images/markaz_umaza_logo.png",
                             width: 50,
                           ),
                           GeneralText(

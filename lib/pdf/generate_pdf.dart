@@ -21,7 +21,7 @@ Future<Uint8List> generatePdf({
   final pdf = pw.Document();
 
   //Logo
-  final img = await rootBundle.load("images/markaz_umaza_logo.png");
+  final img = await rootBundle.load("assets/images/markaz_umaza_logo.png");
   final imageBytes = img.buffer.asUint8List();
   pw.Image logo = pw.Image(pw.MemoryImage(imageBytes));
 
