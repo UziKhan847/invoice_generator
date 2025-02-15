@@ -347,7 +347,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                             context,
                             height: 650,
                             width: 66,
-                            bottom: 0,
+                            bottom: 50,
                             right: 140,
                             onTapOutsideOverlay: () {
                               setState(() {

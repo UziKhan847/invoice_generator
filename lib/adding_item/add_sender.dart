@@ -195,7 +195,6 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
-
                   //Street
                   SizedBox(
                     height: 65,
@@ -264,7 +263,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                             context,
                             height: 650,
                             width: 66,
-                            bottom: 0,
+                            bottom: 50,
                             right: 46,
                             onTapOutsideOverlay: () {
                               setState(() {
