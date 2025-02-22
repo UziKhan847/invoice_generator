@@ -85,7 +85,6 @@ class AppData extends ChangeNotifier {
 
       courses = courseData.map(Course.fromJson).toList();
     } catch (e) {
-      print(e);
       rethrow;
     }
   }

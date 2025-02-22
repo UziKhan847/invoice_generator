@@ -49,7 +49,7 @@ extension ContextExtension on BuildContext {
                             borderRadius: BorderRadius.circular(4),
                             boxShadow: [
                               BoxShadow(
-                                  color: Colors.black.withOpacity(0.2),
+                                  color: Colors.black.withAlpha(51),
                                   spreadRadius: 0,
                                   blurRadius: 4,
                                   offset: const Offset(0, 2))

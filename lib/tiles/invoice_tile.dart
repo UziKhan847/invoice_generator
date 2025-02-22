@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
-import 'package:markaz_umaza_invoice_generator/pages/detail_page.dart';
+import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
@@ -30,12 +30,12 @@ class InvoiceTile extends StatelessWidget {
         Navigator.push(
             context,
             MaterialPageRoute(
-                builder: (context) => DetailPage(
+                builder: (context) => PdfPreviewPage(
                       isInvoice: true,
                       invoice: invoice,
                       sender: invoice.senders,
                       recipient: invoice.recipients,
-                      invoiceCourses: invoice.invoiceCourses,
+                      invoiceCourses: invoice.invoiceCourses!.asMap(),
                     )));
       },
       isLastIndex: isLastIndex,
