@@ -13,6 +13,15 @@ final appData = ChangeNotifierProvider<AppData>((ref) {
   return AppData();
 });
 
+const selectSenders =
+    "sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number";
+const selectRecipients =
+    "recipient_id, name, street, city, province, zip, phone, email";
+const selectInvoices =
+    "invoice_id, invoice_date, due_date, subtotal, hst, total, senders($selectSenders), recipients($selectRecipients), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount)";
+const selectReceipts =
+    "receipt_id, receipt_date, paid, invoices($selectInvoices)";
+
 class AppData extends ChangeNotifier {
   late PostgrestList receiptData;
   late List<Receipt> receipts;
@@ -43,29 +52,25 @@ class AppData extends ChangeNotifier {
     try {
       receiptData = await supabase
           .from("receipts")
-          .select(
-              "receipt_id, receipt_date, paid, invoices(invoice_id, invoice_date, due_date, subtotal, hst, total, senders(sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number), recipients(recipient_id, name, street, city, province, zip, phone, email), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount))")
+          .select(selectReceipts)
           .eq('is_deleted', false)
           .order("receipt_id", ascending: true);
 
       invoiceData = await supabase
           .from("invoices")
-          .select(
-              "invoice_id, invoice_date, due_date, subtotal, hst, total, senders(sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number), recipients(recipient_id, name, street, city, province, zip, phone, email), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount)")
+          .select(selectInvoices)
           .eq('is_deleted', false)
           .order("invoice_id", ascending: true);
 
       senderData = await supabase
           .from("senders")
-          .select(
-              'sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number')
+          .select(selectSenders)
           .eq('is_deleted', false)
           .order("sender_id", ascending: true);
 
       recipientData = await supabase
           .from("recipients")
-          .select(
-              'recipient_id, name, street, city, province, zip, phone, email')
+          .select(selectRecipients)
           .eq('is_deleted', false)
           .order("recipient_id", ascending: true);
 
@@ -105,8 +110,7 @@ class AppData extends ChangeNotifier {
           'paid': paid,
           'invoice_id': invoiceId,
         },
-      ).select(
-          "receipt_id, receipt_date, paid, invoices(invoice_id, invoice_date, due_date, subtotal, hst, total, senders(sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number), recipients(recipient_id, name, street, city, province, zip, phone, email), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount))");
+      ).select(selectReceipts);
 
       receipts.add(Receipt.fromJson(newReceipt[0]));
 
@@ -179,8 +183,7 @@ class AppData extends ChangeNotifier {
 
       newInvoice = await supabase
           .from('invoices')
-          .select(
-              "invoice_id, invoice_date, due_date, subtotal, hst, total, senders(sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number), recipients(recipient_id, name, street, city, province, zip, phone, email), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount)")
+          .select(selectInvoices)
           .eq('invoice_id', newInvoiceId);
 
       invoices.add(Invoice.fromJson(newInvoice[0]));
@@ -243,8 +246,7 @@ class AppData extends ChangeNotifier {
           'e_transfer': eTransfer,
           'business_number': businessNumber
         },
-      ).select(
-          'sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number');
+      ).select(selectSenders);
 
       senders.add(Sender.fromJson(newSender[0]));
 
@@ -303,7 +305,7 @@ class AppData extends ChangeNotifier {
           'phone': phone,
           'email': email,
         },
-      ).select('recipient_id, name, street, city, province, zip, phone, email');
+      ).select(selectRecipients);
 
       recipients.add(Recipient.fromJson(newRecipient[0]));
 

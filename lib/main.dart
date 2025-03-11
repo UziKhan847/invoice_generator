@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
@@ -13,6 +14,8 @@ void main() async {
     url: supabaseUrlKey,
     anonKey: supabaseAnonKey,
   );
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
   runApp(ProviderScope(child: MyApp()));
 }
