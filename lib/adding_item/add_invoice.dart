@@ -10,6 +10,7 @@ import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
+import 'package:markaz_umaza_invoice_generator/pages/tabs_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
@@ -138,7 +139,12 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
           loadCircle();
 
           if (context.mounted) {
-            Navigator.pop(context);
+            //Navigator.pop(context);
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (context) => TabsPage()),
+              (route) => false,
+            );
           }
         }
       },

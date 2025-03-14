@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -14,6 +13,8 @@ import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_b
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/bottom_nav_bar.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
 class TabsPage extends ConsumerStatefulWidget {
   const TabsPage({super.key});
@@ -29,8 +30,8 @@ class _TabPageState extends ConsumerState<TabsPage>
   // late TabController tabController = TabController(length: 5, vsync: this);
 
   late PageController pageController = PageController();
-  late List<AnimationController> navItemAnimController;
-  late List<Animation<double>> navItemAnim;
+  late List<AnimationController> navItemAnimControllers;
+  late List<Animation<double>> navItemAnims;
 
   double pageAnimValue = 0;
   bool swipeRight = true;
@@ -101,22 +102,22 @@ class _TabPageState extends ConsumerState<TabsPage>
   void initState() {
     super.initState();
 
-    navItemAnimController = List<AnimationController>.generate(
+    navItemAnimControllers = List<AnimationController>.generate(
       5,
       (_) => AnimationController(
           vsync: this, duration: const Duration(milliseconds: 200)),
       growable: false,
     );
 
-    navItemAnim = List<Animation<double>>.generate(
+    navItemAnims = List<Animation<double>>.generate(
         5,
-        (int index) =>
-            Tween<double>(begin: 0, end: 1).animate(navItemAnimController[index]
+        (int index) => Tween<double>(begin: 0, end: 1)
+            .animate(navItemAnimControllers[index]
               ..addListener(() {
                 setState(() {});
               })));
 
-    navItemAnimController[0].forward();
+    navItemAnimControllers[0].forward();
 
     pageController.addListener(() {
       isTap = onTapIndex - smallerIndex > 1;
@@ -143,10 +144,10 @@ class _TabPageState extends ConsumerState<TabsPage>
 
       for (int i = 0; i < 5; i++) {
         if (pageAnimValue == i) {
-          navItemAnimController[i].forward();
+          navItemAnimControllers[i].forward();
         } else {
-          if (navItemAnimController[i].isForwardOrCompleted) {
-            navItemAnimController[i].reverse();
+          if (navItemAnimControllers[i].isForwardOrCompleted) {
+            navItemAnimControllers[i].reverse();
           }
         }
       }
@@ -157,8 +158,10 @@ class _TabPageState extends ConsumerState<TabsPage>
 
   @override
   void dispose() {
-    //tabController.dispose();
     pageController.dispose();
+    for (AnimationController e in navItemAnimControllers) {
+      e.dispose();
+    }
     super.dispose();
   }
 
@@ -190,7 +193,6 @@ class _TabPageState extends ConsumerState<TabsPage>
         appBar: AppBar(
           toolbarHeight: 10,
           flexibleSpace: Container(
-            height: 10,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
               colors: gradientColors,
@@ -204,7 +206,7 @@ class _TabPageState extends ConsumerState<TabsPage>
           controller: pageController,
           pageSnapping: false,
           children: [
-            InvoiceListBuilder(invoices: provider.invoices.reversed.toList()),
+            InvoiceListBuilder(invoices: provider.invoices),
             SenderListBuilder(senders: provider.senders),
             RecipientListBuilder(recipients: provider.recipients),
             CourseListBuilder(courses: provider.courses),
@@ -227,7 +229,44 @@ class _TabPageState extends ConsumerState<TabsPage>
                 backgroundColor: navBarColor,
                 child: const Icon(Icons.add),
               ),
-        bottomNavigationBar: GestureDetector(
+        bottomNavigationBar:
+
+            //  BottomNavBar(
+            //   pageController: pageController,
+            //   indicatorColor: indicatorColor,
+            //   indicatorGradColors: indicatorGradColors,
+            //   gradientColors: gradientColors,
+            //   onHorizontalDragEnd: (details) {
+            //     double velocity = details.primaryVelocity ?? 0;
+
+            //     int targetPage = pageAnimValue.round();
+
+            //     if (velocity.abs() > 500) {
+            //       if (velocity < 0) {
+            //         lerp < 0.5 ? targetPage += 1 : targetPage;
+            //       } else {
+            //         lerp > 0.5 ? targetPage -= 1 : targetPage;
+            //       }
+            //     }
+
+            //     targetPage = targetPage.clamp(0, 4);
+
+            //     pageController.animateToPage(
+            //       targetPage,
+            //       duration: const Duration(milliseconds: 300),
+            //       curve: Curves.easeOut,
+            //     );
+            //   },
+            //   onHorizontalDragUpdate: (details) {
+            //     pageController.jumpTo(
+            //         (pageController.position.pixels - details.delta.dx)
+            //             .clamp(0, pageController.position.maxScrollExtent));
+            //   },
+            //   page: pageAnimValue,
+            //   screenWidth: screenWidth,
+            // )
+
+            GestureDetector(
           onHorizontalDragUpdate: (details) {
             pageController.jumpTo(
                 (pageController.position.pixels - details.delta.dx)
@@ -256,7 +295,6 @@ class _TabPageState extends ConsumerState<TabsPage>
           },
           child: Container(
             height: 70,
-            // color: navBarColor,
             decoration: BoxDecoration(
                 gradient: LinearGradient(
               colors: gradientColors,
@@ -278,78 +316,26 @@ class _TabPageState extends ConsumerState<TabsPage>
                 Row(
                   children: [
                     for (int i = 0; i < 5; i++) ...[
-                      GestureDetector(
+                      NavBarItem(
+                          iconColor: Color.lerp(Colors.white, Colors.black,
+                              navItemAnims[i].value),
+                          index: i,
+                          itemColor: pageAnimValue == i
+                              ? indicatorColors[i]
+                              : Colors.transparent,
                           onTap: () {
-                            // onTapIndex = i;
-
                             pageController.animateToPage(
                               i,
                               duration: const Duration(milliseconds: 300),
                               curve: Curves.linear,
                             );
                           },
-                          child: Stack(
-                            children: [
-                              Positioned(
-                                  bottom: 0,
-                                  height: 70,
-                                  width: lerpDouble(screenWidth * 0.2,
-                                      screenWidth * 0.3, navItemAnim[i].value),
-                                  child: Container(
-                                    color: pageAnimValue == i
-                                        ? indicatorColors[i]
-                                        : Colors.transparent,
-                                  )),
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  AnimatedContainer(
-                                    duration: const Duration(milliseconds: 200),
-                                    width: getSelectedItemWidth(
-                                      screenWidth,
-                                      i,
-                                    ),
-                                    height: 70,
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Icon(
-                                          switch (i) {
-                                            1 => Icons.person,
-                                            2 => Icons.person,
-                                            3 => Icons.my_library_books,
-                                            4 => Icons.receipt_long_rounded,
-                                            _ => Icons.receipt,
-                                          },
-                                          size: 25,
-                                          color: Color.lerp(
-                                              Colors.white,
-                                              Colors.black,
-                                              navItemAnim[i].value),
-                                        ),
-                                        SizeTransition(
-                                          sizeFactor: navItemAnimController[i],
-                                          axis: Axis.horizontal,
-                                          axisAlignment: -1,
-                                          child: Center(
-                                            child: Text(
-                                              switch (i) {
-                                                1 => '  Senders',
-                                                2 => '  Recipients',
-                                                3 => '  Courses',
-                                                4 => '  Receipts',
-                                                _ => '  Invoices',
-                                              },
-                                            ),
-                                          ),
-                                        )
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                          controller: navItemAnimControllers[i],
+                          itemBackWidth: lerpDouble(screenWidth * 0.2,
+                              screenWidth * 0.3, navItemAnims[i].value),
+                          itemWidth: getSelectedItemWidth(
+                            screenWidth,
+                            i,
                           ))
                     ],
                   ],
