@@ -8,12 +8,11 @@ import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_recipient.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_sender.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
-import 'package:markaz_umaza_invoice_generator/list_view_builders/invoice_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/bottom_nav_bar.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
 class TabsPage extends ConsumerStatefulWidget {
@@ -26,8 +25,6 @@ class TabsPage extends ConsumerStatefulWidget {
 class _TabPageState extends ConsumerState<TabsPage>
     with TickerProviderStateMixin {
   late AppData provider;
-
-  // late TabController tabController = TabController(length: 5, vsync: this);
 
   late PageController pageController = PageController();
   late List<AnimationController> navItemAnimControllers;
@@ -130,17 +127,10 @@ class _TabPageState extends ConsumerState<TabsPage>
       largerIndex = pageAnimValue.ceil();
       smallerIndex = pageAnimValue.floor();
 
-      nextIndex = swipeRight ? largerIndex : smallerIndex;
-      prevIndex = swipeRight ? smallerIndex : largerIndex;
-
       lerp = (pageAnimValue - smallerIndex).abs();
 
       gradLerp[0] = lerp <= 0.5 ? lerp * 2 : 1;
       gradLerp[1] = lerp >= 0.5 ? (lerp - 0.5) * 2 : 0;
-
-      // print("THE ORIGINAL LERP: $lerp");
-      // print("FIRST LERP: ${gradLerp[0]}");
-      // print("SECOND LERP: ${gradLerp[1]}");
 
       for (int i = 0; i < 5; i++) {
         if (pageAnimValue == i) {
@@ -206,7 +196,15 @@ class _TabPageState extends ConsumerState<TabsPage>
           controller: pageController,
           pageSnapping: false,
           children: [
-            InvoiceListBuilder(invoices: provider.invoices),
+            InvoicePage(
+              invoices: provider.invoices,
+              senders: provider.senders,
+              recipients: provider.recipients,
+              courses: provider.courses,
+              isOnPage: pageAnimValue == 0,
+              navBarColor: navBarColors[0],
+              indicatorColor: indicatorColors[0],
+            ),
             SenderListBuilder(senders: provider.senders),
             RecipientListBuilder(recipients: provider.recipients),
             CourseListBuilder(courses: provider.courses),

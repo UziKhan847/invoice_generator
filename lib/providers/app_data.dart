@@ -9,9 +9,7 @@ import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
-final appData = ChangeNotifierProvider<AppData>((ref) {
-  return AppData();
-});
+final appData = ChangeNotifierProvider<AppData>((ref) => AppData());
 
 const selectSenders =
     "sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number";
