@@ -3,18 +3,16 @@ import 'package:flutter/material.dart';
 class FilterRow extends StatelessWidget {
   const FilterRow({
     super.key,
-    //this.onTap,
     required this.update,
     required this.rowLabel,
-    required this.items,
-    required this.selectedItems,
+    required this.filterOptions,
+    required this.selectedFilters,
   });
 
-  final List<String> items;
-  //final VoidCallback? onTap;
+  final List<String> filterOptions;
   final VoidCallback update;
   final String rowLabel;
-  final Set<String> selectedItems;
+  final Set<String> selectedFilters;
 
   @override
   Widget build(BuildContext context) {
@@ -28,15 +26,15 @@ class FilterRow extends StatelessWidget {
           Expanded(
             child: ListView.builder(
                 scrollDirection: Axis.horizontal,
-                itemCount: items.length,
+                itemCount: filterOptions.length,
                 itemBuilder: (context, index) {
-                  final item = items[index];
+                  final item = filterOptions[index];
 
                   return GestureDetector(
                     onTap: () {
-                      selectedItems.contains(item)
-                          ? selectedItems.remove(item)
-                          : selectedItems.add(item);
+                      selectedFilters.contains(item)
+                          ? selectedFilters.remove(item)
+                          : selectedFilters.add(item);
 
                       update();
                     },
@@ -44,7 +42,7 @@ class FilterRow extends StatelessWidget {
                         margin: const EdgeInsets.symmetric(horizontal: 8),
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
-                            color: selectedItems.contains(item)
+                            color: selectedFilters.contains(item)
                                 ? const Color(0xFFAC1616)
                                 : const Color(0xFFEBA6A6),
                             boxShadow: <BoxShadow>[
@@ -59,7 +57,7 @@ class FilterRow extends StatelessWidget {
                             child: Text(
                           item,
                           style: TextStyle(
-                              color: selectedItems.contains(item)
+                              color: selectedFilters.contains(item)
                                   ? Colors.white
                                   : Colors.black),
                         ))),

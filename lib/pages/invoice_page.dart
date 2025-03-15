@@ -4,8 +4,9 @@ import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/filter_bar.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/filter_row.dart';
+import 'package:markaz_umaza_invoice_generator/filter/filter_bar.dart';
+import 'package:markaz_umaza_invoice_generator/filter/filter_box.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/bottom_info_bar.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage(
@@ -31,32 +32,47 @@ class InvoicePage extends StatefulWidget {
 }
 
 class _InvoicePageState extends State<InvoicePage> {
+  double netincome = 0;
+  double hst = 0;
+  double get grossIncome => netincome - hst;
   bool isExpanded = false;
   late List<Invoice> filteredInvoices;
-  Set<String> selectedSenders = {};
-  Set<String> selectedRecipients = {};
-  Set<String> selectedCourses = {};
-  Set<String> selectedYears = {};
-  Set<String> selectedMonths = {};
-  Set<String> selectedDays = {};
+  Map<String, Set<String>> selectedFilters = {
+    'senders': {},
+    'recipients': {},
+    'courses': {},
+    'years': {},
+    'months': {},
+    'days': {},
+  };
 
-  late List<String> senderNames = widget.senders.map((e) => e.name).toList();
-  late List<String> recipientsNames =
-      widget.recipients.map((e) => e.name).toList();
-  late List<String> courseNames = widget.courses.map((e) => e.name).toList();
-  late List<String> years = widget.invoices
-      .map((invoice) => invoice.invoiceDate.substring(0, 4))
-      .toSet()
-      .toList();
-  late List<String> months = widget.invoices
-      .map((invoice) => invoice.invoiceDate.substring(5, 7))
-      .toSet()
-      .toList();
-  late List<String> days = widget.invoices
-      .map((invoice) =>
-          invoice.invoiceDate.substring(8, invoice.invoiceDate.length))
-      .toSet()
-      .toList();
+  late Map<String, List<String>> filterOptions = {
+    'senders': widget.senders.map((e) => e.name).toList(),
+    'recipients': widget.recipients.map((e) => e.name).toList(),
+    'courses': widget.courses.map((e) => e.name).toList(),
+    'years': widget.invoices
+        .map((invoice) => invoice.invoiceDate.substring(0, 4))
+        .toSet()
+        .toList(),
+    'months': widget.invoices
+        .map((invoice) => invoice.invoiceDate.substring(5, 7))
+        .toSet()
+        .toList(),
+    'days': widget.invoices
+        .map((invoice) =>
+            invoice.invoiceDate.substring(8, invoice.invoiceDate.length))
+        .toSet()
+        .toList(),
+  };
+
+//   late List<String> filterCategories = [
+//   'Recipients',
+//   'Courses',
+//   'Years',
+//   'Months',
+//   'Days',
+//   'Senders',
+// ];
 
   @override
   void initState() {
@@ -65,19 +81,21 @@ class _InvoicePageState extends State<InvoicePage> {
 
   void filterInvoices() {
     filteredInvoices = widget.invoices.where((invoice) {
-      bool matchesSender = selectedSenders.isEmpty ||
-          selectedSenders.contains(invoice.senders.name);
-      bool matchesRecipient = selectedRecipients.isEmpty ||
-          selectedRecipients.contains(invoice.recipients.name);
-      bool matchesCourse = selectedCourses.isEmpty ||
+      bool matchesSender = selectedFilters['senders']!.isEmpty ||
+          selectedFilters['senders']!.contains(invoice.senders.name);
+      bool matchesRecipient = selectedFilters['recipients']!.isEmpty ||
+          selectedFilters['recipients']!.contains(invoice.recipients.name);
+      bool matchesCourse = selectedFilters['courses']!.isEmpty ||
           invoice.invoiceCourses!.any((invoiceCourse) =>
-              selectedCourses.contains(invoiceCourse.courses.name));
-      bool matchesYear = selectedYears.isEmpty ||
-          selectedYears.contains(invoice.invoiceDate.substring(0, 4));
-      bool matchesMonth = selectedMonths.isEmpty ||
-          selectedMonths.contains(invoice.invoiceDate.substring(5, 7));
-      bool matchesDay = selectedDays.isEmpty ||
-          selectedDays.contains(
+              selectedFilters['courses']!.contains(invoiceCourse.courses.name));
+      bool matchesYear = selectedFilters['years']!.isEmpty ||
+          selectedFilters['years']!
+              .contains(invoice.invoiceDate.substring(0, 4));
+      bool matchesMonth = selectedFilters['months']!.isEmpty ||
+          selectedFilters['months']!
+              .contains(invoice.invoiceDate.substring(5, 7));
+      bool matchesDay = selectedFilters['days']!.isEmpty ||
+          selectedFilters['days']!.contains(
               invoice.invoiceDate.substring(8, invoice.invoiceDate.length));
 
       return matchesSender &&
@@ -95,14 +113,19 @@ class _InvoicePageState extends State<InvoicePage> {
 
   @override
   Widget build(BuildContext context) {
-    senderNames.sort();
-    recipientsNames.sort();
-    courseNames.sort();
-    years.sort();
-    months.sort();
-    days.sort();
+    filterOptions.forEach((k, v) {
+      v.sort();
+    });
     filteredInvoices = List.from(widget.invoices);
     filterInvoices();
+    netincome = double.parse(filteredInvoices
+        .map((e) => e.total.toDouble())
+        .reduce((a, b) => a + b)
+        .toStringAsFixed(2));
+    hst = double.parse(filteredInvoices
+        .map((e) => e.hst == null ? 0.0 : e.hst!.toDouble())
+        .reduce((a, b) => a + b)
+        .toStringAsFixed(2));
 
     return Stack(
       children: [
@@ -144,89 +167,22 @@ class _InvoicePageState extends State<InvoicePage> {
                 },
                 indicatorColor: widget.indicatorColor,
               ),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                height: isExpanded ? 300 : 0,
-                decoration: BoxDecoration(
-                    color: const Color(0xFFFFFFFF),
-                    borderRadius: const BorderRadius.only(
-                        bottomLeft: Radius.circular(8),
-                        bottomRight: Radius.circular(8)),
-                    boxShadow: <BoxShadow>[
-                      BoxShadow(
-                        color: Colors.black.withValues(alpha: 0.16),
-                        blurRadius: 6,
-                        offset: const Offset(0, 2),
-                      )
-                    ]),
-                child: ListView(
-                  children: [
-                    for (int i = 0; i < 6; i++) ...[
-                      FilterRow(
-                        rowLabel: switch (i) {
-                          1 => 'Recipients',
-                          2 => 'Courses',
-                          3 => 'Years',
-                          4 => 'Months',
-                          5 => 'Days',
-                          _ => 'Senders'
-                        },
-                        items: switch (i) {
-                          1 => recipientsNames,
-                          2 => courseNames,
-                          3 => years,
-                          4 => months,
-                          5 => days,
-                          _ => senderNames
-                        },
-                        selectedItems: switch (i) {
-                          1 => selectedRecipients,
-                          2 => selectedCourses,
-                          3 => selectedYears,
-                          4 => selectedMonths,
-                          5 => selectedDays,
-                          _ => selectedSenders
-                        },
-                        update: update,
-                      ),
-                      if (i < 5)
-                        const Divider(
-                          height: 0,
-                        ),
-                    ],
-                  ],
-                ),
-              ),
+              FilterBox(
+                  isExpanded: isExpanded,
+                  filterOptions: filterOptions.values.toList(),
+                  selectedFilters: selectedFilters.values.toList(),
+                  update: update)
             ],
           ),
         ),
-        AnimatedPositioned(
-            duration: const Duration(milliseconds: 200),
-            height: 70,
-            width: MediaQuery.of(context).size.width * 0.75,
-            bottom: 8,
-            left: widget.isOnPage
-                ? -10
-                : -MediaQuery.of(context).size.width * 0.75,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 30),
-              decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                  boxShadow: <BoxShadow>[
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.25),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    )
-                  ]),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text("# of Invoices: ${filteredInvoices.length}"),
-                ],
-              ),
-            ))
+        BottomInfoBar(
+          filteredInvoices: filteredInvoices,
+          isOnPage: widget.isOnPage,
+          item: "Invoice",
+          grossIncome: grossIncome,
+          hst: hst,
+          netIncome: netincome,
+        )
       ],
     );
   }
