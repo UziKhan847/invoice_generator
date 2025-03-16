@@ -70,7 +70,7 @@ class CustomListTile extends StatelessWidget {
         const Divider(
           height: 0,
         ),
-        if (isLastIndex) Margins.vertical88,
+        if (isLastIndex) Margins.vertical128,
       ],
     );
   }

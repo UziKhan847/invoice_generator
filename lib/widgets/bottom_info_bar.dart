@@ -61,8 +61,7 @@ class BottomInfoBar extends StatelessWidget {
                 children: [
                   const Text(
                     "Gross Income: ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   Text(
                     "\$$grossIncome",
@@ -74,11 +73,10 @@ class BottomInfoBar extends StatelessWidget {
                 children: [
                   const Text(
                     "HST: ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   Text(
-                    "\$$hst HST",
+                    "\$$hst",
                     style: const TextStyle(fontSize: 13),
                   ),
                 ],
@@ -87,8 +85,7 @@ class BottomInfoBar extends StatelessWidget {
                 children: [
                   const Text(
                     "Net Income: ",
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold, fontSize: 13),
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 13),
                   ),
                   Text(
                     "\$$netIncome",

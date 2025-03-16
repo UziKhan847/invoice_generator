@@ -34,7 +34,7 @@ class InvoicePage extends StatefulWidget {
 class _InvoicePageState extends State<InvoicePage> {
   double netincome = 0;
   double hst = 0;
-  double get grossIncome => netincome - hst;
+  double get grossIncome => double.parse((netincome - hst).toStringAsFixed(2));
   bool isExpanded = false;
   late List<Invoice> filteredInvoices;
   Map<String, Set<String>> selectedFilters = {
@@ -118,14 +118,20 @@ class _InvoicePageState extends State<InvoicePage> {
     });
     filteredInvoices = List.from(widget.invoices);
     filterInvoices();
-    netincome = double.parse(filteredInvoices
-        .map((e) => e.total.toDouble())
-        .reduce((a, b) => a + b)
-        .toStringAsFixed(2));
-    hst = double.parse(filteredInvoices
-        .map((e) => e.hst == null ? 0.0 : e.hst!.toDouble())
-        .reduce((a, b) => a + b)
-        .toStringAsFixed(2));
+
+    if (filteredInvoices.isNotEmpty) {
+      netincome = double.parse(filteredInvoices
+          .map((e) => e.total.toDouble())
+          .reduce((a, b) => a + b)
+          .toStringAsFixed(2));
+      hst = double.parse(filteredInvoices
+          .map((e) => e.hst == null ? 0.0 : e.hst!.toDouble())
+          .reduce((a, b) => a + b)
+          .toStringAsFixed(2));
+    } else {
+      netincome = 0;
+      hst = 0;
+    }
 
     return Stack(
       children: [
