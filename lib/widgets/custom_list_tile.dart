@@ -11,6 +11,7 @@ class CustomListTile extends StatelessWidget {
     required this.isLastIndex,
     this.onTapDelete,
     this.onTapEdit,
+    this.onTapMail,
     this.onTapPreview,
     this.showPreviewButton = false,
   });
@@ -19,9 +20,10 @@ class CustomListTile extends StatelessWidget {
   final Widget? leadingIcon;
   final bool isLastIndex;
   final List<Widget> content;
-  final void Function()? onTapDelete;
-  final void Function()? onTapEdit;
-  final void Function()? onTapPreview;
+  final VoidCallback? onTapDelete;
+  final VoidCallback? onTapMail;
+  final VoidCallback? onTapEdit;
+  final VoidCallback? onTapPreview;
   final bool showPreviewButton;
 
   get children => null;
@@ -48,7 +50,7 @@ class CustomListTile extends StatelessWidget {
             SlidableItem(
               icon: Icons.mail,
               text: 'Mail',
-              onTap: () {},
+              onTap: onTapMail,
               backgroundColor: const Color.fromARGB(255, 150, 95, 0),
               splashColor: const Color.fromARGB(255, 255, 167, 15),
             ),
