@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/slidable_item.dart';
 
 class CustomListTile extends StatelessWidget {
   const CustomListTile({
     super.key,
     this.boxHeight,
-    required this.leadingIcon,
+    this.leadingIcon,
     required this.content,
     required this.isLastIndex,
     this.onTapDelete,
@@ -23,55 +24,53 @@ class CustomListTile extends StatelessWidget {
   final void Function()? onTapPreview;
   final bool showPreviewButton;
 
+  get children => null;
+
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SizedBox(
-              width: 60,
-              child: leadingIcon,
+    return Container(
+      margin: isLastIndex
+          ? const EdgeInsets.only(top: 5, bottom: 131)
+          : const EdgeInsets.symmetric(vertical: 5),
+      decoration: BoxDecoration(
+          color: Colors.white, borderRadius: BorderRadius.circular(4)),
+      child: Slidable(
+        endActionPane: ActionPane(motion: const BehindMotion(), children: [
+          if (showPreviewButton)
+            SlidableItem(
+                icon: Icons.picture_as_pdf,
+                text: 'Preview PDF',
+                onTap: onTapPreview,
+                backgroundColor: const Color.fromARGB(255, 0, 60, 119),
+                splashColor: const Color.fromARGB(255, 13, 134, 255),
+                foregroundColor: Colors.white),
+          if (showPreviewButton)
+            SlidableItem(
+              icon: Icons.mail,
+              text: 'Mail',
+              onTap: () {},
+              backgroundColor: const Color.fromARGB(255, 150, 95, 0),
+              splashColor: const Color.fromARGB(255, 255, 167, 15),
             ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: content,
-              ),
-            ),
-            SizedBox(
-              width: 50,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  if (showPreviewButton)
-                    IconButton(
-                      onPressed: onTapPreview,
-                      icon: const Icon(Icons.picture_as_pdf),
-                    ),
-                  IconButton(
-                    onPressed: onTapDelete,
-                    icon: const Icon(
-                      Icons.delete_rounded,
-                      color: Color(0xFFB71C1C),
-                    ),
-                  ),
-                  // IconButton(
-                  //   onPressed: onTapEdit,
-                  //   icon: const Icon(Icons.edit),
-                  // ),
-                ],
-              ),
-            ),
-          ],
+          SlidableItem(
+            icon: Icons.delete,
+            text: 'Delete',
+            onTap: onTapDelete,
+            backgroundColor: const Color.fromARGB(255, 143, 0, 0),
+            splashColor: const Color.fromARGB(255, 255, 16, 16),
+            isLeftLast: true,
+          ),
+        ]),
+        child: Padding(
+          padding: const EdgeInsets.all(4),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              ...content,
+            ],
+          ),
         ),
-        Margins.vertical4,
-        const Divider(
-          height: 0,
-        ),
-        if (isLastIndex) Margins.vertical128,
-      ],
+      ),
     );
   }
 }

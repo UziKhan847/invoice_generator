@@ -19,42 +19,44 @@ class _InvoiceListBuilderState extends ConsumerState<InvoiceListBuilder> {
 
   @override
   Widget build(BuildContext context) {
-
     provider = ref.watch(appData);
 
-    return ListView.builder(
-        padding: const EdgeInsets.only(top: 0, bottom: 0),
-        itemCount: widget.filteredInvoices.length,
-        itemBuilder: (context, index) {
-          Invoice item = widget.filteredInvoices.reversed.toList()[index];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: ListView.builder(
+          padding: const EdgeInsets.only(top: 0, bottom: 0),
+          itemCount: widget.filteredInvoices.length,
+          itemBuilder: (context, index) {
+            Invoice item = widget.filteredInvoices.reversed.toList()[index];
 
-          return InvoiceTile(
-            isLastIndex: index == widget.filteredInvoices.length - 1,
-            invoice: item,
-            onTapDelete: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DialogTile(
-                      affirmButtonText: "Yes",
-                      cancelButtonText: 'No',
-                      dialogTitle:
-                          "Are you sure you want to\n delete this invoice?",
-                      onTapAffirm: () async {
-                        await provider.deleteInvoice(
-                            context: context, invoiceId: item.invoiceId);
+            return InvoiceTile(
+              isLastIndex: index == widget.filteredInvoices.length - 1,
+              invoice: item,
+              onTapDelete: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogTile(
+                        affirmButtonText: "Yes",
+                        cancelButtonText: 'No',
+                        dialogTitle:
+                            "Are you sure you want to\n delete this invoice?",
+                        onTapAffirm: () async {
+                          await provider.deleteInvoice(
+                              context: context, invoiceId: item.invoiceId);
 
-                        if (context.mounted) {
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        onTapCancel: () {
                           Navigator.pop(context);
-                        }
-                      },
-                      onTapCancel: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  });
-            },
-          );
-        });
+                        },
+                      );
+                    });
+              },
+            );
+          }),
+    );
   }
 }

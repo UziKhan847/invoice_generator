@@ -3,6 +3,7 @@ import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 
 class InvoiceTile extends StatelessWidget {
@@ -39,43 +40,73 @@ class InvoiceTile extends StatelessWidget {
                     )));
       },
       isLastIndex: isLastIndex,
-      leadingIcon: const Icon(
-        Icons.receipt,
-        size: 20,
-      ),
       content: [
-        Margins.vertical4,
-        for (int i = 0; i < 4; i++) ...[
-          switch (i) {
-            1 => TileRow("Invoice Date: ", invoice.invoiceDate),
-            2 => TileRow("Sender: ", invoice.senders.name),
-            3 => TileRow("Recipient: ", invoice.recipients.name),
-            _ => TileRow("Invoice Id: ", '${invoice.invoiceId}')
-          },
-          Margins.vertical4,
-        ],
-        const Divider(height: 3),
-        const Text(
-          "Courses: ",
-          style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            Expanded(child: TileRow("Invoice Id: ", '${invoice.invoiceId}')),
+            Expanded(child: TileRow("Invoice Date: ", invoice.invoiceDate)),
+          ],
         ),
-        for (int i = 0; i < invoice.invoiceCourses!.length; i++) ...[
-          Text(
-            "${i + 1}- ${invoice.invoiceCourses![i].courses.name} - \$${invoice.invoiceCourses![i].courses.cost}/${invoice.invoiceCourses![i].courses.costFrequency} x ${invoice.invoiceCourses![i].quantity} = ${invoice.invoiceCourses![i].amount}",
-            style: const TextStyle(fontSize: 10),
+        Row(
+          children: [
+            Expanded(child: TileRow("From: ", invoice.senders.name)),
+            Expanded(child: TileRow("To: ", invoice.recipients.name)),
+          ],
+        ),
+        const Divider(height: 3),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Course(s): ",
+                      style: TextStyle(
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    for (int i = 0;
+                        i < invoice.invoiceCourses!.length;
+                        i++) ...[
+                      Text(
+                        "${invoice.invoiceCourses!.length > 1 ? '${i + 1}- ' : ''}${invoice.invoiceCourses![i].courses.name} - \$${invoice.invoiceCourses![i].courses.cost}/${invoice.invoiceCourses![i].courses.costFrequency} x ${invoice.invoiceCourses![i].quantity} = ${invoice.invoiceCourses![i].amount}",
+                        style: const TextStyle(fontSize: 10),
+                      ),
+                      Margins.vertical2,
+                    ],
+                  ],
+                ),
+              ),
+              const VerticalDivider(
+                thickness: 0,
+                color: Colors.black,
+              ),
+              TileColumn(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                "HST:",
+                "\$${invoice.hst}",
+                fontSize: 11,
+              ),
+              const VerticalDivider(
+                thickness: 0,
+                color: Colors.black,
+              ),
+              TileColumn(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                "TOTAL:",
+                "\$${invoice.total}",
+                fontSize: 11,
+              ),
+              Margins.horizontal10
+            ],
           ),
-          Margins.vertical2,
-        ],
-        TileRow(
-          "HST:   ",
-          "\$${invoice.hst}",
-          fontSize: 10,
         ),
-        Margins.vertical2,
-        const Divider(height: 3),
-        Margins.vertical4,
-        TileRow("TOTAL DUE:   ", "\$${invoice.total}"),
-        Margins.vertical4,
       ],
     );
   }

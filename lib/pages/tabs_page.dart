@@ -180,6 +180,7 @@ class _TabPageState extends ConsumerState<TabsPage>
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor: const Color.fromARGB(255, 217, 217, 217),
         appBar: AppBar(
           toolbarHeight: 10,
           flexibleSpace: Container(
