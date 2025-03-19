@@ -36,6 +36,7 @@ class DialogTile extends StatelessWidget {
         title: Text(
           dialogTitle,
           style: const TextStyle(fontSize: 20),
+          textAlign: TextAlign.center,
         ),
         content: SizedBox(
           height: dialogHeight,

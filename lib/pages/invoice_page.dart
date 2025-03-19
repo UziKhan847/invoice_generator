@@ -36,6 +36,7 @@ class _InvoicePageState extends State<InvoicePage> {
   double hst = 0;
   double get grossIncome => double.parse((netincome - hst).toStringAsFixed(2));
   bool isExpanded = false;
+  bool isBottomInfoBarExpanded = false;
   late List<Invoice> filteredInvoices;
   Map<String, Set<String>> selectedFilters = {
     'senders': {},
@@ -188,6 +189,13 @@ class _InvoicePageState extends State<InvoicePage> {
           grossIncome: grossIncome,
           hst: hst,
           netIncome: netincome,
+          isExpanded: isBottomInfoBarExpanded,
+          expandButtonColor: widget.indicatorColor,
+          onTapArrow: () {
+            setState(() {
+              isBottomInfoBarExpanded = !isBottomInfoBarExpanded;
+            });
+          },
         )
       ],
     );

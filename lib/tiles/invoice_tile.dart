@@ -30,7 +30,8 @@ class InvoiceTile extends StatelessWidget {
 
   Future<String> getPdfFilePath(Future<Uint8List> pdf) async {
     final dir = await getTemporaryDirectory();
-    final file = File('${dir.path}/email_attachment.pdf');
+    final file = File(
+        '${dir.path}/Invoice_${invoice.invoiceId}_${invoice.invoiceDate.replaceAll(RegExp(r'-'), '_')}.pdf');
 
     await file.writeAsBytes(await pdf);
 
@@ -47,10 +48,17 @@ class InvoiceTile extends StatelessWidget {
         invoiceCourses: invoice.invoiceCourses!.asMap(),
       ));
 
+      String courseNames = List.generate(
+              invoice.invoiceCourses!.length,
+              (index) =>
+                  '${index + 1}- ${invoice.invoiceCourses![index].courses.name}')
+          .join('\n');
+
       final emailToSend = Email(
-          body: "Please find the attached PDF.",
+          body:
+              "Dear ${invoice.recipients.name},\n\nPlease find attached your invoice for the following course(s):\n$courseNames\n\nBest Regards,\nMarkaz Umaza\nmarkazumaza.com\n+1 (289) 456-9089",
           subject:
-              'Invoice #: ${invoice.invoiceId} - ${invoice.recipients.name} - ${invoice.invoiceDate}',
+              'Invoice #${invoice.invoiceId} - ${invoice.recipients.name} - ${invoice.invoiceDate}',
           recipients: [invoice.recipients.email],
           attachmentPaths: [pdfPath],
           isHTML: false);
@@ -103,7 +111,7 @@ class InvoiceTile extends StatelessWidget {
                 affirmButtonText: "Yes",
                 cancelButtonText: 'No',
                 dialogTitle:
-                    "Do you want to send this email to ${invoice.recipients.name}",
+                    "Do you want to send\n this email to ${invoice.recipients.name}",
                 onTapAffirm: () async {
                   sendEmail(context);
 

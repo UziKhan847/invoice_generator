@@ -35,7 +35,8 @@ class CustomListTile extends StatelessWidget {
           ? const EdgeInsets.only(top: 5, bottom: 131)
           : const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-          color: Colors.white, borderRadius: BorderRadius.circular(4)),
+          color: const Color(0xFFFFFFFF),
+          borderRadius: BorderRadius.circular(4)),
       child: Slidable(
         endActionPane: ActionPane(motion: const BehindMotion(), children: [
           if (showPreviewButton)

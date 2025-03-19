@@ -22,60 +22,64 @@ class NavBarItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-        onTap: onTap,
-        child: Stack(
-          children: [
-            Positioned(
-                bottom: 0,
-                height: 70,
-                width: itemBackWidth,
-                child: Container(
-                  color: itemColor,
-                )),
-            Row(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  width: itemWidth,
+    return Material(
+      color: Colors.transparent,
+      child: InkWell(
+          onTap: onTap,
+          splashColor: itemColor,
+          child: Stack(
+            children: [
+              Positioned(
+                  bottom: 0,
                   height: 70,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        switch (index) {
-                          1 => Icons.person,
-                          2 => Icons.person,
-                          3 => Icons.my_library_books,
-                          4 => Icons.receipt_long_rounded,
-                          _ => Icons.receipt,
-                        },
-                        size: 25,
-                        color: iconColor,
-                      ),
-                      SizeTransition(
-                        sizeFactor: controller,
-                        axis: Axis.horizontal,
-                        axisAlignment: -1,
-                        child: Center(
-                          child: Text(
-                            switch (index) {
-                              1 => '  Senders',
-                              2 => '  Recipients',
-                              3 => '  Courses',
-                              4 => '  Receipts',
-                              _ => '  Invoices',
-                            },
-                          ),
+                  child: Container(
+                    color: itemColor,
+                    width: itemBackWidth,
+                  )),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  AnimatedContainer(
+                    duration: const Duration(milliseconds: 200),
+                    width: itemWidth,
+                    height: 70,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          switch (index) {
+                            1 => Icons.person,
+                            2 => Icons.person,
+                            3 => Icons.my_library_books,
+                            4 => Icons.receipt_long_rounded,
+                            _ => Icons.receipt,
+                          },
+                          size: 25,
+                          color: iconColor,
                         ),
-                      )
-                    ],
+                        SizeTransition(
+                          sizeFactor: controller,
+                          axis: Axis.horizontal,
+                          axisAlignment: -1,
+                          child: Center(
+                            child: Text(
+                              switch (index) {
+                                1 => '  Senders',
+                                2 => '  Recipients',
+                                3 => '  Courses',
+                                4 => '  Receipts',
+                                _ => '  Invoices',
+                              },
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ],
-        ));
+                ],
+              ),
+            ],
+          )),
+    );
   }
 }

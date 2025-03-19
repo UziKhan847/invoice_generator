@@ -323,10 +323,10 @@ class _TabPageState extends ConsumerState<TabsPage>
                               ? indicatorColors[i]
                               : Colors.transparent,
                           onTap: () {
-                            pageController.animateToPage(
+                            pageController.jumpToPage(
                               i,
-                              duration: const Duration(milliseconds: 300),
-                              curve: Curves.linear,
+                              // duration: const Duration(milliseconds: 300),
+                              // curve: Curves.linear,
                             );
                           },
                           controller: navItemAnimControllers[i],
@@ -347,3 +347,55 @@ class _TabPageState extends ConsumerState<TabsPage>
     );
   }
 }
+
+
+  //  child: Container(
+  //           height: 70,
+  //           decoration: BoxDecoration(
+  //               gradient: LinearGradient(
+  //             colors: gradientColors,
+  //             begin: Alignment.centerLeft,
+  //             end: Alignment.centerRight,
+  //           )),
+  //           child: Stack(
+  //             children: [
+  //               Positioned(
+  //                   left: (screenWidth * 0.2) * pageAnimValue,
+  //                   bottom: 0,
+  //                   child: Container(
+  //                     decoration: BoxDecoration(
+  //                         gradient:
+  //                             LinearGradient(colors: indicatorGradColors)),
+  //                     width: screenWidth * 0.2,
+  //                     height: 70,
+  //                   )),
+  //               Row(
+  //                 children: [
+  //                   for (int i = 0; i < 5; i++) ...[
+  //                     NavBarItem(
+  //                         iconColor: Color.lerp(Colors.white, Colors.black,
+  //                             navItemAnims[i].value),
+  //                         index: i,
+  //                         itemColor: pageAnimValue == i
+  //                             ? indicatorColors[i]
+  //                             : Colors.transparent,
+  //                         onTap: () {
+  //                           pageController.animateToPage(
+  //                             i,
+  //                             duration: const Duration(milliseconds: 300),
+  //                             curve: Curves.linear,
+  //                           );
+  //                         },
+  //                         controller: navItemAnimControllers[i],
+  //                         itemBackWidth: lerpDouble(screenWidth * 0.2,
+  //                             screenWidth * 0.3, navItemAnims[i].value),
+  //                         itemWidth: getSelectedItemWidth(
+  //                           screenWidth,
+  //                           i,
+  //                         ))
+  //                   ],
+  //                 ],
+  //               )
+  //             ],
+  //           ),
+  //         ),
