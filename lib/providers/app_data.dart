@@ -363,6 +363,9 @@ class AppData extends ChangeNotifier {
 
       courses.add(Course.fromJson(newCourse[0]));
 
+      courses
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
       notifyListeners();
 
       if (context.mounted) {

@@ -31,16 +31,38 @@ class CourseTile extends StatelessWidget {
         size: 20,
       ),
       content: [
-        Margins.vertical4,
-        for (int i = 0; i < 3; i++) ...[
-          switch (i) {
-            1 => TileRow("Name: ", course.name),
-            2 => TileRow(
-                "Course Cost: ", "\$${course.cost}/${course.costFrequency}"),
-            _ => TileRow("Course Id: ", "${course.courseId}")
-          },
-        ],
-        Margins.vertical4,
+        Margins.vertical10,
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              Expanded(
+                child: Center(
+                  child: Text(
+                    course.name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(
+                        fontWeight: FontWeight.bold, fontSize: 16),
+                  ),
+                ),
+              ),
+              const VerticalDivider(
+                thickness: 1,
+                color: Colors.black,
+              ),
+              SizedBox(
+                width: 80,
+                child: Center(
+                  child: Text(
+                    "\$${course.cost}\n/${course.costFrequency}",
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+        Margins.vertical10,
       ],
     );
   }

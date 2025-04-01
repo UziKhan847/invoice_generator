@@ -7,6 +7,7 @@ import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
+import 'package:markaz_umaza_invoice_generator/utils/mail_service.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
@@ -28,57 +29,12 @@ class InvoiceTile extends StatelessWidget {
   final void Function()? onTapDelete;
   final void Function()? onTapEdit;
 
-  Future<String> getPdfFilePath(Future<Uint8List> pdf) async {
-    final dir = await getTemporaryDirectory();
-    final file = File(
-        '${dir.path}/Invoice_${invoice.invoiceId}_${invoice.invoiceDate.replaceAll(RegExp(r'-'), '_')}_${invoice.recipients.name}.pdf');
-
-    await file.writeAsBytes(await pdf);
-
-    return file.path;
-  }
-
-  Future<void> sendEmail(BuildContext context) async {
-    try {
-      final pdfPath = await getPdfFilePath(generatePdf(
-        isInvoice: true,
-        invoice: invoice,
-        sender: invoice.senders,
-        recipient: invoice.recipients,
-        invoiceCourses: invoice.invoiceCourses!.asMap(),
-      ));
-
-      String courseNames = List.generate(
-              invoice.invoiceCourses!.length,
-              (index) =>
-                  '${index + 1}- ${invoice.invoiceCourses![index].courses.name}')
-          .join('\n');
-
-      final emailToSend = Email(
-          body:
-              "Dear ${invoice.recipients.name},\n\nPlease find attached your invoice for the following course(s):\n$courseNames\n\nBest Regards,\nMarkaz Umaza\nmarkazumaza.com\n+1 (289) 456-9089",
-          subject:
-              'Invoice #${invoice.invoiceId} - ${invoice.recipients.name} - ${invoice.invoiceDate}',
-          recipients: [invoice.recipients.email],
-          attachmentPaths: [pdfPath],
-          isHTML: false);
-
-      await FlutterEmailSender.send(emailToSend);
-
-      if (context.mounted) {
-        context.showSnackBar('Successfully Sent Email!');
-      }
-    } catch (e) {
-      if (context.mounted) {
-        context.showSnackBar('$e', isError: true);
-      }
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    final mailService = MailService(invoice: invoice);
+
     return CustomListTile(
-      showPreviewButton: true,
+      isInvoiceReceipt: true,
       onTapDelete: onTapDelete,
       onTapEdit: onTapEdit,
       onTapPreview: () {
@@ -86,7 +42,6 @@ class InvoiceTile extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => PdfPreviewPage(
-                      isInvoice: true,
                       invoice: invoice,
                       sender: invoice.senders,
                       recipient: invoice.recipients,
@@ -101,9 +56,9 @@ class InvoiceTile extends StatelessWidget {
                 affirmButtonText: "Yes",
                 cancelButtonText: 'No',
                 dialogTitle:
-                    "Do you want to send\n this email to ${invoice.recipients.name}",
+                    "Do you want to send\n this invoice to ${invoice.recipients.name}",
                 onTapAffirm: () async {
-                  sendEmail(context);
+                  mailService.sendEmail(context);
 
                   if (context.mounted) {
                     Navigator.pop(context);
@@ -121,12 +76,12 @@ class InvoiceTile extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Expanded(child: TileRow("ID: ", '${invoice.invoiceId}')),
-            Expanded(child: TileRow("Date: ", invoice.invoiceDate)),
+            Expanded(child: TileRow("From: ", invoice.senders.name)),
           ],
         ),
         Row(
           children: [
-            Expanded(child: TileRow("From: ", invoice.senders.name)),
+            Expanded(child: TileRow("Date: ", invoice.invoiceDate)),
             Expanded(child: TileRow("To: ", invoice.recipients.name)),
           ],
         ),

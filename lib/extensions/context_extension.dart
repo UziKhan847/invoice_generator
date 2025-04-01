@@ -15,7 +15,7 @@ extension ContextExtension on BuildContext {
 
   void insertOverlay(
     BuildContext context, {
-    required Widget? listViewBuilder,
+    required Widget listViewBuilder,
     required Function()? onTapOutsideOverlay,
     double? top,
     double? bottom,
@@ -56,13 +56,13 @@ extension ContextExtension on BuildContext {
                             ],
                           ),
                         ),
-                        listViewBuilder!
+                        listViewBuilder
                       ],
                     ))
               ],
             ));
 
-    Overlay.of(context).insert(overlay!);
+    Overlay.of(this).insert(overlay!);
   }
 
   void removeOverlay() {

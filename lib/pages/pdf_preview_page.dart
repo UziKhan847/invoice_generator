@@ -10,7 +10,6 @@ import 'package:printing/printing.dart';
 class PdfPreviewPage extends StatelessWidget {
   const PdfPreviewPage({
     super.key,
-    required this.isInvoice,
     this.receipt,
     required this.invoice,
     required this.sender,
@@ -18,7 +17,6 @@ class PdfPreviewPage extends StatelessWidget {
     required this.invoiceCourses,
   });
 
-  final bool isInvoice;
   final Receipt? receipt;
   final Invoice invoice;
   final Sender sender;
@@ -27,6 +25,7 @@ class PdfPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    bool isInvoice = receipt == null ? true : false;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: isInvoice
@@ -36,7 +35,6 @@ class PdfPreviewPage extends StatelessWidget {
       ),
       body: PdfPreview(
           build: (context) => generatePdf(
-                isInvoice: isInvoice,
                 receipt: receipt,
                 invoice: invoice,
                 sender: sender,

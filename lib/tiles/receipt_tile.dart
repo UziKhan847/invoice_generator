@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
+import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
+import 'package:markaz_umaza_invoice_generator/utils/mail_service.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 
 class ReceiptTile extends StatelessWidget {
@@ -21,20 +24,23 @@ class ReceiptTile extends StatelessWidget {
   final void Function()? onTapDelete;
   final void Function()? onTapEdit;
 
+  get mailService => null;
+
   @override
   Widget build(BuildContext context) {
     Invoice invoice = receipt.invoices;
 
+    final mailService = MailService(invoice: invoice, receipt: receipt);
+
     return CustomListTile(
         onTapDelete: onTapDelete,
         onTapEdit: onTapEdit,
-        showPreviewButton: true,
+        isInvoiceReceipt: true,
         onTapPreview: () {
           Navigator.push(
               context,
               MaterialPageRoute(
                   builder: (context) => PdfPreviewPage(
-                        isInvoice: false,
                         receipt: receipt,
                         invoice: invoice,
                         sender: invoice.senders,
@@ -42,40 +48,94 @@ class ReceiptTile extends StatelessWidget {
                         invoiceCourses: invoice.invoiceCourses!.asMap(),
                       )));
         },
+        onTapMail: () {
+          showDialog(
+              context: context,
+              builder: (BuildContext context) {
+                return DialogTile(
+                  affirmButtonText: "Yes",
+                  cancelButtonText: 'No',
+                  dialogTitle:
+                      "Do you want to send\n this receipt to ${invoice.recipients.name}",
+                  onTapAffirm: () async {
+                    mailService.sendEmail(context);
+
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                  onTapCancel: () {
+                    Navigator.pop(context);
+                  },
+                );
+              });
+        },
         isLastIndex: isLastIndex,
         leadingIcon: const Icon(
           Icons.receipt_long_rounded,
           size: 20,
         ),
         content: [
-          Margins.vertical4,
-          for (int i = 0; i < 6; i++) ...[
-            switch (i) {
-              1 => TileRow("Receipt Date: ", receipt.receiptDate),
-              2 => TileRow("Invoice #: ", "${invoice.invoiceId}"),
-              3 => TileRow("Amount Due: ", "\$${invoice.total}"),
-              4 => TileRow("Sender: ", invoice.senders.name),
-              5 => TileRow("Recipient: ", invoice.recipients.name),
-              _ => TileRow("Receipt Id: ", '${receipt.receiptId}')
-            },
-            Margins.vertical4,
-          ],
-          const Text(
-            "Courses: ",
-            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Expanded(child: TileRow("Invoice #: ", '${invoice.invoiceId}')),
+              Expanded(child: TileRow("From: ", invoice.senders.name)),
+            ],
           ),
-          for (int i = 0; i < invoice.invoiceCourses!.length; i++) ...[
-            Text(
-              "${i + 1}- ${invoice.invoiceCourses![i].courses.name} - \$${invoice.invoiceCourses![i].courses.cost}/${invoice.invoiceCourses![i].courses.costFrequency} x ${invoice.invoiceCourses![i].quantity} = ${invoice.invoiceCourses![i].amount}",
-              style: const TextStyle(fontSize: 10),
-            ),
-            Margins.vertical2,
-          ],
-          Margins.vertical2,
+          Row(
+            children: [
+              Expanded(child: TileRow("Date: ", receipt.receiptDate)),
+              Expanded(child: TileRow("To: ", invoice.recipients.name)),
+            ],
+          ),
           const Divider(height: 3),
-          Margins.vertical4,
-          TileRow("TOTAL PAID:   ", "\$${receipt.paid}"),
-          Margins.vertical4,
+          IntrinsicHeight(
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        "Course(s): ",
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      for (int i = 0;
+                          i < invoice.invoiceCourses!.length;
+                          i++) ...[
+                        Text(
+                          "${invoice.invoiceCourses!.length > 1 ? '${i + 1}- ' : ''}${invoice.invoiceCourses![i].courses.name} - \$${invoice.invoiceCourses![i].courses.cost}/${invoice.invoiceCourses![i].courses.costFrequency} x ${invoice.invoiceCourses![i].quantity} = ${invoice.invoiceCourses![i].amount}",
+                          style: const TextStyle(fontSize: 10),
+                        ),
+                        Margins.vertical2,
+                      ],
+                    ],
+                  ),
+                ),
+                const VerticalDivider(
+                  thickness: 0,
+                  color: Colors.black,
+                ),
+                SizedBox(
+                  width: 60,
+                  child: Center(
+                    child: TileColumn(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      "PAID:",
+                      "\$${receipt.paid}",
+                      fontSize: 11,
+                    ),
+                  ),
+                ),
+                Margins.horizontal10
+              ],
+            ),
+          ),
         ]);
   }
 }

@@ -20,6 +20,26 @@ class NavBarItem extends StatelessWidget {
   final Animation<double> controller;
   final int index;
 
+  Widget get icon => switch (index) {
+        1 => SizedBox(
+            child: ImageIcon(
+              const AssetImage('assets/icons/sender_icon.png'),
+              size: 25,
+              color: iconColor,
+            ),
+          ),
+        2 => SizedBox(
+            child: ImageIcon(
+              const AssetImage('assets/icons/recipient_icon.png'),
+              size: 25,
+              color: iconColor,
+            ),
+          ),
+        3 => Icon(Icons.my_library_books, size: 25, color: iconColor),
+        4 => Icon(Icons.receipt_long_rounded, size: 25, color: iconColor),
+        _ => Icon(Icons.receipt, size: 25, color: iconColor),
+      };
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -46,17 +66,7 @@ class NavBarItem extends StatelessWidget {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(
-                          switch (index) {
-                            1 => Icons.person,
-                            2 => Icons.person,
-                            3 => Icons.my_library_books,
-                            4 => Icons.receipt_long_rounded,
-                            _ => Icons.receipt,
-                          },
-                          size: 25,
-                          color: iconColor,
-                        ),
+                        icon,
                         SizeTransition(
                           sizeFactor: controller,
                           axis: Axis.horizontal,

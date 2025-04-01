@@ -39,6 +39,9 @@ class _CourseListBuilderConsumerState extends ConsumerState<CourseListBuilder> {
   Widget build(BuildContext context) {
     provider = ref.watch(appData);
 
+    widget.courses
+        .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 6),
       child: ListView.builder(

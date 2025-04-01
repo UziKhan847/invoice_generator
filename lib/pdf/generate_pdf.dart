@@ -11,7 +11,7 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 Future<Uint8List> generatePdf({
-  required bool isInvoice,
+
   Receipt? receipt,
   required Invoice invoice,
   required Sender sender,
@@ -26,6 +26,8 @@ Future<Uint8List> generatePdf({
   pw.Image logo = pw.Image(pw.MemoryImage(imageBytes));
 
   pdf.addPage(pw.Page(build: (context) {
+    bool isInvoice = receipt == null ? true : false;
+
     return pw.Column(
       mainAxisAlignment: pw.MainAxisAlignment.center,
       children: [
