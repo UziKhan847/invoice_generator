@@ -145,10 +145,9 @@ class _InvoicePageState extends State<InvoicePage> {
                 child: InvoiceListBuilder(filteredInvoices: filteredInvoices)),
           ],
         ),
-        Positioned(
-            child: IgnorePointer(
-          ignoring: isExpanded ? false : true,
-          child: GestureDetector(
+        if (isExpanded)
+          Positioned(
+              child: GestureDetector(
             onTap: () {
               isExpanded = !isExpanded;
 
@@ -156,10 +155,9 @@ class _InvoicePageState extends State<InvoicePage> {
             },
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 200),
-              color: Colors.black.withValues(alpha: isExpanded ? 0.4 : 0),
+              color: Colors.black.withValues(alpha: 0.4),
             ),
-          ),
-        )),
+          )),
         Positioned(
           top: 0,
           width: MediaQuery.of(context).size.width,

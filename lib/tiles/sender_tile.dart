@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
-import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/icon_with_text.dart';
 
 class SenderTile extends StatelessWidget {
   const SenderTile({
@@ -21,9 +20,11 @@ class SenderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    int senderAddressLength =
-        "${sender.street}, ${sender.city}, ${sender.province}, ${sender.zip}"
-            .length;
+    // int senderAddressLength =
+    //     "${sender.street}, ${sender.city}, ${sender.province}, ${sender.zip}"
+    //         .length;
+
+    final name = sender.name.replaceAll(RegExp(' '), '\n');
 
     return CustomListTile(
       onTapDelete: onTapDelete,
@@ -34,35 +35,37 @@ class SenderTile extends StatelessWidget {
         size: 20,
       ),
       content: [
-        Margins.vertical4,
-        for (int i = 0; i < 5; i++) ...[
-          switch (i) {
-            1 => TileRow("Name: ", sender.name),
-            2 => Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    "Address: ",
-                    style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+        IntrinsicHeight(
+          child: Row(
+            children: [
+              SizedBox(
+                width: 120,
+                child: Center(
+                  child: Text(
+                    name,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  senderAddressLength > 30
-                      ? Text(
-                          "${sender.street},\n ${sender.city}, ${sender.province}, ${sender.zip}",
-                          style: const TextStyle(fontSize: 11),
-                        )
-                      : Text(
-                          "${sender.street}, ${sender.city}, ${sender.province}, ${sender.zip}",
-                          style: const TextStyle(fontSize: 12),
-                        )
-                ],
+                ),
               ),
-            3 => TileRow("Phone: ", sender.phone),
-            4 => TileRow("Email: ", sender.email),
-            5 => TileRow('E-Transfer: ', "${sender.eTransfer}"),
-            _ => TileRow("Sender Id: ", "${sender.senderId}")
-          },
-        ],
-        Margins.vertical4,
+              const VerticalDivider(
+                thickness: 0,
+                color: Colors.black,
+              ),
+              Expanded(
+                child: Column(
+                  spacing: 8,
+                  children: [
+                    IconWithText(Icons.location_on,
+                        ' ${sender.street} ${sender.city} ${sender.province} ${sender.zip}'),
+                    IconWithText(Icons.phone, " ${sender.phone}"),
+                    IconWithText(Icons.email, ' ${sender.email}')
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
       ],
     );
   }

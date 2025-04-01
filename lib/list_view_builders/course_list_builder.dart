@@ -39,68 +39,42 @@ class _CourseListBuilderConsumerState extends ConsumerState<CourseListBuilder> {
   Widget build(BuildContext context) {
     provider = ref.watch(appData);
 
-    return ListView.builder(
-        padding: const EdgeInsets.only(top: 0, bottom: 0),
-        itemCount: widget.courses.length,
-        itemBuilder: (context, index) {
-          Course item = widget.courses[index];
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 6),
+      child: ListView.builder(
+          padding: const EdgeInsets.only(top: 0, bottom: 0),
+          itemCount: widget.courses.length,
+          itemBuilder: (context, index) {
+            Course item = widget.courses[index];
 
-          //         nameController.text = item.name;
-          // costController.text = "${item.cost}";
-          // frequencyController.text = item.costFrequency;
+            return CourseTile(
+              course: item,
+              isLastIndex: index == widget.courses.length - 1,
+              onTapDelete: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogTile(
+                        affirmButtonText: "Yes",
+                        cancelButtonText: 'No',
+                        dialogTitle:
+                            "Are you sure you want to\n delete this course?",
+                        onTapAffirm: () async {
+                          await provider.deleteCourse(
+                              context: context, courseId: item.courseId);
 
-          return CourseTile(
-            course: item,
-            isLastIndex: index == widget.courses.length - 1,
-            onTapDelete: () {
-              showDialog(
-                  context: context,
-                  builder: (BuildContext context) {
-                    return DialogTile(
-                      affirmButtonText: "Yes",
-                      cancelButtonText: 'No',
-                      dialogTitle:
-                          "Are you sure you want to\n delete this course?",
-                      onTapAffirm: () async {
-                        await provider.deleteCourse(
-                            context: context, courseId: item.courseId);
-
-                        if (context.mounted) {
+                          if (context.mounted) {
+                            Navigator.pop(context);
+                          }
+                        },
+                        onTapCancel: () {
                           Navigator.pop(context);
-                        }
-                      },
-                      onTapCancel: () {
-                        Navigator.pop(context);
-                      },
-                    );
-                  });
-            },
-            // onTapEdit: () => showDialog<String>(
-            //     barrierDismissible: false,
-            //     context: context,
-            //     builder: (BuildContext context) => CourseDialog(
-            //           formKey: formKey,
-            //           item: item,
-            //           costController: costController,
-            //           nameController: nameController,
-            //           frequencyController: frequencyController,
-            //           onTapAffirm: () async {
-            //             loadCircle();
-            //             await provider.updateCourse(
-            //               context: context,
-            //               courseId: item.courseId,
-            //               name: nameController.text,
-            //               cost: double.parse(costController.text),
-            //               frequency: frequencyController.text,
-            //             );
-            //             loadCircle();
-
-            //             if (context.mounted) {
-            //               Navigator.pop(context);
-            //             }
-            //           },
-            //         )),
-          );
-        });
+                        },
+                      );
+                    });
+              },
+            );
+          }),
+    );
   }
 }

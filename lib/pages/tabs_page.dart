@@ -170,8 +170,6 @@ class _TabPageState extends ConsumerState<TabsPage>
     return scrWFifth;
   }
 
-  //double getLeft() {}
-
   @override
   Widget build(BuildContext context) {
     provider = ref.watch(appData);
@@ -228,44 +226,7 @@ class _TabPageState extends ConsumerState<TabsPage>
                 backgroundColor: navBarColor,
                 child: const Icon(Icons.add),
               ),
-        bottomNavigationBar:
-
-            //  BottomNavBar(
-            //   pageController: pageController,
-            //   indicatorColor: indicatorColor,
-            //   indicatorGradColors: indicatorGradColors,
-            //   gradientColors: gradientColors,
-            //   onHorizontalDragEnd: (details) {
-            //     double velocity = details.primaryVelocity ?? 0;
-
-            //     int targetPage = pageAnimValue.round();
-
-            //     if (velocity.abs() > 500) {
-            //       if (velocity < 0) {
-            //         lerp < 0.5 ? targetPage += 1 : targetPage;
-            //       } else {
-            //         lerp > 0.5 ? targetPage -= 1 : targetPage;
-            //       }
-            //     }
-
-            //     targetPage = targetPage.clamp(0, 4);
-
-            //     pageController.animateToPage(
-            //       targetPage,
-            //       duration: const Duration(milliseconds: 300),
-            //       curve: Curves.easeOut,
-            //     );
-            //   },
-            //   onHorizontalDragUpdate: (details) {
-            //     pageController.jumpTo(
-            //         (pageController.position.pixels - details.delta.dx)
-            //             .clamp(0, pageController.position.maxScrollExtent));
-            //   },
-            //   page: pageAnimValue,
-            //   screenWidth: screenWidth,
-            // )
-
-            GestureDetector(
+        bottomNavigationBar: GestureDetector(
           onHorizontalDragUpdate: (details) {
             pageController.jumpTo(
                 (pageController.position.pixels - details.delta.dx)
@@ -325,8 +286,6 @@ class _TabPageState extends ConsumerState<TabsPage>
                           onTap: () {
                             pageController.jumpToPage(
                               i,
-                              // duration: const Duration(milliseconds: 300),
-                              // curve: Curves.linear,
                             );
                           },
                           controller: navItemAnimControllers[i],
@@ -347,55 +306,3 @@ class _TabPageState extends ConsumerState<TabsPage>
     );
   }
 }
-
-
-  //  child: Container(
-  //           height: 70,
-  //           decoration: BoxDecoration(
-  //               gradient: LinearGradient(
-  //             colors: gradientColors,
-  //             begin: Alignment.centerLeft,
-  //             end: Alignment.centerRight,
-  //           )),
-  //           child: Stack(
-  //             children: [
-  //               Positioned(
-  //                   left: (screenWidth * 0.2) * pageAnimValue,
-  //                   bottom: 0,
-  //                   child: Container(
-  //                     decoration: BoxDecoration(
-  //                         gradient:
-  //                             LinearGradient(colors: indicatorGradColors)),
-  //                     width: screenWidth * 0.2,
-  //                     height: 70,
-  //                   )),
-  //               Row(
-  //                 children: [
-  //                   for (int i = 0; i < 5; i++) ...[
-  //                     NavBarItem(
-  //                         iconColor: Color.lerp(Colors.white, Colors.black,
-  //                             navItemAnims[i].value),
-  //                         index: i,
-  //                         itemColor: pageAnimValue == i
-  //                             ? indicatorColors[i]
-  //                             : Colors.transparent,
-  //                         onTap: () {
-  //                           pageController.animateToPage(
-  //                             i,
-  //                             duration: const Duration(milliseconds: 300),
-  //                             curve: Curves.linear,
-  //                           );
-  //                         },
-  //                         controller: navItemAnimControllers[i],
-  //                         itemBackWidth: lerpDouble(screenWidth * 0.2,
-  //                             screenWidth * 0.3, navItemAnims[i].value),
-  //                         itemWidth: getSelectedItemWidth(
-  //                           screenWidth,
-  //                           i,
-  //                         ))
-  //                   ],
-  //                 ],
-  //               )
-  //             ],
-  //           ),
-  //         ),

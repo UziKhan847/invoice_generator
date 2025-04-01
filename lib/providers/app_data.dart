@@ -248,6 +248,9 @@ class AppData extends ChangeNotifier {
 
       senders.add(Sender.fromJson(newSender[0]));
 
+      senders
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+
       notifyListeners();
 
       if (context.mounted) {
@@ -306,6 +309,8 @@ class AppData extends ChangeNotifier {
       ).select(selectRecipients);
 
       recipients.add(Recipient.fromJson(newRecipient[0]));
+      recipients
+          .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
       notifyListeners();
 

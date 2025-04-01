@@ -31,7 +31,7 @@ class InvoiceTile extends StatelessWidget {
   Future<String> getPdfFilePath(Future<Uint8List> pdf) async {
     final dir = await getTemporaryDirectory();
     final file = File(
-        '${dir.path}/Invoice_${invoice.invoiceId}_${invoice.invoiceDate.replaceAll(RegExp(r'-'), '_')}.pdf');
+        '${dir.path}/Invoice_${invoice.invoiceId}_${invoice.invoiceDate.replaceAll(RegExp(r'-'), '_')}_${invoice.recipients.name}.pdf');
 
     await file.writeAsBytes(await pdf);
 
@@ -74,16 +74,6 @@ class InvoiceTile extends StatelessWidget {
       }
     }
   }
-
-  // Future<void> sendEmail(String email, String subject) async {
-  //   final pdfPath = getPdfFilePath(await generatePdf(
-  //     isInvoice: true,
-  //     invoice: invoice,
-  //     sender: invoice.senders,
-  //     recipient: invoice.recipients,
-  //     invoiceCourses: invoice.invoiceCourses!.asMap(),
-  //   ));
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -130,8 +120,8 @@ class InvoiceTile extends StatelessWidget {
         Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            Expanded(child: TileRow("Invoice Id: ", '${invoice.invoiceId}')),
-            Expanded(child: TileRow("Invoice Date: ", invoice.invoiceDate)),
+            Expanded(child: TileRow("ID: ", '${invoice.invoiceId}')),
+            Expanded(child: TileRow("Date: ", invoice.invoiceDate)),
           ],
         ),
         Row(
