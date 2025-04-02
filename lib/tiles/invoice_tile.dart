@@ -1,18 +1,12 @@
-import 'dart:io';
-import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_email_sender/flutter_email_sender.dart';
-import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
-import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/mail_service.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
-import 'package:path_provider/path_provider.dart';
 
 class InvoiceTile extends StatelessWidget {
   const InvoiceTile(

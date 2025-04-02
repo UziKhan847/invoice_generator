@@ -15,14 +15,14 @@ import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
-class TabsPage extends ConsumerStatefulWidget {
-  const TabsPage({super.key});
+class MainPage extends ConsumerStatefulWidget {
+  const MainPage({super.key});
 
   @override
-  ConsumerState<TabsPage> createState() => _TabPageState();
+  ConsumerState<MainPage> createState() => _TabPageState();
 }
 
-class _TabPageState extends ConsumerState<TabsPage>
+class _TabPageState extends ConsumerState<MainPage>
     with TickerProviderStateMixin {
   late AppData provider;
 
@@ -46,19 +46,19 @@ class _TabPageState extends ConsumerState<TabsPage>
   double dragDelta = 0.0;
 
   final navBarColors = [
-    const Color(0xFF6B2C2C), // Muted Dark Red
-    const Color(0xFF8C5A2E), // Muted Olive Brown
-    const Color(0xFF4A6D8C), // Muted Slate Blue
-    const Color(0xFF3A5A47), // Muted Dark Green
-    const Color(0xFF5B3A73), // Muted Dark Violet
+    const Color(0xFF6B2C2C),
+    const Color(0xFF8C5A2E),
+    const Color(0xFF4A6D8C),
+    const Color(0xFF3A5A47),
+    const Color(0xFF5B3A73),
   ];
 
   final indicatorColors = [
-    const Color(0xFFE48787), // Lightened Muted Dark Red
-    const Color(0xFFDCAB6F), // Lightened Muted Olive Brown
-    const Color(0xFF93B3D1), // Lightened Muted Slate Blue
-    const Color(0xFFB6D7B1), // Lightened Muted Dark Green
-    const Color(0xFFBE95CE), // Lightened Muted Dark Violet
+    const Color(0xFFF6857D),
+    const Color(0xFFFFCA8A),
+    const Color(0xFFA3CEFF),
+    const Color(0xFFA5FFCB),
+    const Color(0xFFDDB9FF)
   ];
 
   Color? get navBarColor {

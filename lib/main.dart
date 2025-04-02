@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
-import 'package:markaz_umaza_invoice_generator/pages/tabs_page.dart';
+import 'package:markaz_umaza_invoice_generator/pages/main_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -35,7 +35,7 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFF951414),
+            backgroundColor: Color(0xFF6B2C2C),
             foregroundColor: Colors.white,
             shadowColor: Colors.black,
             elevation: 4,
@@ -45,7 +45,7 @@ class MyApp extends ConsumerWidget {
             textColor: Colors.black,
             tileColor: Color(0xFFF7F7F7)),
         floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF951414),
+          backgroundColor: Color(0xFF6B2C2C),
           foregroundColor: Colors.white,
           elevation: 4,
           shape: CircleBorder(),
@@ -85,7 +85,7 @@ class MyApp extends ConsumerWidget {
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.done &&
                     !snapshot.hasError) {
-                  return const TabsPage();
+                  return const MainPage();
                 }
 
                 return const LoadingScreenPage();

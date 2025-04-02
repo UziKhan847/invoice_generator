@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
-import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
+import 'package:markaz_umaza_invoice_generator/pdf/pdf_generator.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 
@@ -25,7 +25,7 @@ class MailService {
 
   Future<void> sendEmail(BuildContext context) async {
     try {
-      final pdfPath = await getPdfFilePath(generatePdf(
+      final pdfPath = await getPdfFilePath(PdfGenerator.generatePdf(
         receipt: receipt,
         invoice: invoice,
         sender: invoice.senders,
@@ -61,5 +61,3 @@ class MailService {
     }
   }
 }
-
-class Reciepient {}

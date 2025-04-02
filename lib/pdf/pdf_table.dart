@@ -14,7 +14,6 @@ class PdfTable {
   }) =>
       pw.Table(
         border: pw.TableBorder.all(),
-        //defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         columnWidths: const <int, pw.TableColumnWidth>{
           0: pw.FixedColumnWidth(185),
           1: pw.FixedColumnWidth(55),
@@ -83,7 +82,7 @@ class PdfTable {
           PdfTableRow.row(
             font: pw.Font.times(),
             columnOne: "HST %13",
-            columnFour: "\$$hst",
+            columnFour: "\$${hst ?? 0.0}",
           ),
           if (isInvoice) ...[
             pw.TableRow(

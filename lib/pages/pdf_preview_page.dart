@@ -4,7 +4,7 @@ import 'package:markaz_umaza_invoice_generator/models/invoice_course.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
-import 'package:markaz_umaza_invoice_generator/pdf/generate_pdf.dart';
+import 'package:markaz_umaza_invoice_generator/pdf/pdf_generator.dart';
 import 'package:printing/printing.dart';
 
 class PdfPreviewPage extends StatelessWidget {
@@ -25,7 +25,7 @@ class PdfPreviewPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isInvoice = receipt == null ? true : false;
+    bool isInvoice = receipt == null;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: isInvoice
@@ -34,7 +34,13 @@ class PdfPreviewPage extends StatelessWidget {
         title: const Text("PDF Preview"),
       ),
       body: PdfPreview(
-          build: (context) => generatePdf(
+          actionBarTheme: PdfActionBarTheme(
+            height: 70,
+            backgroundColor: isInvoice
+                ? Theme.of(context).appBarTheme.backgroundColor
+                : const Color(0xFF421070),
+          ),
+          build: (context) => PdfGenerator.generatePdf(
                 receipt: receipt,
                 invoice: invoice,
                 sender: sender,
