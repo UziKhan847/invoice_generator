@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
-import 'package:markaz_umaza_invoice_generator/utils/mail_service.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/utils/pdf_handler.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
@@ -19,13 +20,12 @@ class InvoiceTile extends StatelessWidget {
   final Invoice invoice;
 
   final bool isLastIndex;
-
   final void Function()? onTapDelete;
   final void Function()? onTapEdit;
 
   @override
   Widget build(BuildContext context) {
-    final mailService = MailService(invoice: invoice);
+    final pdfHandler = PdfHandler(invoice: invoice);
 
     return CustomListTile(
       isInvoiceReceipt: true,
@@ -42,6 +42,20 @@ class InvoiceTile extends StatelessWidget {
                       invoiceCourses: invoice.invoiceCourses!.asMap(),
                     )));
       },
+      onTapSave: () async {
+        if (await pdfHandler.isGranted(context)) {
+          if (context.mounted) {
+            String saveFilePath = await pdfHandler.savePdf(context);
+            if (context.mounted) {
+              context.showSnackBar('PDF Saved at: $saveFilePath');
+            }
+          }
+        } else {
+          if (context.mounted) {
+            await pdfHandler.showPermssionDialog(context);
+          }
+        }
+      },
       onTapMail: () {
         showDialog(
             context: context,
@@ -52,7 +66,7 @@ class InvoiceTile extends StatelessWidget {
                 dialogTitle:
                     "Do you want to send\n this invoice to ${invoice.recipients.name}",
                 onTapAffirm: () async {
-                  mailService.sendEmail(context);
+                  pdfHandler.sendEmail(context);
 
                   if (context.mounted) {
                     Navigator.pop(context);

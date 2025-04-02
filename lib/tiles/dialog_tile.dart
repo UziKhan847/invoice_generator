@@ -13,6 +13,7 @@ class DialogTile extends StatelessWidget {
     required this.affirmButtonText,
     required this.cancelButtonText,
     this.dialogInsetPadding = 12,
+    this.textAlign = TextAlign.center,
   });
 
   final double dialogInsetPadding;
@@ -24,6 +25,7 @@ class DialogTile extends StatelessWidget {
   final bool isLoading;
   final String affirmButtonText;
   final String cancelButtonText;
+  final TextAlign textAlign;
 
   @override
   Widget build(BuildContext context) {
@@ -36,7 +38,7 @@ class DialogTile extends StatelessWidget {
         title: Text(
           dialogTitle,
           style: const TextStyle(fontSize: 20),
-          textAlign: TextAlign.center,
+          textAlign: textAlign,
         ),
         content: SizedBox(
           height: dialogHeight,

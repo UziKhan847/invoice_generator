@@ -13,6 +13,7 @@ class CustomListTile extends StatelessWidget {
     this.onTapEdit,
     this.onTapMail,
     this.onTapPreview,
+    this.onTapSave,
     this.isInvoiceReceipt = false,
   });
 
@@ -24,6 +25,7 @@ class CustomListTile extends StatelessWidget {
   final VoidCallback? onTapMail;
   final VoidCallback? onTapEdit;
   final VoidCallback? onTapPreview;
+  final VoidCallback? onTapSave;
   final bool isInvoiceReceipt;
 
   @override
@@ -53,7 +55,7 @@ class CustomListTile extends StatelessWidget {
             SlidableItem(
               icon: Icons.download,
               text: 'Download',
-              onTap: onTapPreview,
+              onTap: onTapSave,
               backgroundColor: const Color(0xFF003C77),
               splashColor: const Color(0xFF0D86FF),
             ),

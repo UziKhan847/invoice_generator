@@ -6,7 +6,7 @@ import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/filter/filter_bar.dart';
 import 'package:markaz_umaza_invoice_generator/filter/filter_box.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/bottom_info_bar.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/bottom_nav_bar/bottom_info_bar.dart';
 
 class InvoicePage extends StatefulWidget {
   const InvoicePage(

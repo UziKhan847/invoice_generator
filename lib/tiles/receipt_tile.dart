@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
-import 'package:markaz_umaza_invoice_generator/utils/mail_service.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/utils/pdf_handler.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
@@ -30,7 +31,7 @@ class ReceiptTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Invoice invoice = receipt.invoices;
 
-    final mailService = MailService(invoice: invoice, receipt: receipt);
+    final pdfHandler = PdfHandler(invoice: invoice, receipt: receipt);
 
     return CustomListTile(
         onTapDelete: onTapDelete,
@@ -48,6 +49,20 @@ class ReceiptTile extends StatelessWidget {
                         invoiceCourses: invoice.invoiceCourses!.asMap(),
                       )));
         },
+        onTapSave: () async {
+          // if (await pdfHandler.requestStrgPermission(context)) {
+          //   if (context.mounted) {
+          //     String saveFilePath = await pdfHandler.savePdf(context);
+          //     if (context.mounted) {
+          //       context.showSnackBar('PDF Saved at: $saveFilePath');
+          //     }
+          //   }
+          // } else {
+          //   if (context.mounted) {
+          //     context.showSnackBar('Stroage permission denied.', isError: true);
+          //   }
+          // }
+        },
         onTapMail: () {
           showDialog(
               context: context,
@@ -58,7 +73,7 @@ class ReceiptTile extends StatelessWidget {
                   dialogTitle:
                       "Do you want to send\n this receipt to ${invoice.recipients.name}",
                   onTapAffirm: () async {
-                    mailService.sendEmail(context);
+                    pdfHandler.sendEmail(context);
 
                     if (context.mounted) {
                       Navigator.pop(context);

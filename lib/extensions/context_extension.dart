@@ -3,16 +3,6 @@ import 'package:flutter/material.dart';
 extension ContextExtension on BuildContext {
   static OverlayEntry? overlay;
 
-  void showSnackBar(String message, {bool isError = false}) =>
-      ScaffoldMessenger.of(this).showSnackBar(
-        SnackBar(
-          content: Text(message),
-          backgroundColor:
-              isError ? const Color(0xFF8A241D) : const Color(0xFF187218),
-          duration: const Duration(milliseconds: 2500),
-        ),
-      );
-
   void insertOverlay(
     BuildContext context, {
     required Widget listViewBuilder,
@@ -70,4 +60,14 @@ extension ContextExtension on BuildContext {
     overlay?.dispose();
     overlay = null;
   }
+
+  void showSnackBar(String message, {bool isError = false}) =>
+      ScaffoldMessenger.of(this).showSnackBar(
+        SnackBar(
+          content: Text(message),
+          backgroundColor:
+              isError ? const Color(0xFF8A241D) : const Color(0xFF187218),
+          duration: const Duration(milliseconds: 2500),
+        ),
+      );
 }
