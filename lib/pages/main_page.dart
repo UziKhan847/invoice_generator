@@ -1,18 +1,19 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_course.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_invoice.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_recipient.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_sender.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/string_extension.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -25,6 +26,8 @@ class MainPage extends ConsumerStatefulWidget {
 class _TabPageState extends ConsumerState<MainPage>
     with TickerProviderStateMixin {
   late AppData provider;
+  late AppTheme themeMode;
+  late ThemeNotifier themeNotifier;
 
   late PageController pageController = PageController();
   late List<AnimationController> navItemAnimControllers;
@@ -117,12 +120,7 @@ class _TabPageState extends ConsumerState<MainPage>
     navItemAnimControllers[0].forward();
 
     pageController.addListener(() {
-      isTap = onTapIndex - smallerIndex > 1;
-
       pageAnimValue = pageController.page ?? 0;
-
-      swipeRight = pageController.position.userScrollDirection ==
-          ScrollDirection.reverse;
 
       largerIndex = pageAnimValue.ceil();
       smallerIndex = pageAnimValue.floor();
@@ -173,21 +171,42 @@ class _TabPageState extends ConsumerState<MainPage>
   @override
   Widget build(BuildContext context) {
     provider = ref.watch(appData);
+    themeMode = ref.watch(themeProvider);
+    themeNotifier = ref.read(themeProvider.notifier);
+
     double screenWidth = MediaQuery.of(context).size.width;
 
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: const Color.fromARGB(255, 217, 217, 217),
         appBar: AppBar(
-          toolbarHeight: 10,
+          toolbarHeight: 50, //10,
           flexibleSpace: Container(
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: gradientColors,
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            )),
+            decoration: switch (themeMode) {
+              AppTheme.colorful => BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: gradientColors,
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )),
+              _ => BoxDecoration(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                )
+            },
+            child: Center(
+              child: ElevatedButton(
+                  onPressed: () {
+                    switch (themeMode) {
+                      case AppTheme.light:
+                        themeNotifier.setTheme(AppTheme.dark);
+                      case AppTheme.dark:
+                        themeNotifier.setTheme(AppTheme.colorful);
+                      default:
+                        themeNotifier.setTheme(AppTheme.light);
+                    }
+                  },
+                  child: Text(themeMode.name.toCapitalized)),
+            ),
           ),
         ),
         body: PageView(
@@ -196,14 +215,17 @@ class _TabPageState extends ConsumerState<MainPage>
           pageSnapping: false,
           children: [
             InvoicePage(
-              invoices: provider.invoices,
-              senders: provider.senders,
-              recipients: provider.recipients,
-              courses: provider.courses,
-              isOnPage: pageAnimValue == 0,
-              navBarColor: navBarColors[0],
-              indicatorColor: indicatorColors[0],
-            ),
+                invoices: provider.invoices,
+                senders: provider.senders,
+                recipients: provider.recipients,
+                courses: provider.courses,
+                isOnPage: pageAnimValue == 0,
+                navBarColor: navBarColors[0],
+                indicatorColor: switch (themeMode) {
+                  AppTheme.light => Colors.white,
+                  AppTheme.dark => Colors.black,
+                  _ => indicatorColors[0],
+                }),
             SenderListBuilder(senders: provider.senders),
             RecipientListBuilder(recipients: provider.recipients),
             CourseListBuilder(courses: provider.courses),
@@ -223,7 +245,10 @@ class _TabPageState extends ConsumerState<MainPage>
                           4 => const AddReceipt(),
                           _ => const AddInvoice(),
                         }),
-                backgroundColor: navBarColor,
+                backgroundColor: switch (themeMode) {
+                  AppTheme.colorful => navBarColor,
+                  _ => Theme.of(context).appBarTheme.backgroundColor,
+                },
                 child: const Icon(Icons.add),
               ),
         bottomNavigationBar: GestureDetector(
@@ -255,21 +280,32 @@ class _TabPageState extends ConsumerState<MainPage>
           },
           child: Container(
             height: 70,
-            decoration: BoxDecoration(
-                gradient: LinearGradient(
-              colors: gradientColors,
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-            )),
+            decoration: switch (themeMode) {
+              AppTheme.colorful => BoxDecoration(
+                    gradient: LinearGradient(
+                  colors: gradientColors,
+                  begin: Alignment.centerLeft,
+                  end: Alignment.centerRight,
+                )),
+              _ => BoxDecoration(
+                  color: Theme.of(context).appBarTheme.backgroundColor,
+                )
+            },
             child: Stack(
               children: [
                 Positioned(
                     left: (screenWidth * 0.2) * pageAnimValue,
                     bottom: 0,
                     child: Container(
-                      decoration: BoxDecoration(
-                          gradient:
-                              LinearGradient(colors: indicatorGradColors)),
+                      decoration: switch (themeMode) {
+                        AppTheme.light =>
+                          const BoxDecoration(color: Colors.white),
+                        AppTheme.dark =>
+                          const BoxDecoration(color: Colors.black),
+                        _ => BoxDecoration(
+                            gradient:
+                                LinearGradient(colors: indicatorGradColors))
+                      },
                       width: screenWidth * 0.2,
                       height: 70,
                     )),
@@ -277,11 +313,19 @@ class _TabPageState extends ConsumerState<MainPage>
                   children: [
                     for (int i = 0; i < 5; i++) ...[
                       NavBarItem(
-                          iconColor: Color.lerp(Colors.white, Colors.black,
-                              navItemAnims[i].value),
+                          iconColor: switch (themeMode) {
+                            AppTheme.light => Colors.black,
+                            AppTheme.dark => Colors.white,
+                            _ => Color.lerp(Colors.white, Colors.black,
+                                navItemAnims[i].value)
+                          },
                           index: i,
                           itemColor: pageAnimValue == i
-                              ? indicatorColors[i]
+                              ? switch (themeMode) {
+                                  AppTheme.light => Colors.white,
+                                  AppTheme.dark => Colors.black,
+                                  _ => indicatorColors[i]
+                                }
                               : Colors.transparent,
                           onTap: () {
                             pageController.jumpToPage(

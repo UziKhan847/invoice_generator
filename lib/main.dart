@@ -5,6 +5,9 @@ import 'package:markaz_umaza_invoice_generator/keys.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_screen_page.dart';
 import 'package:markaz_umaza_invoice_generator/pages/main_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
+import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
+import 'package:markaz_umaza_invoice_generator/themes/theme_preferances.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final supabase = Supabase.instance.client;
@@ -15,69 +18,34 @@ void main() async {
     anonKey: supabaseAnonKey,
   );
 
+  final savedTheme = await ThemePreferances.getSavedTheme();
+
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
 
-  runApp(ProviderScope(child: MyApp()));
+  runApp(ProviderScope(
+    overrides: [themeProvider.overrideWith((ref) => ThemeNotifier(savedTheme))],
+    child: MyApp(),
+  ));
 }
 
 class MyApp extends ConsumerWidget {
   MyApp({super.key});
 
   late AppData provider;
+  late AppTheme themeMode;
   late final data = provider.getData();
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     provider = ref.watch(appData);
+    themeMode = ref.watch(themeProvider);
 
     return MaterialApp(
       title: "Invoice Generator",
       debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-        appBarTheme: const AppBarTheme(
-            backgroundColor: Color(0xFF6B2C2C),
-            foregroundColor: Colors.white,
-            shadowColor: Colors.black,
-            elevation: 4,
-            centerTitle: true),
-        listTileTheme: const ListTileThemeData(
-            titleTextStyle: TextStyle(fontSize: 20),
-            textColor: Colors.black,
-            tileColor: Color(0xFFF7F7F7)),
-        floatingActionButtonTheme: const FloatingActionButtonThemeData(
-          backgroundColor: Color(0xFF6B2C2C),
-          foregroundColor: Colors.white,
-          elevation: 4,
-          shape: CircleBorder(),
-        ),
-        elevatedButtonTheme: const ElevatedButtonThemeData(
-            style: ButtonStyle(
-          fixedSize: WidgetStatePropertyAll(Size(95, 20)),
-          backgroundColor: WidgetStatePropertyAll(Colors.white),
-          foregroundColor: WidgetStatePropertyAll(Colors.black),
-          elevation: WidgetStatePropertyAll(4),
-          overlayColor: WidgetStatePropertyAll(Color(0xFFDDDDDD)),
-        )),
-        inputDecorationTheme: const InputDecorationTheme(
-            isDense: true,
-            iconColor: Color(0xFF6A6A6A),
-            floatingLabelBehavior: FloatingLabelBehavior.always,
-            labelStyle: TextStyle(
-              color: Color(0xFF6A6A6A),
-            ),
-            errorStyle: TextStyle(height: 0, fontSize: 11),
-            border: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF616161))),
-            focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF135993))),
-            errorBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-            focusedErrorBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: Colors.red)),
-            disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF616161)))),
-        dialogTheme: const DialogTheme(backgroundColor: Color(0xFFF7F7F7)),
-      ),
+      theme: MyThemes.lightTheme(themeMode),
+      darkTheme: MyThemes.darkTheme(),
+      themeMode: themeMode == AppTheme.dark ? ThemeMode.dark : ThemeMode.light,
       home:
           // TabsPage()
           FutureBuilder(

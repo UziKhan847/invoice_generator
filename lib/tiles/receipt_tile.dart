@@ -50,18 +50,18 @@ class ReceiptTile extends StatelessWidget {
                       )));
         },
         onTapSave: () async {
-          // if (await pdfHandler.requestStrgPermission(context)) {
-          //   if (context.mounted) {
-          //     String saveFilePath = await pdfHandler.savePdf(context);
-          //     if (context.mounted) {
-          //       context.showSnackBar('PDF Saved at: $saveFilePath');
-          //     }
-          //   }
-          // } else {
-          //   if (context.mounted) {
-          //     context.showSnackBar('Stroage permission denied.', isError: true);
-          //   }
-          // }
+          if (await pdfHandler.isGranted(context)) {
+            if (context.mounted) {
+              String saveFilePath = await pdfHandler.savePdf(context);
+              if (context.mounted) {
+                context.showSnackBar('PDF Saved at: $saveFilePath');
+              }
+            }
+          } else {
+            if (context.mounted) {
+              await pdfHandler.showPermssionDialog(context);
+            }
+          }
         },
         onTapMail: () {
           showDialog(

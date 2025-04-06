@@ -113,7 +113,7 @@ class PdfHandler {
   }
 
   Future<bool> requestStrgPermission(BuildContext context) async {
-    PermissionStatus status = await Permission.manageExternalStorage.request();
+    final status = await Permission.manageExternalStorage.request();
 
     if (status.isGranted) {
       if (context.mounted) {
