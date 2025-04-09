@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/slidable_item.dart';
 
 class CustomListTile extends StatelessWidget {
@@ -35,8 +36,11 @@ class CustomListTile extends StatelessWidget {
           ? const EdgeInsets.only(top: 5, bottom: 131)
           : const EdgeInsets.symmetric(vertical: 5),
       decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
-          borderRadius: BorderRadius.circular(4)),
+        color: Theme.of(context).brightness == Brightness.dark
+            ? MyThemes.secondaryDark
+            : Colors.white,
+        borderRadius: BorderRadius.circular(4),
+      ),
       child: Slidable(
         startActionPane: !isInvoiceReceipt
             ? null

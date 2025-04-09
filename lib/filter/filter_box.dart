@@ -8,12 +8,22 @@ class FilterBox extends StatelessWidget {
     required this.filterOptions,
     required this.selectedFilters,
     required this.update,
+    required this.boxColor,
+    required this.activeBtnColor,
+    required this.inactiveBtnColor,
+    required this.activeTextColor,
+    required this.inactiveTextColor,
   });
 
   final bool isExpanded;
   final VoidCallback update;
   final List<Set<String>> selectedFilters;
   final List<List<String>> filterOptions;
+  final Color boxColor;
+  final Color activeBtnColor;
+  final Color inactiveBtnColor;
+  final Color activeTextColor;
+  final Color inactiveTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -21,12 +31,12 @@ class FilterBox extends StatelessWidget {
       duration: const Duration(milliseconds: 200),
       height: isExpanded ? 300 : 0,
       decoration: BoxDecoration(
-          color: const Color(0xFFFFFFFF),
+          color: boxColor,
           borderRadius: const BorderRadius.only(
               bottomLeft: Radius.circular(8), bottomRight: Radius.circular(8)),
           boxShadow: <BoxShadow>[
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.16),
+              color: Colors.black.withValues(alpha: 0.2),
               blurRadius: 6,
               offset: const Offset(0, 2),
             )
@@ -35,6 +45,10 @@ class FilterBox extends StatelessWidget {
         children: [
           for (int i = 0; i < 6; i++) ...[
             FilterRow(
+              activeBtnColor: activeBtnColor,
+              inactiveBtnColor: inactiveBtnColor,
+              activeTextColor: activeTextColor,
+              inactiveTextColor: inactiveTextColor,
               rowLabel: switch (i) {
                 1 => 'Recipients',
                 2 => 'Courses',
@@ -44,7 +58,7 @@ class FilterBox extends StatelessWidget {
                 _ => 'Senders'
               },
               filterOptions: filterOptions[i],
-              selectedFilters:selectedFilters[i],
+              selectedFilters: selectedFilters[i],
               update: update,
             ),
             if (i < 5)

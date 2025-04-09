@@ -7,12 +7,20 @@ class FilterRow extends StatelessWidget {
     required this.rowLabel,
     required this.filterOptions,
     required this.selectedFilters,
+    required this.activeBtnColor,
+    required this.inactiveBtnColor,
+    required this.activeTextColor,
+    required this.inactiveTextColor,
   });
 
   final List<String> filterOptions;
   final VoidCallback update;
   final String rowLabel;
   final Set<String> selectedFilters;
+  final Color activeBtnColor;
+  final Color inactiveBtnColor;
+  final Color activeTextColor;
+  final Color inactiveTextColor;
 
   @override
   Widget build(BuildContext context) {
@@ -43,8 +51,8 @@ class FilterRow extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 20),
                         decoration: BoxDecoration(
                             color: selectedFilters.contains(item)
-                                ? const Color(0xFFAC1616)
-                                : const Color(0xFFEBA6A6),
+                                ? activeBtnColor
+                                : inactiveBtnColor,
                             boxShadow: <BoxShadow>[
                               BoxShadow(
                                 color: Colors.black.withValues(alpha: 0.16),
@@ -58,8 +66,8 @@ class FilterRow extends StatelessWidget {
                           item,
                           style: TextStyle(
                               color: selectedFilters.contains(item)
-                                  ? Colors.white
-                                  : Colors.black),
+                                  ? activeTextColor
+                                  : inactiveTextColor),
                         ))),
                   );
                 }),

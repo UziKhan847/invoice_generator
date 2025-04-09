@@ -6,6 +6,8 @@ import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/filter/filter_bar.dart';
 import 'package:markaz_umaza_invoice_generator/filter/filter_box.dart';
+import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
+import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/bottom_info_bar.dart';
 
 class InvoicePage extends StatefulWidget {
@@ -17,7 +19,8 @@ class InvoicePage extends StatefulWidget {
       required this.senders,
       required this.isOnPage,
       required this.indicatorColor,
-      required this.navBarColor});
+      required this.navBarColor,
+      required this.themeMode});
 
   final List<Invoice> invoices;
   final List<Sender> senders;
@@ -26,6 +29,7 @@ class InvoicePage extends StatefulWidget {
   final bool isOnPage;
   final Color navBarColor;
   final Color indicatorColor;
+  final AppTheme themeMode;
 
   @override
   State<InvoicePage> createState() => _InvoicePageState();
@@ -170,13 +174,41 @@ class _InvoicePageState extends State<InvoicePage> {
 
                   setState(() {});
                 },
-                indicatorColor: widget.indicatorColor,
+                expandedBarColor:
+                    Theme.of(context).brightness == Brightness.dark
+                        ? Colors.black
+                        : Colors.white,
+                collapsedBarColor: switch (widget.themeMode) {
+                  AppTheme.light => MyThemes.tertiaryLight,
+                  AppTheme.dark => MyThemes.tertiaryDark,
+                  _ => widget.indicatorColor
+                },
               ),
               FilterBox(
-                  isExpanded: isExpanded,
-                  filterOptions: filterOptions.values.toList(),
-                  selectedFilters: selectedFilters.values.toList(),
-                  update: update)
+                isExpanded: isExpanded,
+                filterOptions: filterOptions.values.toList(),
+                selectedFilters: selectedFilters.values.toList(),
+                update: update,
+                boxColor: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.black
+                    : Colors.white,
+                activeBtnColor: switch (widget.themeMode) {
+                  AppTheme.light => const Color.fromARGB(255, 172, 172, 172),
+                  AppTheme.dark => MyThemes.tertiaryDark,
+                  _ => const Color.fromARGB(255, 156, 17, 7)
+                },
+                inactiveBtnColor: switch (widget.themeMode) {
+                  AppTheme.light => MyThemes.secondaryLight,
+                  AppTheme.dark => MyThemes.secondaryDark,
+                  _ => widget.indicatorColor
+                },
+                activeTextColor: Colors.white,
+                inactiveTextColor: switch (widget.themeMode) {
+                  AppTheme.light => MyThemes.secondaryDark,
+                  AppTheme.dark => MyThemes.secondaryLight,
+                  _ => Colors.black,
+                },
+              )
             ],
           ),
         ),
@@ -188,7 +220,11 @@ class _InvoicePageState extends State<InvoicePage> {
           hst: hst,
           netIncome: netincome,
           isExpanded: isBottomInfoBarExpanded,
-          expandButtonColor: widget.indicatorColor,
+          expandButtonColor: switch (widget.themeMode) {
+            AppTheme.light => MyThemes.tertiaryLight,
+            AppTheme.dark => MyThemes.tertiaryDark,
+            _ => widget.indicatorColor
+          },
           onTapArrow: () {
             setState(() {
               isBottomInfoBarExpanded = !isBottomInfoBarExpanded;

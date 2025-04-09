@@ -14,6 +14,7 @@ import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_bu
 import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
+import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
 class MainPage extends ConsumerStatefulWidget {
@@ -215,17 +216,15 @@ class _TabPageState extends ConsumerState<MainPage>
           pageSnapping: false,
           children: [
             InvoicePage(
-                invoices: provider.invoices,
-                senders: provider.senders,
-                recipients: provider.recipients,
-                courses: provider.courses,
-                isOnPage: pageAnimValue == 0,
-                navBarColor: navBarColors[0],
-                indicatorColor: switch (themeMode) {
-                  AppTheme.light => Colors.white,
-                  AppTheme.dark => Colors.black,
-                  _ => indicatorColors[0],
-                }),
+              invoices: provider.invoices,
+              senders: provider.senders,
+              recipients: provider.recipients,
+              courses: provider.courses,
+              isOnPage: pageAnimValue == 0,
+              navBarColor: navBarColors[0],
+              themeMode: themeMode,
+              indicatorColor: indicatorColors[0],
+            ),
             SenderListBuilder(senders: provider.senders),
             RecipientListBuilder(recipients: provider.recipients),
             CourseListBuilder(courses: provider.courses),
@@ -245,10 +244,8 @@ class _TabPageState extends ConsumerState<MainPage>
                           4 => const AddReceipt(),
                           _ => const AddInvoice(),
                         }),
-                backgroundColor: switch (themeMode) {
-                  AppTheme.colorful => navBarColor,
-                  _ => Theme.of(context).appBarTheme.backgroundColor,
-                },
+                backgroundColor:
+                    themeMode == AppTheme.colorful ? navBarColor : null,
                 child: const Icon(Icons.add),
               ),
         bottomNavigationBar: GestureDetector(
@@ -314,11 +311,18 @@ class _TabPageState extends ConsumerState<MainPage>
                     for (int i = 0; i < 5; i++) ...[
                       NavBarItem(
                           iconColor: switch (themeMode) {
-                            AppTheme.light => Colors.black,
-                            AppTheme.dark => Colors.white,
+                            AppTheme.light => Color.lerp(MyThemes.tertiaryDark,
+                                Colors.black, navItemAnims[i].value),
+                            AppTheme.dark => Color.lerp(MyThemes.tertiaryLight,
+                                Colors.white, navItemAnims[i].value),
                             _ => Color.lerp(Colors.white, Colors.black,
                                 navItemAnims[i].value)
                           },
+
+                          // themeMode == AppTheme.colorful
+                          //     ? Color.lerp(Colors.white, Colors.black,
+                          //         navItemAnims[i].value)
+                          //     : null,
                           index: i,
                           itemColor: pageAnimValue == i
                               ? switch (themeMode) {

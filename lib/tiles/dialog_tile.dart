@@ -13,7 +13,7 @@ class DialogTile extends StatelessWidget {
     required this.affirmButtonText,
     required this.cancelButtonText,
     this.dialogInsetPadding = 12,
-    this.textAlign = TextAlign.center,
+    this.textAlign = TextAlign.left,
   });
 
   final double dialogInsetPadding;
@@ -32,12 +32,15 @@ class DialogTile extends StatelessWidget {
     return PopScope(
       canPop: false,
       child: AlertDialog(
+       
         contentPadding:
             const EdgeInsets.only(top: 16, bottom: 8, left: 20, right: 20),
         insetPadding: const EdgeInsets.all(0),
         title: Text(
           dialogTitle,
-          style: const TextStyle(fontSize: 20),
+          style: const TextStyle(
+            fontSize: 20,
+          ),
           textAlign: textAlign,
         ),
         content: SizedBox(

@@ -15,17 +15,23 @@ class TileRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final isDark = Theme.of(context).brightness == Brightness.dark;
+
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
       children: [
         Text(
           textOne,
-          style: TextStyle(fontSize: fontSize, fontWeight: FontWeight.bold),
+          style: TextStyle(
+              fontSize: fontSize,
+              fontWeight: FontWeight.bold,
+              color: isDark ? Colors.white : null),
         ),
         Text(
           textTwo,
-          style: TextStyle(fontSize: fontSize),
+          style: TextStyle(
+              fontSize: fontSize, color: isDark ? Colors.white : null),
           overflow: TextOverflow.ellipsis,
         )
       ],

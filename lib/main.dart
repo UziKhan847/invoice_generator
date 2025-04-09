@@ -43,8 +43,10 @@ class MyApp extends ConsumerWidget {
     return MaterialApp(
       title: "Invoice Generator",
       debugShowCheckedModeBanner: false,
-      theme: MyThemes.lightTheme(themeMode),
-      darkTheme: MyThemes.darkTheme(),
+      theme: themeMode == AppTheme.colorful
+          ? MyThemes.colorfulTheme
+          : MyThemes.lightTheme,
+      darkTheme: MyThemes.darkTheme,
       themeMode: themeMode == AppTheme.dark ? ThemeMode.dark : ThemeMode.light,
       home:
           // TabsPage()

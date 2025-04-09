@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 class FilterBar extends StatelessWidget {
-  const FilterBar({super.key, required this.isExpanded, required this.onTap, required this.indicatorColor});
+  const FilterBar({
+    super.key,
+    required this.isExpanded,
+    required this.onTap,
+    required this.expandedBarColor,
+    required this.collapsedBarColor,
+  });
 
   final bool isExpanded;
   final VoidCallback onTap;
-  final Color indicatorColor;
+  final Color expandedBarColor;
+  final Color collapsedBarColor;
 
   @override
   Widget build(BuildContext context) {
@@ -17,10 +24,10 @@ class FilterBar extends StatelessWidget {
         padding:
             const EdgeInsetsDirectional.symmetric(vertical: 10, horizontal: 20),
         decoration: BoxDecoration(
-            color: isExpanded ? Colors.white : indicatorColor,
+            color: isExpanded ? expandedBarColor : collapsedBarColor,
             boxShadow: <BoxShadow>[
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0.16),
+                color: Colors.black.withValues(alpha: 0.3),
                 blurRadius: 6,
                 offset: const Offset(0, 2),
               )

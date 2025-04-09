@@ -1,19 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 
+
 class BottomInfoBar extends StatelessWidget {
-  const BottomInfoBar({
-    super.key,
-    required this.filteredInvoices,
-    required this.isOnPage,
-    required this.item,
-    this.grossIncome = 0,
-    this.hst = 0,
-    this.netIncome = 0,
-    required this.isExpanded,
-    this.onTapArrow,
-    this.expandButtonColor,
-  });
+  const BottomInfoBar(
+      {super.key,
+      required this.filteredInvoices,
+      required this.isOnPage,
+      required this.item,
+      this.grossIncome = 0,
+      this.hst = 0,
+      this.netIncome = 0,
+      required this.isExpanded,
+      this.onTapArrow,
+      this.expandButtonColor,
+});
 
   final bool isOnPage;
   final List<Invoice> filteredInvoices;
@@ -24,6 +25,7 @@ class BottomInfoBar extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback? onTapArrow;
   final Color? expandButtonColor;
+ 
 
   @override
   Widget build(BuildContext context) {
