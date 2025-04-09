@@ -29,7 +29,7 @@ class MyThemes {
         appBarForeColor: secondaryDark,
         dialogBackColor: primaryLight,
         dialogTitleColor: secondaryDark,
-        elvtdBtnBackColor: primaryLight,
+        elvtdBtnBackColor: secondaryLight,
         elvtdBtnForeColor: primaryDark,
         fltnActBtnBackColor: tertiaryLight,
         fltnActBtnForeColor: primaryDark,
