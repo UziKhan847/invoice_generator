@@ -223,8 +223,10 @@ class _InvoicePageState extends State<InvoicePage> {
           expandButtonColor: switch (widget.themeMode) {
             AppTheme.light => MyThemes.tertiaryLight,
             AppTheme.dark => MyThemes.tertiaryDark,
-            _ => widget.indicatorColor
+            _ => widget.navBarColor
           },
+          arrowColor:
+              widget.themeMode == AppTheme.colorful ? Colors.white : null,
           onTapArrow: () {
             setState(() {
               isBottomInfoBarExpanded = !isBottomInfoBarExpanded;
