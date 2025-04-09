@@ -1,55 +1,55 @@
 import 'package:flutter/material.dart';
 
 class MyThemes {
-  static const Color primaryDark = Colors.black;
-  static const Color secondaryDark = Color.fromARGB(255, 30, 30, 30);
-  static const Color tertiaryDark = Color.fromARGB(255, 50, 50, 50);
+  static const Color primaryDark = Color(0xFF000000);
+  static const Color secondaryDark = Color(0xFF1E1E1E);
+  static const Color tertiaryDark = Color(0xFF323232);
 
   static const Color primaryLight = Colors.white;
-  static const Color secondaryLight = Color.fromARGB(255, 225, 225, 225);
-  static const Color tertiaryLight = Color.fromARGB(255, 205, 205, 205);
+  static const Color secondaryLight = Color(0xFFE1E1E1);
+  static const Color tertiaryLight = Color(0xFFCDCDCD);
 
-  static ThemeData get colorfulTheme => getThemeData(
-        brightness: Brightness.light,
-        appBarBackColor: const Color(0xFF6B2C2C),
-        appBarForeColor: Colors.white,
-        dialogBackColor: const Color(0xFFfff7ff),
-        dialogTitleColor: secondaryDark,
-        elvtdBtnBackColor: Colors.white,
-        elvtdBtnForeColor: Colors.black,
-        fltnActBtnBackColor: const Color(0xFF6B2C2C),
-        fltnActBtnForeColor: Colors.white,
-        iconColor: primaryDark,
-        scaffoldBackgroundColor: secondaryLight,
-      );
+  static final colorfulTheme = getThemeData(
+    brightness: Brightness.light,
+    appBarBackColor: const Color(0xFF6B2C2C),
+    appBarForeColor: Colors.white,
+    dialogBackColor: const Color(0xFFfff7ff),
+    dialogTitleColor: secondaryDark,
+    elvtdBtnBackColor: Colors.white,
+    elvtdBtnForeColor: Colors.black,
+    fltnActBtnBackColor: const Color(0xFF6B2C2C),
+    fltnActBtnForeColor: Colors.white,
+    iconColor: primaryDark,
+    scaffoldBackgroundColor: secondaryLight,
+  );
 
-  static ThemeData get lightTheme => getThemeData(
-        brightness: Brightness.light,
-        appBarBackColor: secondaryLight,
-        appBarForeColor: secondaryDark,
-        dialogBackColor: primaryLight,
-        dialogTitleColor: secondaryDark,
-        elvtdBtnBackColor: secondaryLight,
-        elvtdBtnForeColor: primaryDark,
-        fltnActBtnBackColor: tertiaryLight,
-        fltnActBtnForeColor: primaryDark,
-        iconColor: primaryDark,
-        scaffoldBackgroundColor: secondaryLight,
-      );
+  static final lightTheme = getThemeData(
+    brightness: Brightness.light,
+    appBarBackColor: secondaryLight,
+    appBarForeColor: secondaryDark,
+    dialogBackColor: primaryLight,
+    dialogTitleColor: secondaryDark,
+    elvtdBtnBackColor: secondaryLight,
+    elvtdBtnForeColor: primaryDark,
+    fltnActBtnBackColor: tertiaryLight,
+    fltnActBtnForeColor: primaryDark,
+    iconColor: primaryDark,
+    scaffoldBackgroundColor: secondaryLight,
+  );
 
-  static ThemeData get darkTheme => getThemeData(
-        brightness: Brightness.dark,
-        appBarBackColor: secondaryDark,
-        appBarForeColor: secondaryLight,
-        dialogBackColor: secondaryDark,
-        dialogTitleColor: secondaryLight,
-        elvtdBtnBackColor: tertiaryDark,
-        elvtdBtnForeColor: primaryLight,
-        fltnActBtnBackColor: tertiaryDark,
-        fltnActBtnForeColor: primaryLight,
-        iconColor: primaryLight,
-        scaffoldBackgroundColor: primaryDark,
-      );
+  static final darkTheme = getThemeData(
+    brightness: Brightness.dark,
+    appBarBackColor: secondaryDark,
+    appBarForeColor: secondaryLight,
+    dialogBackColor: secondaryDark,
+    dialogTitleColor: secondaryLight,
+    elvtdBtnBackColor: tertiaryDark,
+    elvtdBtnForeColor: primaryLight,
+    fltnActBtnBackColor: tertiaryDark,
+    fltnActBtnForeColor: primaryLight,
+    iconColor: primaryLight,
+    scaffoldBackgroundColor: primaryDark,
+  );
 
   static ThemeData getThemeData({
     Brightness? brightness,
