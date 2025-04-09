@@ -34,7 +34,10 @@ class DropdownItemTile extends StatelessWidget {
     return Container(
         height: menuItemHeight,
         decoration: BoxDecoration(
-            color: const Color(0xFFF2F2F2), borderRadius: itemBorderRadius()),
+            color: Theme.of(context).brightness == Brightness.dark
+                ? Colors.black
+                : const Color(0xFFF2F2F2),
+            borderRadius: itemBorderRadius()),
         child: Material(
           color: Colors.transparent,
           child: InkWell(
@@ -43,7 +46,6 @@ class DropdownItemTile extends StatelessWidget {
             child: Row(mainAxisAlignment: mainAxisAlignment, children: [
               Text(
                 itemText,
-                
               )
             ]),
           ),

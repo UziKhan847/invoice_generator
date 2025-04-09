@@ -14,6 +14,7 @@ class BottomInfoBar extends StatelessWidget {
     this.onTapArrow,
     this.expandButtonColor,
     this.arrowColor,
+    this.infoBoxColor,
   });
 
   final bool isOnPage;
@@ -25,6 +26,7 @@ class BottomInfoBar extends StatelessWidget {
   final bool isExpanded;
   final VoidCallback? onTapArrow;
   final Color? expandButtonColor;
+  final Color? infoBoxColor;
   final Color? arrowColor;
 
   @override
@@ -46,7 +48,7 @@ class BottomInfoBar extends StatelessWidget {
             Container(
               padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 27),
               decoration: BoxDecoration(
-                  color: Colors.white,
+                  color: infoBoxColor,
                   borderRadius: BorderRadius.circular(8),
                   boxShadow: <BoxShadow>[
                     BoxShadow(
