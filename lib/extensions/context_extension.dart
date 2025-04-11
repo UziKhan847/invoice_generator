@@ -5,49 +5,52 @@ extension ContextExtension on BuildContext {
 
   void insertOverlay(
     BuildContext context, {
-    required Widget listViewBuilder,
     required Function()? onTapOutsideOverlay,
-    double? top,
-    double? bottom,
-    double? right,
-    double? left,
-    double? height,
-    double? width,
+    required itemCount,
+    required Widget? Function(BuildContext, int) itemBuilder,
+    required LayerLink layerLink,
+    GlobalKey? widgetKey,
   }) {
     removeOverlay();
+
+    final renderBox =
+        widgetKey!.currentContext!.findRenderObject()! as RenderBox;
+    final position = renderBox.localToGlobal(Offset.zero);
+    final height = renderBox.size.height;
+     final width = renderBox.size.width;
+    final screnHeight = MediaQuery.of(this).size.height;
+    final buttonBottom = position.dy + height;
+    final availableHeight = screnHeight - buttonBottom - 16;
 
     overlay = OverlayEntry(
         builder: (BuildContext context) => Stack(
               children: [
                 GestureDetector(
                   onTap: onTapOutsideOverlay,
-                  child: Container(
-                    color: Colors.transparent,
-                  ),
+                  behavior: HitTestBehavior.translucent,
                 ),
                 Positioned(
-                    top: top,
-                    bottom: bottom,
-                    right: right,
-                    left: left,
-                    height: height,
                     width: width,
-                    child: Stack(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            boxShadow: [
-                              BoxShadow(
-                                  color: Colors.black.withAlpha(51),
-                                  spreadRadius: 0,
-                                  blurRadius: 4,
-                                  offset: const Offset(0, 2))
-                            ],
+                    child: CompositedTransformFollower(
+                      link: layerLink,
+                      offset: const Offset(0, 48),
+                      child: Material(
+                        elevation: 4,
+                        borderRadius: BorderRadius.circular(4),
+                        color: Theme.of(context).brightness == Brightness.dark
+                            ? Colors.black
+                            : const Color(0xFFF2F2F2),
+                        child: ConstrainedBox(
+                          constraints:
+                              BoxConstraints(maxHeight: availableHeight),
+                          child: ListView.builder(
+                            padding: const EdgeInsets.all(0),
+                            shrinkWrap: true,
+                            itemCount: itemCount,
+                            itemBuilder: itemBuilder,
                           ),
                         ),
-                        listViewBuilder
-                      ],
+                      ),
                     ))
               ],
             ));

@@ -22,39 +22,56 @@ class AddInvoice extends ConsumerStatefulWidget {
 }
 
 class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
+// Form and Scroll
   final _formKey = GlobalKey<FormState>();
+  late ScrollPhysics scrollPhysics = AlwaysScrollableScrollPhysics();
+
+// Controllers
+  final Map<String, TextEditingController> controllers = {
+    'date': TextEditingController(),
+    'dueDate': TextEditingController(),
+    'sender': TextEditingController(),
+    'recipient': TextEditingController(),
+  };
+  final courseControllers =
+      List<TextEditingController>.generate(5, (_) => TextEditingController());
+  final quantityControllers =
+      List<TextEditingController>.generate(5, (_) => TextEditingController());
+
+// Focus and Keys
+  final quantityFocusNodes = List<FocusNode>.generate(5, (_) => FocusNode());
+
+  final keys = {
+    'sender': GlobalKey(),
+    'recipient': GlobalKey(),
+  };
+  final courseKeys = List<GlobalKey>.generate(5, (_) => GlobalKey());
+
+  late final layerLinks = {
+    'sender': LayerLink(),
+    'recipient': LayerLink(),
+  };
+  late final courseLayerLinks = List<LayerLink>.generate(5, (_) => LayerLink());
+
+// UI State
   bool isLoading = false;
-
-  final dateController = TextEditingController();
-  final dueDateController = TextEditingController();
-  final senderController = TextEditingController();
-  final recipientController = TextEditingController();
-  final List<TextEditingController> courseControllers =
-      List<TextEditingController>.generate(5, (_) => TextEditingController());
-  final List<TextEditingController> quantityControllers =
-      List<TextEditingController>.generate(5, (_) => TextEditingController());
-  final List<FocusNode> quantityFocusNodes =
-      List<FocusNode>.generate(5, (_) => FocusNode());
-  final List<bool> isEnabled = List<bool>.generate(5, (_) => true);
-
   bool isSenderSelected = false;
   bool isRecipientSelected = false;
-
+  List<bool> isEnabled = List<bool>.generate(5, (_) => true);
   List<bool> isCourseSelected = List<bool>.generate(5, (_) => false);
-  List<Course> courseMenuItems = [];
 
+// Dropdown/Menu State
   late Sender selectedSender;
   late Recipient selectedRecipient;
+  List<Course> courseMenuItems = [];
   Map<int, Course> selectedCourses = {};
-  double coursesSubtotal = 0;
   Map<int, double> courseQuantities = {};
   Map<int, double> courseAmounts = {};
   int numberOfCourses = 1;
   bool isCourseAdded = false;
+  double coursesSubtotal = 0;
 
-  double shadowHeight = 0;
-  double menuHeight = 0;
-
+// Misc
   late AppData provider;
   DateTime now = DateTime.now();
 
@@ -71,10 +88,10 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
   @override
   void dispose() {
-    dateController.dispose();
-    dueDateController.dispose();
-    senderController.dispose();
-    recipientController.dispose();
+    for (TextEditingController e in controllers.values) {
+      e.dispose();
+    }
+
     for (TextEditingController e in courseControllers) {
       e.dispose();
     }
@@ -127,8 +144,8 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
           await provider.insertInvoice(
               context: context,
-              invoiceDate: dateController.text,
-              dueDate: dueDateController.text,
+              invoiceDate: controllers['date']!.text,
+              dueDate: controllers['dueDate']!.text,
               senderId: selectedSender.senderId,
               recipientId: selectedRecipient.recipientId,
               selectedCourses: selectedCourses,
@@ -150,6 +167,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
         child: SizedBox(
           width: 270,
           child: ListView(
+            physics: scrollPhysics,
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
@@ -170,7 +188,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                   SizedBox(
                     height: 65,
                     child: DatepickerMenu(
-                      controller: dateController,
+                      controller: controllers['date']!,
                       labelText: "Invoice Date (auto)",
                       isSelected: false,
                       menuInkHeight: 46,
@@ -188,13 +206,13 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                         if (newDate == null) return;
 
                         setState(() {
-                          dateController.text =
+                          controllers['date']!.text =
                               '${newDate.year}-${newDate.month}-${newDate.day}';
                         });
                       },
                       onTapDelete: () {
                         setState(() {
-                          dateController.clear();
+                          controllers['date']!.clear();
                         });
                       },
                     ),
@@ -205,7 +223,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                   SizedBox(
                     height: 65,
                     child: DatepickerMenu(
-                      controller: dueDateController,
+                      controller: controllers['dueDate']!,
                       labelText: "Due Date",
                       isSelected: false,
                       menuInkHeight: 46,
@@ -223,13 +241,13 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                         if (newDate == null) return;
 
                         setState(() {
-                          dueDateController.text =
+                          controllers['dueDate']!.text =
                               '${newDate.year}-${newDate.month}-${newDate.day}';
                         });
                       },
                       onTapDelete: () {
                         setState(() {
-                          dueDateController.clear();
+                          controllers['dueDate']!.clear();
                         });
                       },
                     ),
@@ -238,7 +256,9 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
                   //Sender DropDown
                   DropdownMenuTile(
-                    controller: senderController,
+                    layerLink: layerLinks['sender']!,
+                    controller: controllers['sender']!,
+                    widgetKey: keys['sender'],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please select Sender";
@@ -256,43 +276,41 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                     onTapMenuBox: () {
                       setState(() {
                         isSenderSelected = !isSenderSelected;
+                        scrollPhysics = NeverScrollableScrollPhysics();
                       });
 
                       context.insertOverlay(
                         context,
-                        height: 200,
-                        width: 260,
-                        bottom: 200,
-                        right: 50,
+                        widgetKey: keys['sender'],
+                        layerLink: layerLinks['sender']!,
                         onTapOutsideOverlay: () {
                           setState(() {
                             isSenderSelected = !isSenderSelected;
+                            scrollPhysics = AlwaysScrollableScrollPhysics();
                           });
                           context.removeOverlay();
                         },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: provider.senders.length,
-                            itemBuilder: (context, index) {
-                              Sender item = provider.senders[index];
+                        itemCount: provider.senders.length,
+                        itemBuilder: (context, index) {
+                          Sender item = provider.senders[index];
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText:
-                                    "#${item.senderId}- ${item.name}\n${item.street}, ${item.city}, ${item.province}\n${item.email},\n${item.eTransfer}",
-                                lastItemIndex: provider.senders.length - 1,
-                                menuItemHeight: 100,
-                                onItemTap: () {
-                                  selectedSender = item;
-                                  senderController.text =
-                                      "#${item.senderId}- ${item.name}, ${item.street}, ${item.city}, ${item.province}, ${item.email}, ${item.eTransfer}";
-                                  isSenderSelected = !isSenderSelected;
+                          return DropdownItemTile(
+                            currentMenuIndex: index,
+                            itemText:
+                                "#${item.senderId}- ${item.name}\n${item.street}, ${item.city}, ${item.province}\n${item.email},\n${item.eTransfer}",
+                            lastItemIndex: provider.senders.length - 1,
+                            menuItemHeight: 100,
+                            onItemTap: () {
+                              selectedSender = item;
+                              controllers['sender']!.text =
+                                  "#${item.senderId}- ${item.name}, ${item.street}, ${item.city}, ${item.province}, ${item.email}, ${item.eTransfer}";
+                              isSenderSelected = !isSenderSelected;
 
-                                  setState(() {});
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
+                              setState(() {});
+                              context.removeOverlay();
+                            },
+                          );
+                        },
                       );
                     },
                   ),
@@ -300,7 +318,9 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
                   //Recipient DropDown
                   DropdownMenuTile(
-                    controller: recipientController,
+                    layerLink: layerLinks['recipient']!,
+                    controller: controllers['recipient']!,
+                    key: keys['recipient'],
                     validator: (value) {
                       if (value == null || value.isEmpty) {
                         return "Please select Recipient";
@@ -318,44 +338,42 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                     onTapMenuBox: () {
                       setState(() {
                         isRecipientSelected = !isRecipientSelected;
+                        scrollPhysics = NeverScrollableScrollPhysics();
                       });
 
                       context.insertOverlay(
                         context,
-                        height: 500,
-                        width: 260,
-                        bottom: 0,
-                        right: 50,
+                        widgetKey: keys['recipient']!,
+                        layerLink: layerLinks['recipient']!,
                         onTapOutsideOverlay: () {
                           setState(() {
                             isRecipientSelected = !isRecipientSelected;
+                            scrollPhysics = AlwaysScrollableScrollPhysics();
                           });
                           context.removeOverlay();
                         },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: provider.recipients.length,
-                            itemBuilder: (context, index) {
-                              Recipient item = provider.recipients[index];
+                        itemCount: provider.recipients.length,
+                        itemBuilder: (context, index) {
+                          Recipient item = provider.recipients[index];
 
-                              return DropdownItemTile(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                currentMenuIndex: index,
-                                itemText:
-                                    "#${item.recipientId}- ${item.name}\n${item.street}\n${item.city}, ${item.province}\n${item.email}",
-                                lastItemIndex: provider.recipients.length - 1,
-                                menuItemHeight: 90,
-                                onItemTap: () {
-                                  selectedRecipient = item;
-                                  recipientController.text =
-                                      "#${item.recipientId}- ${item.name}, ${item.street}, ${item.city}, ${item.province}, ${item.email}";
-                                  isRecipientSelected = !isRecipientSelected;
+                          return DropdownItemTile(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            currentMenuIndex: index,
+                            itemText:
+                                "#${item.recipientId}- ${item.name}\n${item.street}\n${item.city}, ${item.province}\n${item.email}",
+                            lastItemIndex: provider.recipients.length - 1,
+                            menuItemHeight: 90,
+                            onItemTap: () {
+                              selectedRecipient = item;
+                              controllers['recipient']!.text =
+                                  "#${item.recipientId}- ${item.name}, ${item.street}, ${item.city}, ${item.province}, ${item.email}";
+                              isRecipientSelected = !isRecipientSelected;
 
-                                  setState(() {});
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
+                              setState(() {});
+                              context.removeOverlay();
+                            },
+                          );
+                        },
                       );
                     },
                   ),
@@ -421,6 +439,8 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
                   for (int i = 0; i < numberOfCourses; i++) ...[
                     DropdownCourseTile(
+                      layerLink: courseLayerLinks[i],
+                      widgetKey: courseKeys[i],
                       textStyle: numberOfCourses == i + 1
                           ? null
                           : TextStyle(color: Colors.grey.shade500),
@@ -440,49 +460,46 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                           : () {
                               setState(() {
                                 isCourseSelected[i] = !isCourseSelected[i];
+                                scrollPhysics = NeverScrollableScrollPhysics();
                               });
 
                               context.insertOverlay(
                                 context,
-                                height: 450,
-                                width: 260,
-                                bottom: 100,
-                                right: 50,
+                                layerLink: courseLayerLinks[i],
+                                widgetKey: courseKeys[i],
                                 onTapOutsideOverlay: () {
                                   setState(() {
                                     isCourseSelected[i] = !isCourseSelected[i];
+                                    scrollPhysics =
+                                        AlwaysScrollableScrollPhysics();
                                   });
                                   context.removeOverlay();
                                 },
-                                listViewBuilder: ListView.builder(
-                                    padding: const EdgeInsets.all(0),
-                                    itemCount: courseMenuItems.length,
-                                    itemBuilder: (context, index) {
-                                      Course item = courseMenuItems[index];
+                                itemCount: courseMenuItems.length,
+                                itemBuilder: (context, index) {
+                                  Course item = courseMenuItems[index];
 
-                                      return DropdownItemTile(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.start,
-                                        currentMenuIndex: index,
-                                        itemText:
-                                            "#${item.courseId}- ${item.name}\n\$${item.cost}/${item.costFrequency}",
-                                        lastItemIndex:
-                                            courseMenuItems.length - 1,
-                                        menuItemHeight: 75,
-                                        onItemTap: () {
-                                          selectedCourses[i] = item;
+                                  return DropdownItemTile(
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    currentMenuIndex: index,
+                                    itemText:
+                                        "#${item.courseId}- ${item.name}\n\$${item.cost}/${item.costFrequency}",
+                                    lastItemIndex: courseMenuItems.length - 1,
+                                    menuItemHeight: 75,
+                                    onItemTap: () {
+                                      selectedCourses[i] = item;
 
-                                          courseControllers[i].text =
-                                              "#${item.courseId}- ${item.name}, \$${item.cost}/${item.costFrequency}";
+                                      courseControllers[i].text =
+                                          "#${item.courseId}- ${item.name}, \$${item.cost}/${item.costFrequency}";
 
-                                          isCourseSelected[i] =
-                                              !isCourseSelected[i];
+                                      isCourseSelected[i] =
+                                          !isCourseSelected[i];
 
-                                          setState(() {});
-                                          context.removeOverlay();
-                                        },
-                                      );
-                                    }),
+                                      setState(() {});
+                                      context.removeOverlay();
+                                    },
+                                  );
+                                },
                               );
                             },
                     ),

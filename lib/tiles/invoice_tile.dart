@@ -120,9 +120,11 @@ class InvoiceTile extends StatelessWidget {
                   ],
                 ),
               ),
-              const VerticalDivider(
+              VerticalDivider(
                 thickness: 0,
-                color: Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               TileColumn(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -131,9 +133,11 @@ class InvoiceTile extends StatelessWidget {
                 "\$${invoice.hst}",
                 fontSize: 11,
               ),
-              const VerticalDivider(
+              VerticalDivider(
                 thickness: 0,
-                color: Colors.black,
+                color: Theme.of(context).brightness == Brightness.dark
+                    ? Colors.white
+                    : Colors.black,
               ),
               TileColumn(
                 mainAxisAlignment: MainAxisAlignment.center,

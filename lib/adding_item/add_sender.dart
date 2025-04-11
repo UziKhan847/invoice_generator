@@ -16,6 +16,9 @@ class AddSender extends ConsumerStatefulWidget {
 
 class _AddSenderConsumerState extends ConsumerState<AddSender> {
   final _formKey = GlobalKey<FormState>();
+
+  late final layerLink = LayerLink();
+
   bool isLoading = false;
 
   final nameController = TextEditingController();
@@ -241,6 +244,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                       //Province DropDown Menu
                       DropdownMenuTile(
+                        layerLink: layerLink,
                         controller: provController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -261,36 +265,32 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                           context.insertOverlay(
                             context,
-                            height: 650,
-                            width: 66,
-                            bottom: 50,
-                            right: 46,
+                            layerLink: layerLink,
+                           
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isProvSelected = !isProvSelected;
                               });
                               context.removeOverlay();
                             },
-                            listViewBuilder: ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                itemCount: provDropdowItems.length,
-                                itemBuilder: (context, index) {
-                                  String item = provDropdowItems[index];
+                            itemCount: provDropdowItems.length,
+                            itemBuilder: (context, index) {
+                              String item = provDropdowItems[index];
 
-                                  return DropdownItemTile(
-                                    currentMenuIndex: index,
-                                    itemText: item,
-                                    lastItemIndex: provDropdowItems.length - 1,
-                                    menuItemHeight: 50,
-                                    onItemTap: () {
-                                      setState(() {
-                                        provController.text = item;
-                                        isProvSelected = !isProvSelected;
-                                      });
-                                      context.removeOverlay();
-                                    },
-                                  );
-                                }),
+                              return DropdownItemTile(
+                                currentMenuIndex: index,
+                                itemText: item,
+                                lastItemIndex: provDropdowItems.length - 1,
+                                menuItemHeight: 50,
+                                onItemTap: () {
+                                  setState(() {
+                                    provController.text = item;
+                                    isProvSelected = !isProvSelected;
+                                  });
+                                  context.removeOverlay();
+                                },
+                              );
+                            },
                           );
                         },
                       ),

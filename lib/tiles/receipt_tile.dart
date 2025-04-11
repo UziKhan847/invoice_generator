@@ -131,9 +131,11 @@ class ReceiptTile extends StatelessWidget {
                     ],
                   ),
                 ),
-                const VerticalDivider(
+                VerticalDivider(
                   thickness: 0,
-                  color: Colors.black,
+                  color: Theme.of(context).brightness == Brightness.dark
+                      ? Colors.white
+                      : Colors.black,
                 ),
                 SizedBox(
                   width: 60,

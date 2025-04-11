@@ -36,6 +36,8 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
   double shadowHeight = 0;
   double menuHeight = 0;
 
+  late final layerLink = LayerLink();
+
   late AppData provider;
   DateTime now = DateTime.now();
 
@@ -174,6 +176,7 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
 
                   //Invoice DropDown
                   DropdownMenuTile(
+                    layerLink: layerLink,
                     controller: invoiceController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -196,40 +199,35 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
 
                       context.insertOverlay(
                         context,
-                        height: 200,
-                        width: 260,
-                        bottom: 200,
-                        right: 50,
+                        layerLink: layerLink,
                         onTapOutsideOverlay: () {
                           setState(() {
                             isInvoiceSelected = !isInvoiceSelected;
                           });
                           context.removeOverlay();
                         },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: provider.invoices.length,
-                            itemBuilder: (context, index) {
-                              Invoice item = provider.invoices[index];
+                        itemCount: provider.invoices.length,
+                        itemBuilder: (context, index) {
+                          Invoice item = provider.invoices[index];
 
-                              return DropdownItemTile(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                currentMenuIndex: index,
-                                itemText:
-                                    "Id: ${item.invoiceId},\nDate: ${item.invoiceDate},\nSender: ${item.senders.name},\nRecipient: ${item.recipients.name},\nTotal: ${item.total}",
-                                lastItemIndex: provider.invoices.length - 1,
-                                menuItemHeight: 100,
-                                onItemTap: () {
-                                  selectedInvoice = item;
-                                  invoiceController.text =
-                                      "#${item.invoiceId}, ${item.invoiceDate}, From: ${item.senders.name}, To: ${item.recipients.name}, Total: ${item.total}";
-                                  isInvoiceSelected = !isInvoiceSelected;
+                          return DropdownItemTile(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            currentMenuIndex: index,
+                            itemText:
+                                "Id: ${item.invoiceId},\nDate: ${item.invoiceDate},\nSender: ${item.senders.name},\nRecipient: ${item.recipients.name},\nTotal: ${item.total}",
+                            lastItemIndex: provider.invoices.length - 1,
+                            menuItemHeight: 100,
+                            onItemTap: () {
+                              selectedInvoice = item;
+                              invoiceController.text =
+                                  "#${item.invoiceId}, ${item.invoiceDate}, From: ${item.senders.name}, To: ${item.recipients.name}, Total: ${item.total}";
+                              isInvoiceSelected = !isInvoiceSelected;
 
-                                  setState(() {});
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
+                              setState(() {});
+                              context.removeOverlay();
+                            },
+                          );
+                        },
                       );
                     },
                   ),

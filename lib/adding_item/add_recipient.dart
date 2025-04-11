@@ -16,6 +16,9 @@ class AddRecipient extends ConsumerStatefulWidget {
 
 class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   final _formKey = GlobalKey<FormState>();
+
+  late final layerLink = LayerLink();
+
   bool isLoading = false;
 
   final nameController = TextEditingController();
@@ -224,6 +227,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
 
                   //Country DropDown Menu
                   DropdownMenuTile(
+                    layerLink: layerLink,
                     controller: countryController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -244,36 +248,33 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
 
                       context.insertOverlay(
                         context,
-                        height: 100,
-                        width: 150,
-                        bottom: 400,
-                        right: 40,
+                        layerLink: layerLink,
+                    
+                  
                         onTapOutsideOverlay: () {
                           setState(() {
                             isCountrySelected = !isCountrySelected;
                           });
                           context.removeOverlay();
                         },
-                        listViewBuilder: ListView.builder(
-                            padding: const EdgeInsets.all(0),
-                            itemCount: 2,
-                            itemBuilder: (context, index) {
-                              String item = countryDropdowItems[index];
+                        itemCount: 2,
+                        itemBuilder: (context, index) {
+                          String item = countryDropdowItems[index];
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText: item,
-                                lastItemIndex: countryDropdowItems.length - 1,
-                                menuItemHeight: 50,
-                                onItemTap: () {
-                                  setState(() {
-                                    countryController.text = item;
-                                    isCountrySelected = !isCountrySelected;
-                                  });
-                                  context.removeOverlay();
-                                },
-                              );
-                            }),
+                          return DropdownItemTile(
+                            currentMenuIndex: index,
+                            itemText: item,
+                            lastItemIndex: countryDropdowItems.length - 1,
+                            menuItemHeight: 50,
+                            onItemTap: () {
+                              setState(() {
+                                countryController.text = item;
+                                isCountrySelected = !isCountrySelected;
+                              });
+                              context.removeOverlay();
+                            },
+                          );
+                        },
                       );
                     },
                   ),
@@ -325,6 +326,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
 
                       //Province DropDown Menu
                       DropdownMenuTile(
+                        layerLink: layerLink,
                         controller: provController,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
@@ -345,36 +347,33 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
 
                           context.insertOverlay(
                             context,
-                            height: 650,
-                            width: 66,
-                            bottom: 50,
-                            right: 140,
+                            layerLink: layerLink,
+                   
+                          
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isProvSelected = !isProvSelected;
                               });
                               context.removeOverlay();
                             },
-                            listViewBuilder: ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                itemCount: provDropdowItems.length,
-                                itemBuilder: (context, index) {
-                                  String item = provDropdowItems[index];
+                            itemCount: provDropdowItems.length,
+                            itemBuilder: (context, index) {
+                              String item = provDropdowItems[index];
 
-                                  return DropdownItemTile(
-                                    currentMenuIndex: index,
-                                    itemText: item,
-                                    lastItemIndex: provDropdowItems.length - 1,
-                                    menuItemHeight: 50,
-                                    onItemTap: () {
-                                      setState(() {
-                                        provController.text = item;
-                                        isProvSelected = !isProvSelected;
-                                      });
-                                      context.removeOverlay();
-                                    },
-                                  );
-                                }),
+                              return DropdownItemTile(
+                                currentMenuIndex: index,
+                                itemText: item,
+                                lastItemIndex: provDropdowItems.length - 1,
+                                menuItemHeight: 50,
+                                onItemTap: () {
+                                  setState(() {
+                                    provController.text = item;
+                                    isProvSelected = !isProvSelected;
+                                  });
+                                  context.removeOverlay();
+                                },
+                              );
+                            },
                           );
                         },
                       ),

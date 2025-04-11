@@ -38,6 +38,7 @@ class _CourseDialogState extends State<CourseDialog> {
   final quantityFocus = FocusNode();
   final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
   final leadingZerosRegex = RegExp(r'^0+\d');
+  late final layerLink = LayerLink();
 
   @override
   Widget build(BuildContext context) {
@@ -135,6 +136,7 @@ class _CourseDialogState extends State<CourseDialog> {
 
                       //Frequency DropDown Menu
                       DropdownMenuTile(
+                        layerLink: layerLink,
                         labelText: "Frequency*",
                         controller: widget.frequencyController,
                         validator: (value) {
@@ -154,38 +156,33 @@ class _CourseDialogState extends State<CourseDialog> {
 
                           context.insertOverlay(
                             context,
-                            height: 250,
-                            width: 64,
-                            bottom: 42,
-                            right: 35,
+                            layerLink: layerLink,
+                      
+               
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isFrequencySelected = !isFrequencySelected;
                               });
                               context.removeOverlay();
                             },
-                            listViewBuilder: ListView.builder(
-                                padding: const EdgeInsets.all(0),
-                                itemCount: frequencyDropdowItems.length,
-                                itemBuilder: (context, index) {
-                                  String item = frequencyDropdowItems[index];
+                            itemCount: frequencyDropdowItems.length,
+                            itemBuilder: (context, index) {
+                              String item = frequencyDropdowItems[index];
 
-                                  return DropdownItemTile(
-                                    currentMenuIndex: index,
-                                    itemText: item,
-                                    lastItemIndex:
-                                        frequencyDropdowItems.length - 1,
-                                    menuItemHeight: 50,
-                                    onItemTap: () {
-                                      setState(() {
-                                        widget.frequencyController.text = item;
-                                        isFrequencySelected =
-                                            !isFrequencySelected;
-                                      });
-                                      context.removeOverlay();
-                                    },
-                                  );
-                                }),
+                              return DropdownItemTile(
+                                currentMenuIndex: index,
+                                itemText: item,
+                                lastItemIndex: frequencyDropdowItems.length - 1,
+                                menuItemHeight: 50,
+                                onItemTap: () {
+                                  setState(() {
+                                    widget.frequencyController.text = item;
+                                    isFrequencySelected = !isFrequencySelected;
+                                  });
+                                  context.removeOverlay();
+                                },
+                              );
+                            },
                           );
                         },
                       ),

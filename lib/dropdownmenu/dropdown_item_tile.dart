@@ -18,37 +18,20 @@ class DropdownItemTile extends StatelessWidget {
   final void Function()? onItemTap;
   final MainAxisAlignment mainAxisAlignment;
 
-  BorderRadius itemBorderRadius() {
-    if (currentMenuIndex == 0) {
-      return const BorderRadius.only(
-          topLeft: Radius.circular(4), topRight: Radius.circular(4));
-    } else if (currentMenuIndex == lastItemIndex) {
-      return const BorderRadius.only(
-          bottomLeft: Radius.circular(4), bottomRight: Radius.circular(4));
-    }
-    return BorderRadius.circular(0);
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Container(
-        height: menuItemHeight,
-        decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.dark
-                ? Colors.black
-                : const Color(0xFFF2F2F2),
-            borderRadius: itemBorderRadius()),
+    return SizedBox(
         child: Material(
-          color: Colors.transparent,
-          child: InkWell(
-            borderRadius: itemBorderRadius(),
-            onTap: onItemTap,
-            child: Row(mainAxisAlignment: mainAxisAlignment, children: [
-              Text(
-                itemText,
-              )
-            ]),
-          ),
-        ));
+      color: Colors.transparent,
+      child: InkWell(
+        borderRadius: BorderRadius.circular(4),
+        onTap: onItemTap,
+        child: Row(mainAxisAlignment: mainAxisAlignment, children: [
+          Text(
+            itemText,
+          )
+        ]),
+      ),
+    ));
   }
 }

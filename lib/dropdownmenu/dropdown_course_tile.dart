@@ -9,6 +9,7 @@ class DropdownCourseTile extends StatelessWidget {
     this.isLastCourse = false,
     required this.isSelected,
     required this.courseNumber,
+    required this.layerLink,
     this.courseController,
     this.quantityController,
     this.quantityFocus,
@@ -19,6 +20,7 @@ class DropdownCourseTile extends StatelessWidget {
     this.arrowDownColor,
     this.arrowUpColor,
     this.isEnabled = true,
+    required this.widgetKey,
   });
 
   final bool isFirstCourse;
@@ -35,8 +37,10 @@ class DropdownCourseTile extends StatelessWidget {
   final TextStyle? textStyle;
   final Color? arrowUpColor;
   final Color? arrowDownColor;
+  final LayerLink layerLink;
   final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
   final leadingZerosRegex = RegExp(r'^0+\d');
+  final GlobalKey widgetKey;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +52,8 @@ class DropdownCourseTile extends StatelessWidget {
             height: 65,
             width: 180,
             child: DropdownMenuTile(
+              layerLink: layerLink,
+              widgetKey: widgetKey,
               textStyle: textStyle,
               arrowUpColor: arrowUpColor,
               arrowDownColor: arrowDownColor,
