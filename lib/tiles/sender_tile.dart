@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
+import 'package:markaz_umaza_invoice_generator/utils/dividers.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/icon_with_text.dart';
 
@@ -48,16 +49,14 @@ class SenderTile extends StatelessWidget {
                   ),
                 ),
               ),
-              const VerticalDivider(
-                thickness: 0,
-                color: Colors.black,
-              ),
+              Dividers.verticalDivider(
+                  Theme.of(context).brightness == Brightness.dark),
               Expanded(
                 child: Column(
                   spacing: 8,
                   children: [
                     IconWithText(Icons.location_on,
-                        ' ${sender.street} ${sender.city} ${sender.province} ${sender.zip}'),
+                        ' ${sender.street} ${sender.city} ${sender.province} ${sender.zip ?? ''}'),
                     IconWithText(Icons.phone, " ${sender.phone}"),
                     IconWithText(Icons.email, ' ${sender.email}')
                   ],

@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 extension ContextExtension on BuildContext {
   static OverlayEntry? overlay;
 
-  void insertOverlay(
-    BuildContext context, {
+  void insertOverlay({
+    required BuildContext context,
     required Function()? onTapOutsideOverlay,
     required itemCount,
     required Widget? Function(BuildContext, int) itemBuilder,
@@ -17,7 +17,7 @@ extension ContextExtension on BuildContext {
         widgetKey!.currentContext!.findRenderObject()! as RenderBox;
     final position = renderBox.localToGlobal(Offset.zero);
     final height = renderBox.size.height;
-     final width = renderBox.size.width;
+    final width = renderBox.size.width;
     final screnHeight = MediaQuery.of(this).size.height;
     final buttonBottom = position.dy + height;
     final availableHeight = screnHeight - buttonBottom - 16;

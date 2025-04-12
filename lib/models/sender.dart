@@ -11,6 +11,7 @@ class Sender {
     required this.street,
     required this.city,
     required this.province,
+    required this.country,
     required this.zip,
     required this.phone,
     required this.email,
@@ -23,7 +24,8 @@ class Sender {
   String street;
   String city;
   String province;
-  String zip;
+  String country;
+  String? zip;
   String phone;
   String email;
   String? eTransfer;

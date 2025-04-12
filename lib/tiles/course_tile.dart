@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
+import 'package:markaz_umaza_invoice_generator/utils/dividers.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 
@@ -44,10 +45,7 @@ class CourseTile extends StatelessWidget {
                   ),
                 ),
               ),
-              const VerticalDivider(
-                thickness: 1,
-                color: Colors.black,
-              ),
+              Dividers.verticalDivider(Theme.of(context).brightness == Brightness.dark),
               SizedBox(
                 width: 80,
                 child: Center(

@@ -5,6 +5,7 @@ import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.d
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
+import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 
 class AddSender extends ConsumerStatefulWidget {
@@ -15,79 +16,88 @@ class AddSender extends ConsumerStatefulWidget {
 }
 
 class _AddSenderConsumerState extends ConsumerState<AddSender> {
+// Form
   final _formKey = GlobalKey<FormState>();
 
-  late final layerLink = LayerLink();
+// Layer Link
+  late final layerLinks = {
+    'country': LayerLink(),
+    'prov': LayerLink(),
+  };
 
+// UI State
   bool isLoading = false;
-
-  final nameController = TextEditingController();
-  final bnController = TextEditingController();
-  final streetController = TextEditingController();
-  final cityController = TextEditingController();
-  final provController = TextEditingController();
-  final zipController = TextEditingController();
-  final phoneController = TextEditingController();
-  final emailController = TextEditingController();
-  final eTransferController = TextEditingController();
-
   String selectedProv = 'ON';
   bool isProvSelected = false;
-  List<String> provDropdowItems = [
-    "AB",
-    "BC",
-    "MB",
-    "NB",
-    "NL",
-    "NS",
-    "NT",
-    "NU",
-    "ON",
-    "PE",
-    "QC",
-    "SK",
-    "YT"
-  ];
-  late AppData provider;
-  final nameFocus = FocusNode();
-  final bnFocus = FocusNode();
-  final streetFocus = FocusNode();
-  final cityFocus = FocusNode();
-  final zipFocus = FocusNode();
-  final phoneFocus = FocusNode();
-  final emailFocus = FocusNode();
-  final eTransferFocus = FocusNode();
-  final zipRegex = RegExp(r'^\w\d\w\s?\d\w\d$');
+  bool isCountrySelected = false;
+
+// Controllers
+  final Map<String, TextEditingController> controllers = {
+    'name': TextEditingController(),
+    'bn': TextEditingController(),
+    'street': TextEditingController(),
+    'city': TextEditingController(),
+    'prov': TextEditingController(),
+    'country': TextEditingController()..text = 'Canada',
+    'zip': TextEditingController(),
+    'phone': TextEditingController(),
+    'email': TextEditingController(),
+    'eTransfer': TextEditingController(),
+  };
+
+// Focus Nodes and Keys
+  final Map<String, FocusNode> focusNodes = {
+    'name': FocusNode(),
+    'bn': FocusNode(),
+    'street': FocusNode(),
+    'city': FocusNode(),
+    'zip': FocusNode(),
+    'phone': FocusNode(),
+    'email': FocusNode(),
+    'eTransfer': FocusNode(),
+  };
+
+  final keys = {
+    'country': GlobalKey(),
+    'prov': GlobalKey(),
+  };
+
+// Dropdown Items
+  List<String> get provDropdownItems =>
+      Countries.countries[controllers['country']!.text]!['provinces']
+          as List<String>;
+
+// Regex and Validation
+  RegExp get zipRegex => RegExp(Countries
+      .countries[controllers['country']!.text]!['postal_code_regex'] as String);
   final emailRegex = RegExp(r'^.+@[0-z]+\.[A-z]+$');
-  final phoneRegex =
-      RegExp(r'^\+?1?\s?(\(\d{3}\)|\d{3})(-|\s)?\d{3}(-|\s)?\d{4}$');
+  RegExp get phoneRegex =>
+      RegExp(Countries.countries[controllers['country']!.text]!['phone_regex']
+          as String);
   final bnRegex = RegExp(r'^\d{9}\s?[A-z]{2}\s?\d{4}$');
 
-  String get zipWithSpace => switch (zipController.text.length) {
+// Derived Getters
+  String get zipWithSpace => switch (controllers['zip']!.text.length) {
         6 =>
-          '${zipController.text.substring(0, 3)} ${zipController.text.substring(3, 6)}'
+          '${controllers['zip']!.text.substring(0, 3)} ${controllers['zip']!.text.substring(3, 6)}'
               .toUpperCase(),
-        _ => zipController.text.toUpperCase()
+        _ => controllers['zip']!.text.toUpperCase()
       };
 
   String get bnFormat {
     String bnText =
-        bnController.text.replaceAll(RegExp(r'\s'), '').toUpperCase();
-
+        controllers['bn']!.text.replaceAll(RegExp(r'\s'), '').toUpperCase();
     return '${bnText.substring(0, 9)} ${bnText.substring(9, 11)} ${bnText.substring(11, 15)}';
   }
 
+// External Data
+  late AppData provider;
+
   @override
   void dispose() {
-    nameController.dispose();
-    bnController.dispose();
-    streetController.dispose();
-    cityController.dispose();
-    provController.dispose();
-    zipController.dispose();
-    phoneController.dispose();
-    emailController.dispose();
-    eTransferController.dispose();
+    for (TextEditingController e in controllers.values) {
+      e.dispose();
+    }
     super.dispose();
   }
 
@@ -112,15 +122,20 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
           loadCircle();
           await provider.insertSender(
               context: context,
-              name: nameController.text,
+              name: controllers['name']!.text,
               businessNumber: bnFormat,
-              street: streetController.text,
-              city: cityController.text,
-              prov: provController.text,
-              zip: zipWithSpace,
-              phone: phoneController.text,
-              email: emailController.text,
-              eTransfer: eTransferController.text);
+              street: controllers['street']!.text,
+              city: controllers['city']!.text,
+              prov: controllers['prov']!.text,
+              country: controllers['country']!.text,
+              zip: Countries.countries[controllers['country']!.text]![
+                          'postal_code_regex'] !=
+                      null
+                  ? controllers['zip']!.text
+                  : null,
+              phone: controllers['phone']!.text,
+              email: controllers['email']!.text,
+              eTransfer: controllers['eTransfer']!.text);
           loadCircle();
 
           if (context.mounted) {
@@ -156,9 +171,9 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: nameFocus,
-                      controller: nameController,
-                      onTapOutside: (_) => nameFocus.unfocus(),
+                      focusNode: focusNodes['name']!,
+                      controller: controllers['name']!,
+                      onTapOutside: (_) => focusNodes['name']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a name';
@@ -176,9 +191,9 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: bnFocus,
-                      controller: bnController,
-                      onTapOutside: (_) => bnFocus.unfocus(),
+                      focusNode: focusNodes['bn']!,
+                      controller: controllers['bn']!,
+                      onTapOutside: (_) => focusNodes['bn']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a Business Number';
@@ -202,9 +217,9 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: streetFocus,
-                      controller: streetController,
-                      onTapOutside: (_) => streetFocus.unfocus(),
+                      focusNode: focusNodes['street']!,
+                      controller: controllers['street']!,
+                      onTapOutside: (_) => focusNodes['street']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter the street';
@@ -218,6 +233,61 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
+                  //Country DropDown Menu
+                  DropdownMenuTile(
+                    widgetKey: keys['country']!,
+                    layerLink: layerLinks['country']!,
+                    controller: controllers['country']!,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Invalid';
+                      }
+                      return null;
+                    },
+                    labelText: "Country*",
+                    labelTextSize: 12.5,
+                    isSelected: isCountrySelected,
+                    menuInkHeight: 47,
+                    menuInkWidth: 150,
+                    menuBoxWidth: 150,
+                    onTapMenuBox: () {
+                      setState(() {
+                        isCountrySelected = !isCountrySelected;
+                      });
+
+                      context.insertOverlay(
+                        context: context,
+                        widgetKey: keys['country']!,
+                        layerLink: layerLinks['country']!,
+                        onTapOutsideOverlay: () {
+                          setState(() {
+                            isCountrySelected = !isCountrySelected;
+                          });
+                          context.removeOverlay();
+                        },
+                        itemCount: Countries.nameOfCountries.length,
+                        itemBuilder: (context, index) {
+                          String item = Countries.nameOfCountries[index];
+
+                          return DropdownItemTile(
+                            currentMenuIndex: index,
+                            itemText: item,
+                            menuItemHeight: 50,
+                            onItemTap: () {
+                              setState(() {
+                                controllers['country']!.text = item;
+                                isCountrySelected = !isCountrySelected;
+                              });
+                              context.removeOverlay();
+                            },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                  Margins.vertical18,
+
+                  //City
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -227,9 +297,9 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         height: 65,
                         width: 190,
                         child: TextFormField(
-                          focusNode: cityFocus,
-                          controller: cityController,
-                          onTapOutside: (_) => cityFocus.unfocus(),
+                          focusNode: focusNodes['city']!,
+                          controller: controllers['city']!,
+                          onTapOutside: (_) => focusNodes['city']!.unfocus(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Please enter City name';
@@ -244,8 +314,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                       //Province DropDown Menu
                       DropdownMenuTile(
-                        layerLink: layerLink,
-                        controller: provController,
+                        layerLink: layerLinks['prov']!,
+                        controller: controllers['prov']!,
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Invalid';
@@ -264,27 +334,25 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                           });
 
                           context.insertOverlay(
-                            context,
-                            layerLink: layerLink,
-                           
+                            context: context,
+                            layerLink: layerLinks['prov']!,
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isProvSelected = !isProvSelected;
                               });
                               context.removeOverlay();
                             },
-                            itemCount: provDropdowItems.length,
+                            itemCount: provDropdownItems.length,
                             itemBuilder: (context, index) {
-                              String item = provDropdowItems[index];
+                              String item = provDropdownItems[index];
 
                               return DropdownItemTile(
                                 currentMenuIndex: index,
                                 itemText: item,
-                                lastItemIndex: provDropdowItems.length - 1,
                                 menuItemHeight: 50,
                                 onItemTap: () {
                                   setState(() {
-                                    provController.text = item;
+                                    controllers['prov']!.text = item;
                                     isProvSelected = !isProvSelected;
                                   });
                                   context.removeOverlay();
@@ -299,36 +367,42 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   Margins.vertical18,
 
                   //Zip
-                  SizedBox(
-                    width: 100,
-                    height: 65,
-                    child: TextFormField(
-                      focusNode: zipFocus,
-                      controller: zipController,
-                      onTapOutside: (_) => zipFocus.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Enter Zipcode';
-                        } else if (!zipRegex.hasMatch(value)) {
-                          return 'Invalid Zip';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Zipcode*",
+                  if (Countries.countries[controllers['country']!.text]![
+                          'postal_code_regex'] !=
+                      null)
+                    SizedBox(
+                      width: 100,
+                      height: 65,
+                      child: TextFormField(
+                        focusNode: focusNodes['zip']!,
+                        controller: controllers['zip']!,
+                        onTapOutside: (_) => focusNodes['zip']!.unfocus(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Enter Zipcode';
+                          } else if (!zipRegex.hasMatch(value)) {
+                            return 'Invalid Zip';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Zipcode*",
+                        ),
                       ),
                     ),
-                  ),
-                  Margins.vertical18,
+                  if (Countries.countries[controllers['country']!.text]![
+                          'postal_code_regex'] !=
+                      null)
+                    Margins.vertical18,
 
                   //Phone
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: phoneFocus,
-                      controller: phoneController,
+                      focusNode: focusNodes['phone']!,
+                      controller: controllers['phone']!,
                       keyboardType: TextInputType.phone,
-                      onTapOutside: (_) => phoneFocus.unfocus(),
+                      onTapOutside: (_) => focusNodes['phone']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a Phone Number';
@@ -348,10 +422,10 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: emailFocus,
-                      controller: emailController,
+                      focusNode: focusNodes['email']!,
+                      controller: controllers['email']!,
                       keyboardType: TextInputType.emailAddress,
-                      onTapOutside: (_) => emailFocus.unfocus(),
+                      onTapOutside: (_) => focusNodes['email']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter an Email';
@@ -371,10 +445,10 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: eTransferFocus,
-                      controller: eTransferController,
+                      focusNode: focusNodes['eTransfer']!,
+                      controller: controllers['eTransfer']!,
                       keyboardType: TextInputType.emailAddress,
-                      onTapOutside: (_) => eTransferFocus.unfocus(),
+                      onTapOutside: (_) => focusNodes['eTransfer']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter your Etransfer email';

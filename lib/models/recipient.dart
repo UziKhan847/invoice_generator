@@ -10,6 +10,7 @@ Recipient({
   required this.street,
   required this.city,
   required this.province,
+  required this.country,
   required this.zip,
   required this.phone,
   required this.email,
@@ -20,7 +21,8 @@ String name;
 String street;
 String city;
 String province;
-String zip;
+String country;
+String? zip;
 String phone;
 String email;
 

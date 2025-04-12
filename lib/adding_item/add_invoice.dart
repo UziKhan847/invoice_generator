@@ -27,7 +27,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
   late ScrollPhysics scrollPhysics = AlwaysScrollableScrollPhysics();
 
 // Controllers
-  final Map<String, TextEditingController> controllers = {
+  late final Map<String, TextEditingController> controllers = {
     'date': TextEditingController(),
     'dueDate': TextEditingController(),
     'sender': TextEditingController(),
@@ -280,7 +280,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                       });
 
                       context.insertOverlay(
-                        context,
+                        context: context,
                         widgetKey: keys['sender'],
                         layerLink: layerLinks['sender']!,
                         onTapOutsideOverlay: () {
@@ -298,7 +298,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                             currentMenuIndex: index,
                             itemText:
                                 "#${item.senderId}- ${item.name}\n${item.street}, ${item.city}, ${item.province}\n${item.email},\n${item.eTransfer}",
-                            lastItemIndex: provider.senders.length - 1,
+                   
                             menuItemHeight: 100,
                             onItemTap: () {
                               selectedSender = item;
@@ -342,7 +342,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                       });
 
                       context.insertOverlay(
-                        context,
+                        context: context,
                         widgetKey: keys['recipient']!,
                         layerLink: layerLinks['recipient']!,
                         onTapOutsideOverlay: () {
@@ -361,7 +361,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                             currentMenuIndex: index,
                             itemText:
                                 "#${item.recipientId}- ${item.name}\n${item.street}\n${item.city}, ${item.province}\n${item.email}",
-                            lastItemIndex: provider.recipients.length - 1,
+             
                             menuItemHeight: 90,
                             onItemTap: () {
                               selectedRecipient = item;
@@ -464,7 +464,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                               });
 
                               context.insertOverlay(
-                                context,
+                                context: context,
                                 layerLink: courseLayerLinks[i],
                                 widgetKey: courseKeys[i],
                                 onTapOutsideOverlay: () {
@@ -484,7 +484,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                     currentMenuIndex: index,
                                     itemText:
                                         "#${item.courseId}- ${item.name}\n\$${item.cost}/${item.costFrequency}",
-                                    lastItemIndex: courseMenuItems.length - 1,
+                                 
                                     menuItemHeight: 75,
                                     onItemTap: () {
                                       selectedCourses[i] = item;

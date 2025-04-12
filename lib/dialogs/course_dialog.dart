@@ -155,10 +155,8 @@ class _CourseDialogState extends State<CourseDialog> {
                           });
 
                           context.insertOverlay(
-                            context,
+                            context: context,
                             layerLink: layerLink,
-                      
-               
                             onTapOutsideOverlay: () {
                               setState(() {
                                 isFrequencySelected = !isFrequencySelected;
@@ -172,7 +170,6 @@ class _CourseDialogState extends State<CourseDialog> {
                               return DropdownItemTile(
                                 currentMenuIndex: index,
                                 itemText: item,
-                                lastItemIndex: frequencyDropdowItems.length - 1,
                                 menuItemHeight: 50,
                                 onItemTap: () {
                                   setState(() {

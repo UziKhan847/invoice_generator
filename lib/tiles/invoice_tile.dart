@@ -3,6 +3,7 @@ import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
+import 'package:markaz_umaza_invoice_generator/utils/dividers.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/utils/pdf_handler.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
@@ -120,12 +121,8 @@ class InvoiceTile extends StatelessWidget {
                   ],
                 ),
               ),
-              VerticalDivider(
-                thickness: 0,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black,
-              ),
+              Dividers.verticalDivider(
+                  Theme.of(context).brightness == Brightness.dark),
               TileColumn(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -133,12 +130,8 @@ class InvoiceTile extends StatelessWidget {
                 "\$${invoice.hst}",
                 fontSize: 11,
               ),
-              VerticalDivider(
-                thickness: 0,
-                color: Theme.of(context).brightness == Brightness.dark
-                    ? Colors.white
-                    : Colors.black,
-              ),
+              Dividers.verticalDivider(
+                  Theme.of(context).brightness == Brightness.dark),
               TileColumn(
                 mainAxisAlignment: MainAxisAlignment.center,
                 crossAxisAlignment: CrossAxisAlignment.start,

@@ -180,6 +180,7 @@ class _TabPageState extends ConsumerState<MainPage>
     return PopScope(
       canPop: false,
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: 50, //10,
           flexibleSpace: Container(

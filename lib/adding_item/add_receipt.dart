@@ -19,28 +19,36 @@ class AddReceipt extends ConsumerStatefulWidget {
 }
 
 class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
+// Form and Scroll
   final _formKey = GlobalKey<FormState>();
-  bool isLoading = false;
 
+// Controllers
   final invoiceController = TextEditingController();
   final dateController = TextEditingController();
   final paidController = TextEditingController();
 
+// Focus and Keys
   final paidFocus = FocusNode();
+  late final globalKey = GlobalKey();
 
+// Layer Links
+  late final layerLink = LayerLink();
+
+// UI State
+  bool isLoading = false;
   bool isInvoiceSelected = false;
-
-  late Invoice selectedInvoice;
-  late double paid;
-
   double shadowHeight = 0;
   double menuHeight = 0;
 
-  late final layerLink = LayerLink();
+// Dropdown/Menu State
+  late Invoice selectedInvoice;
+  late double paid;
 
+// Misc
   late AppData provider;
   DateTime now = DateTime.now();
 
+// Validation
   final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
   final leadingZerosRegex = RegExp(r'^0+\d');
 
@@ -177,6 +185,7 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
                   //Invoice DropDown
                   DropdownMenuTile(
                     layerLink: layerLink,
+                    widgetKey: globalKey,
                     controller: invoiceController,
                     validator: (value) {
                       if (value == null || value.isEmpty) {
@@ -198,7 +207,8 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
                       });
 
                       context.insertOverlay(
-                        context,
+                        context: context,
+                        widgetKey: globalKey,
                         layerLink: layerLink,
                         onTapOutsideOverlay: () {
                           setState(() {
@@ -215,7 +225,7 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
                             currentMenuIndex: index,
                             itemText:
                                 "Id: ${item.invoiceId},\nDate: ${item.invoiceDate},\nSender: ${item.senders.name},\nRecipient: ${item.recipients.name},\nTotal: ${item.total}",
-                            lastItemIndex: provider.invoices.length - 1,
+                        
                             menuItemHeight: 100,
                             onItemTap: () {
                               selectedInvoice = item;

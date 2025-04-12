@@ -5,7 +5,6 @@ class DropdownItemTile extends StatelessWidget {
     super.key,
     required this.currentMenuIndex,
     required this.itemText,
-    required this.lastItemIndex,
     required this.menuItemHeight,
     required this.onItemTap,
     this.mainAxisAlignment = MainAxisAlignment.center,
@@ -13,7 +12,6 @@ class DropdownItemTile extends StatelessWidget {
 
   final double? menuItemHeight;
   final int currentMenuIndex;
-  final int lastItemIndex;
   final String itemText;
   final void Function()? onItemTap;
   final MainAxisAlignment mainAxisAlignment;

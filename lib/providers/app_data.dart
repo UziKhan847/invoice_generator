@@ -12,9 +12,9 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 final appData = ChangeNotifierProvider<AppData>((ref) => AppData());
 
 const selectSenders =
-    "sender_id, name, street, city, province, zip, phone, email, e_transfer, business_number";
+    "sender_id, name, street, city, province, country, zip, phone, email, e_transfer, business_number";
 const selectRecipients =
-    "recipient_id, name, street, city, province, zip, phone, email";
+    "recipient_id, name, street, city, province, country, zip, phone, email";
 const selectInvoices =
     "invoice_id, invoice_date, due_date, subtotal, hst, total, senders($selectSenders), recipients($selectRecipients), invoice_courses(courses(course_id, name, cost, cost_frequency), quantity, amount)";
 const selectReceipts =
@@ -226,7 +226,8 @@ class AppData extends ChangeNotifier {
       required String street,
       required String city,
       required String prov,
-      required String zip,
+      required String country,
+      required String? zip,
       required String phone,
       required String email,
       required String eTransfer,
@@ -238,6 +239,7 @@ class AppData extends ChangeNotifier {
           'street': street,
           'city': city,
           'province': prov,
+          'country': country,
           'zip': zip,
           'phone': phone,
           'email': email,
@@ -291,7 +293,8 @@ class AppData extends ChangeNotifier {
     required String street,
     required String city,
     required String prov,
-    required String zip,
+    required String country,
+    required String? zip,
     required String phone,
     required String email,
   }) async {
@@ -302,6 +305,7 @@ class AppData extends ChangeNotifier {
           'street': street,
           'city': city,
           'province': prov,
+          'country': country,
           'zip': zip,
           'phone': phone,
           'email': email,
