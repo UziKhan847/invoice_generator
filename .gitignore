@@ -48,3 +48,6 @@ app.*.map.json
 /lib/models/invoice.g.dart
 /lib/models/receipt.g.dart
 /lib/models/invoice_course.g.dart
+/lib/models/country.g.dart
+/lib/models/province.g.dart
+/lib/models/country_code.g.dart
