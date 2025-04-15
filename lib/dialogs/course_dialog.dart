@@ -145,7 +145,7 @@ class _CourseDialogState extends State<CourseDialog> {
                           }
                           return null;
                         },
-                        isSelected: isFrequencySelected,
+                        isFocused: isFrequencySelected,
                         menuInkHeight: 47,
                         menuInkWidth: 66,
                         menuBoxWidth: 66,

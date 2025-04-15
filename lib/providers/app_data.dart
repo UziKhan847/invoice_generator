@@ -230,8 +230,8 @@ class AppData extends ChangeNotifier {
       required String? zip,
       required String phone,
       required String email,
-      required String eTransfer,
-      required String businessNumber}) async {
+      required String? eTransfer,
+      required String? businessNumber}) async {
     try {
       newSender = await supabase.from("senders").insert(
         {

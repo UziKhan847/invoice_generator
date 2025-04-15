@@ -19,7 +19,7 @@ class Sender {
   });
 
   int senderId;
-  String businessNumber;
+  String? businessNumber;
   String name;
   String street;
   String city;

@@ -6,7 +6,7 @@ class DropdownMenuTile extends StatelessWidget {
     this.controller,
     required this.labelText,
     this.labelTextSize = 10,
-    required this.isSelected,
+    required this.isFocused,
     this.onTapMenuBox,
     this.arrowBottomPosition,
     this.arrowLeftPosition,
@@ -28,7 +28,7 @@ class DropdownMenuTile extends StatelessWidget {
   final void Function()? onTapMenuBox;
   final String? Function(String?)? validator;
   final String? labelText;
-  final bool isSelected;
+  final bool isFocused;
   final double? arrowBottomPosition;
   final double? arrowLeftPosition;
   final double? arrowRightPosition;
@@ -64,7 +64,7 @@ class DropdownMenuTile extends StatelessWidget {
                 labelStyle: TextStyle(fontSize: labelTextSize),
                 enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(4),
-                    borderSide: isSelected
+                    borderSide: isFocused
                         ? Theme.of(context)
                             .inputDecorationTheme
                             .focusedBorder!
@@ -82,7 +82,7 @@ class DropdownMenuTile extends StatelessWidget {
           top: arrowTopPosition,
           right: arrowRightPosition,
           bottom: arrowBottomPosition,
-          child: isSelected
+          child: isFocused
               ? Icon(
                   Icons.arrow_drop_up,
                   color: arrowUpColor,

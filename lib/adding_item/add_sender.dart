@@ -3,10 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
+import 'package:markaz_umaza_invoice_generator/models/country.dart';
+import 'package:markaz_umaza_invoice_generator/models/province.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
 
 class AddSender extends ConsumerStatefulWidget {
   const AddSender({super.key});
@@ -28,8 +31,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 // UI State
   bool isLoading = false;
   String selectedProv = 'ON';
-  bool isProvSelected = false;
-  bool isCountrySelected = false;
+  bool isProvFocused = false;
+  bool isCountryFocused = false;
 
 // Controllers
   final Map<String, TextEditingController> controllers = {
@@ -63,35 +66,43 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
   };
 
 // Dropdown Items
-  List<String> get provDropdownItems =>
-      Countries.countries[controllers['country']!.text]!['provinces']
-          as List<String>;
+  // List<String> get provDropdownItems =>
+  //     Countries.countries[controllers['country']!.text]!['provinces']
+  //         as List<String>;
 
 // Regex and Validation
-  RegExp get zipRegex => RegExp(Countries
-      .countries[controllers['country']!.text]!['postal_code_regex'] as String);
-  final emailRegex = RegExp(r'^.+@[0-z]+\.[A-z]+$');
-  RegExp get phoneRegex =>
-      RegExp(Countries.countries[controllers['country']!.text]!['phone_regex']
-          as String);
-  final bnRegex = RegExp(r'^\d{9}\s?[A-z]{2}\s?\d{4}$');
+  // RegExp get zipRegex => RegExp(Countries
+  //     .countries[controllers['country']!.text]!['postal_code_regex'] as String);
+
+  // RegExp get phoneRegex =>
+  //     RegExp(Countries.countries[controllers['country']!.text]!['phone_regex']
+  //         as String);
 
 // Derived Getters
-  String get zipWithSpace => switch (controllers['zip']!.text.length) {
-        6 =>
-          '${controllers['zip']!.text.substring(0, 3)} ${controllers['zip']!.text.substring(3, 6)}'
-              .toUpperCase(),
-        _ => controllers['zip']!.text.toUpperCase()
-      };
-
   String get bnFormat {
-    String bnText =
-        controllers['bn']!.text.replaceAll(RegExp(r'\s'), '').toUpperCase();
-    return '${bnText.substring(0, 9)} ${bnText.substring(9, 11)} ${bnText.substring(11, 15)}';
+    if (selectedCountryIndex == 0) {
+      String bnText =
+          controllers['bn']!.text.replaceAll(RegExp(r'\s'), '').toUpperCase();
+      return '${bnText.substring(0, 9)} ${bnText.substring(9, 11)} ${bnText.substring(11, 15)}';
+    }
+    return controllers['bn']!.text;
   }
 
 // External Data
   late AppData provider;
+
+  int selectedCountryIndex = 0;
+
+  late List<Country> countries = Countries.countries;
+
+  String getProv(List<Province> prov, int index, String countryIsoTwo) {
+    final currentProv = prov[index];
+    final iso = currentProv.iso;
+
+    if (iso == null) return currentProv.name;
+
+    return int.tryParse(iso) == null ? iso : '$countryIsoTwo-$iso';
+  }
 
   @override
   void dispose() {
@@ -123,19 +134,20 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
           await provider.insertSender(
               context: context,
               name: controllers['name']!.text,
-              businessNumber: bnFormat,
+              businessNumber:
+                  controllers['bn']!.text.isNotEmpty ? bnFormat : null,
               street: controllers['street']!.text,
               city: controllers['city']!.text,
               prov: controllers['prov']!.text,
               country: controllers['country']!.text,
-              zip: Countries.countries[controllers['country']!.text]![
-                          'postal_code_regex'] !=
-                      null
-                  ? controllers['zip']!.text
-                  : null,
+              zip: countries[selectedCountryIndex].postalCodeRegex == null
+                  ? null
+                  : controllers['zip']!.text,
               phone: controllers['phone']!.text,
               email: controllers['email']!.text,
-              eTransfer: controllers['eTransfer']!.text);
+              eTransfer: selectedCountryIndex == 0
+                  ? controllers['eTransfer']!.text
+                  : null);
           loadCircle();
 
           if (context.mounted) {
@@ -195,19 +207,24 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                       controller: controllers['bn']!,
                       onTapOutside: (_) => focusNodes['bn']!.unfocus(),
                       validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Business Number';
-                        } else if (value.length < 15) {
-                          return 'Min. is 15 characters w/o spaces';
-                        } else if (value.length > 17) {
-                          return 'Max. is 17 characters with spaces';
-                        } else if (!bnRegex.hasMatch(value)) {
-                          return "Invalid Business Number";
+                        if (selectedCountryIndex == 0) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Business Number';
+                          } else if (value.length < 15) {
+                            return 'Min. is 15 characters w/o spaces';
+                          } else if (value.length > 17) {
+                            return 'Max. is 17 characters with spaces';
+                          } else if (!RegularExpressions.bnRegex
+                              .hasMatch(value)) {
+                            return "Invalid Business Number";
+                          }
                         }
+
                         return null;
                       },
-                      decoration: const InputDecoration(
-                        labelText: "Business Number*",
+                      decoration: InputDecoration(
+                        labelText:
+                            "Business Number${selectedCountryIndex == 0 ? '*' : ''}",
                       ),
                     ),
                   ),
@@ -246,13 +263,13 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                     },
                     labelText: "Country*",
                     labelTextSize: 12.5,
-                    isSelected: isCountrySelected,
+                    isFocused: isCountryFocused,
                     menuInkHeight: 47,
                     menuInkWidth: 150,
                     menuBoxWidth: 150,
                     onTapMenuBox: () {
                       setState(() {
-                        isCountrySelected = !isCountrySelected;
+                        isCountryFocused = !isCountryFocused;
                       });
 
                       context.insertOverlay(
@@ -261,13 +278,13 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         layerLink: layerLinks['country']!,
                         onTapOutsideOverlay: () {
                           setState(() {
-                            isCountrySelected = !isCountrySelected;
+                            isCountryFocused = !isCountryFocused;
                           });
                           context.removeOverlay();
                         },
-                        itemCount: Countries.nameOfCountries.length,
+                        itemCount: Countries.countries.length,
                         itemBuilder: (context, index) {
-                          String item = Countries.nameOfCountries[index];
+                          String item = Countries.countries[index].name;
 
                           return DropdownItemTile(
                             currentMenuIndex: index,
@@ -276,7 +293,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                             onItemTap: () {
                               setState(() {
                                 controllers['country']!.text = item;
-                                isCountrySelected = !isCountrySelected;
+                                selectedCountryIndex = index;
+                                isCountryFocused = !isCountryFocused;
                               });
                               context.removeOverlay();
                             },
@@ -287,7 +305,6 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
-                  //City
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -312,64 +329,78 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         ),
                       ),
 
-                      //Province DropDown Menu
-                      DropdownMenuTile(
-                        layerLink: layerLinks['prov']!,
-                        controller: controllers['prov']!,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Invalid';
-                          }
-                          return null;
-                        },
-                        labelText: "Province*",
-                        labelTextSize: 12.5,
-                        isSelected: isProvSelected,
-                        menuInkHeight: 47,
-                        menuInkWidth: 68,
-                        menuBoxWidth: 68,
-                        onTapMenuBox: () {
-                          setState(() {
-                            isProvSelected = !isProvSelected;
-                          });
+                      if (controllers['country']!.text.isNotEmpty) ...[
+                        //Province DropDown Menu
+                        DropdownMenuTile(
+                          widgetKey: keys['prov']!,
+                          layerLink: layerLinks['prov']!,
+                          controller: controllers['prov']!,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Invalid';
+                            }
+                            return null;
+                          },
+                          labelText: "Province*",
+                          labelTextSize: 12.5,
+                          isFocused: isProvFocused,
+                          menuInkHeight: 47,
+                          menuInkWidth: 68,
+                          menuBoxWidth: 68,
+                          onTapMenuBox: () {
+                            setState(() {
+                              isProvFocused = !isProvFocused;
+                            });
 
-                          context.insertOverlay(
-                            context: context,
-                            layerLink: layerLinks['prov']!,
-                            onTapOutsideOverlay: () {
-                              setState(() {
-                                isProvSelected = !isProvSelected;
-                              });
-                              context.removeOverlay();
-                            },
-                            itemCount: provDropdownItems.length,
-                            itemBuilder: (context, index) {
-                              String item = provDropdownItems[index];
+                            context.insertOverlay(
+                              context: context,
+                              widgetKey: keys['prov']!,
+                              layerLink: layerLinks['prov']!,
+                              onTapOutsideOverlay: () {
+                                setState(() {
+                                  isProvFocused = !isProvFocused;
+                                });
+                                context.removeOverlay();
+                              },
+                              itemCount: Countries
+                                  .countries[selectedCountryIndex]
+                                  .provinces
+                                  .length,
+                              itemBuilder: (context, index) {
+                                final country = countries[selectedCountryIndex];
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText: item,
-                                menuItemHeight: 50,
-                                onItemTap: () {
-                                  setState(() {
-                                    controllers['prov']!.text = item;
-                                    isProvSelected = !isProvSelected;
-                                  });
-                                  context.removeOverlay();
-                                },
-                              );
-                            },
-                          );
-                        },
-                      ),
+                                String item = getProv(
+                                  country.provinces,
+                                  index,
+                                  country.countryCode.isoTwo,
+                                );
+
+                                return DropdownItemTile(
+                                  currentMenuIndex: index,
+                                  itemText: item,
+                                  menuItemHeight: 50,
+                                  onItemTap: () {
+                                    setState(() {
+                                      controllers['prov']!.text = item;
+                                      isProvFocused = !isProvFocused;
+                                    });
+                                    context.removeOverlay();
+                                  },
+                                );
+                              },
+                            );
+                          },
+                        ),
+                      ],
                     ],
                   ),
                   Margins.vertical18,
 
-                  //Zip
-                  if (Countries.countries[controllers['country']!.text]![
-                          'postal_code_regex'] !=
-                      null)
+                  if (controllers['country']!.text.isNotEmpty &&
+                      Countries.countries[selectedCountryIndex]
+                              .postalCodeRegex !=
+                          null) ...[
+                    //Zip
                     SizedBox(
                       width: 100,
                       height: 65,
@@ -380,7 +411,10 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Enter Zipcode';
-                          } else if (!zipRegex.hasMatch(value)) {
+                          } else if (!RegExp(Countries
+                                  .countries[selectedCountryIndex]
+                                  .postalCodeRegex!)
+                              .hasMatch(value)) {
                             return 'Invalid Zip';
                           }
                           return null;
@@ -390,33 +424,35 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         ),
                       ),
                     ),
-                  if (Countries.countries[controllers['country']!.text]![
-                          'postal_code_regex'] !=
-                      null)
                     Margins.vertical18,
+                  ],
 
-                  //Phone
-                  SizedBox(
-                    height: 65,
-                    child: TextFormField(
-                      focusNode: focusNodes['phone']!,
-                      controller: controllers['phone']!,
-                      keyboardType: TextInputType.phone,
-                      onTapOutside: (_) => focusNodes['phone']!.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter a Phone Number';
-                        } else if (!phoneRegex.hasMatch(value)) {
-                          return 'Please enter a valid Phone Number';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Phone Number*",
+                  if (controllers['country']!.text.isNotEmpty) ...[
+                    //Phone
+                    SizedBox(
+                      height: 65,
+                      child: TextFormField(
+                        focusNode: focusNodes['phone']!,
+                        controller: controllers['phone']!,
+                        keyboardType: TextInputType.phone,
+                        onTapOutside: (_) => focusNodes['phone']!.unfocus(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter a Phone Number';
+                          } else if (!RegExp(Countries
+                                  .countries[selectedCountryIndex].phoneRegex)
+                              .hasMatch(value)) {
+                            return 'Please enter a valid Phone Number';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Phone Number*",
+                        ),
                       ),
                     ),
-                  ),
-                  Margins.vertical18,
+                    Margins.vertical18,
+                  ],
 
                   //Email
                   SizedBox(
@@ -429,7 +465,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter an Email';
-                        } else if (!emailRegex.hasMatch(value)) {
+                        } else if (!RegularExpressions.emailRegex
+                            .hasMatch(value)) {
                           return 'Please enter a valid Email';
                         }
                         return null;
@@ -441,28 +478,34 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
-                  //Etransfer
-                  SizedBox(
-                    height: 65,
-                    child: TextFormField(
-                      focusNode: focusNodes['eTransfer']!,
-                      controller: controllers['eTransfer']!,
-                      keyboardType: TextInputType.emailAddress,
-                      onTapOutside: (_) => focusNodes['eTransfer']!.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your Etransfer email';
-                        } else if (!emailRegex.hasMatch(value)) {
-                          return 'Please enter a valid Email';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Etransfer Email*",
+                  if (selectedCountryIndex == 0) ...[
+                    //Etransfer
+                    SizedBox(
+                      height: 65,
+                      child: TextFormField(
+                        focusNode: focusNodes['eTransfer']!,
+                        controller: controllers['eTransfer']!,
+                        keyboardType: TextInputType.emailAddress,
+                        onTapOutside: (_) => focusNodes['eTransfer']!.unfocus(),
+                        validator: (value) {
+                          if (selectedCountryIndex == 0) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter your Etransfer email';
+                            } else if (!RegularExpressions.emailRegex
+                                .hasMatch(value)) {
+                              return 'Please enter a valid Email';
+                            }
+                          }
+
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Etransfer Email*",
+                        ),
                       ),
                     ),
-                  ),
-                  Margins.vertical18,
+                    Margins.vertical18,
+                  ],
                 ],
               ),
             ],

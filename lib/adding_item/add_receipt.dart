@@ -127,7 +127,7 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
                     child: DatepickerMenu(
                       controller: dateController,
                       labelText: "Receipt Date (auto)",
-                      isSelected: false,
+                      isFocused: false,
                       menuInkHeight: 46,
                       menuInkWidth: 155,
                       menuBoxWidth: 155,
@@ -197,7 +197,7 @@ class _AddReceiptConsumerState extends ConsumerState<AddReceipt> {
                         top: 12, bottom: 12, right: 22, left: 10),
                     labelText: "Invoice*",
                     labelTextSize: 16,
-                    isSelected: isInvoiceSelected,
+                    isFocused: isInvoiceSelected,
                     arrowRightPosition: 2,
                     arrowTopPosition: 12,
                     menuInkHeight: 47,

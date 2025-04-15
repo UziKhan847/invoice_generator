@@ -7,7 +7,7 @@ class DropdownCourseTile extends StatelessWidget {
     super.key,
     this.isFirstCourse = false,
     this.isLastCourse = false,
-    required this.isSelected,
+    required this.isFocused,
     required this.courseNumber,
     required this.layerLink,
     this.courseController,
@@ -25,7 +25,7 @@ class DropdownCourseTile extends StatelessWidget {
 
   final bool isFirstCourse;
   final bool isLastCourse;
-  final bool isSelected;
+  final bool isFocused;
   final bool isEnabled;
   final TextEditingController? courseController;
   final TextEditingController? quantityController;
@@ -68,7 +68,7 @@ class DropdownCourseTile extends StatelessWidget {
                   top: 12, bottom: 12, right: 22, left: 10),
               labelText: "Course $courseNumber*",
               labelTextSize: 16,
-              isSelected: isSelected,
+              isFocused: isFocused,
               arrowRightPosition: 2,
               arrowTopPosition: 12,
               menuInkHeight: 47,

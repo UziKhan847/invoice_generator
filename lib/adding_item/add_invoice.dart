@@ -55,10 +55,10 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
 
 // UI State
   bool isLoading = false;
-  bool isSenderSelected = false;
+  bool isSenderFocused = false;
   bool isRecipientSelected = false;
   List<bool> isEnabled = List<bool>.generate(5, (_) => true);
-  List<bool> isCourseSelected = List<bool>.generate(5, (_) => false);
+  List<bool> isCourseSFocused = List<bool>.generate(5, (_) => false);
 
 // Dropdown/Menu State
   late Sender selectedSender;
@@ -190,7 +190,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                     child: DatepickerMenu(
                       controller: controllers['date']!,
                       labelText: "Invoice Date (auto)",
-                      isSelected: false,
+                      isFocused: false,
                       menuInkHeight: 46,
                       menuInkWidth: 155,
                       menuBoxWidth: 155,
@@ -225,7 +225,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                     child: DatepickerMenu(
                       controller: controllers['dueDate']!,
                       labelText: "Due Date",
-                      isSelected: false,
+                      isFocused: false,
                       menuInkHeight: 46,
                       menuInkWidth: 155,
                       menuBoxWidth: 155,
@@ -269,13 +269,13 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                         top: 12, bottom: 12, right: 22, left: 10),
                     labelText: "Sender*",
                     labelTextSize: 16,
-                    isSelected: isSenderSelected,
+                    isFocused: isSenderFocused,
                     arrowRightPosition: 2,
                     arrowTopPosition: 12,
                     menuInkHeight: 47,
                     onTapMenuBox: () {
                       setState(() {
-                        isSenderSelected = !isSenderSelected;
+                        isSenderFocused = !isSenderFocused;
                         scrollPhysics = NeverScrollableScrollPhysics();
                       });
 
@@ -285,7 +285,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                         layerLink: layerLinks['sender']!,
                         onTapOutsideOverlay: () {
                           setState(() {
-                            isSenderSelected = !isSenderSelected;
+                            isSenderFocused = !isSenderFocused;
                             scrollPhysics = AlwaysScrollableScrollPhysics();
                           });
                           context.removeOverlay();
@@ -298,13 +298,12 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                             currentMenuIndex: index,
                             itemText:
                                 "#${item.senderId}- ${item.name}\n${item.street}, ${item.city}, ${item.province}\n${item.email},\n${item.eTransfer}",
-                   
                             menuItemHeight: 100,
                             onItemTap: () {
                               selectedSender = item;
                               controllers['sender']!.text =
                                   "#${item.senderId}- ${item.name}, ${item.street}, ${item.city}, ${item.province}, ${item.email}, ${item.eTransfer}";
-                              isSenderSelected = !isSenderSelected;
+                              isSenderFocused = !isSenderFocused;
 
                               setState(() {});
                               context.removeOverlay();
@@ -331,7 +330,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                         top: 12, bottom: 12, right: 22, left: 10),
                     labelText: "Recipient*",
                     labelTextSize: 16,
-                    isSelected: isRecipientSelected,
+                    isFocused: isRecipientSelected,
                     arrowRightPosition: 2,
                     arrowTopPosition: 12,
                     menuInkHeight: 47,
@@ -361,7 +360,6 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                             currentMenuIndex: index,
                             itemText:
                                 "#${item.recipientId}- ${item.name}\n${item.street}\n${item.city}, ${item.province}\n${item.email}",
-             
                             menuItemHeight: 90,
                             onItemTap: () {
                               selectedRecipient = item;
@@ -449,7 +447,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                           : Colors.grey.shade500,
                       isFirstCourse: i == 0,
                       isLastCourse: i == 4,
-                      isSelected: isCourseSelected[i],
+                      isFocused: isCourseSFocused[i],
                       courseNumber: i + 1,
                       courseController: courseControllers[i],
                       quantityController: quantityControllers[i],
@@ -459,7 +457,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                           ? null
                           : () {
                               setState(() {
-                                isCourseSelected[i] = !isCourseSelected[i];
+                                isCourseSFocused[i] = !isCourseSFocused[i];
                                 scrollPhysics = NeverScrollableScrollPhysics();
                               });
 
@@ -469,7 +467,7 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                 widgetKey: courseKeys[i],
                                 onTapOutsideOverlay: () {
                                   setState(() {
-                                    isCourseSelected[i] = !isCourseSelected[i];
+                                    isCourseSFocused[i] = !isCourseSFocused[i];
                                     scrollPhysics =
                                         AlwaysScrollableScrollPhysics();
                                   });
@@ -484,7 +482,6 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                     currentMenuIndex: index,
                                     itemText:
                                         "#${item.courseId}- ${item.name}\n\$${item.cost}/${item.costFrequency}",
-                                 
                                     menuItemHeight: 75,
                                     onItemTap: () {
                                       selectedCourses[i] = item;
@@ -492,8 +489,8 @@ class _AddInvoiceConsumerState extends ConsumerState<AddInvoice> {
                                       courseControllers[i].text =
                                           "#${item.courseId}- ${item.name}, \$${item.cost}/${item.costFrequency}";
 
-                                      isCourseSelected[i] =
-                                          !isCourseSelected[i];
+                                      isCourseSFocused[i] =
+                                          !isCourseSFocused[i];
 
                                       setState(() {});
                                       context.removeOverlay();

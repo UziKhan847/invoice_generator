@@ -4,7 +4,7 @@ class DatepickerMenu extends StatelessWidget {
   const DatepickerMenu({
     super.key,
     required this.labelText,
-    required this.isSelected,
+    required this.isFocused,
     required this.onTapMenuBox,
     required this.onTapDelete,
     required this.menuInkHeight,
@@ -23,7 +23,7 @@ class DatepickerMenu extends StatelessWidget {
 
   final TextEditingController controller;
   final String? labelText;
-  final bool isSelected;
+  final bool isFocused;
   final void Function()? onTapMenuBox;
   final void Function()? onTapDelete;
   final double? iconBottomPosition;
@@ -54,7 +54,7 @@ class DatepickerMenu extends StatelessWidget {
                   labelText: labelText,
                   enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(4),
-                      borderSide: isSelected
+                      borderSide: isFocused
                           ? Theme.of(context)
                               .inputDecorationTheme
                               .focusedBorder!
