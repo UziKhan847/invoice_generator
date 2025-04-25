@@ -1,0 +1,1 @@
+/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/build/app/intermediates/cxx/Debug/5t6b6n4z/obj/armeabi-v7a

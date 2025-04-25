@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "/home/uzi/Desktop/Coding/Flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/uzi/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/Debug/5t6b6n4z/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/uzi/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/Debug/5t6b6n4z/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}

@@ -222,13 +222,14 @@ class _InvoicePageState extends State<InvoicePage> {
           isExpanded: isBottomInfoBarExpanded,
           expandButtonColor: switch (widget.themeMode) {
             AppTheme.light => MyThemes.tertiaryLight,
-            AppTheme.dark => MyThemes.tertiaryDark,
+            AppTheme.dark => MyThemes.primaryDark,
             _ => widget.navBarColor
           },
           arrowColor:
               widget.themeMode == AppTheme.colorful ? Colors.white : null,
-          infoBoxColor:
-              widget.themeMode == AppTheme.dark ? Colors.black : Colors.white,
+          infoBoxColor: widget.themeMode == AppTheme.dark
+              ? MyThemes.secondaryDark
+              : Colors.white,
           onTapArrow: () {
             setState(() {
               isBottomInfoBarExpanded = !isBottomInfoBarExpanded;

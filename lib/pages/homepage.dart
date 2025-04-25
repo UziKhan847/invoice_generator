@@ -11,26 +11,27 @@ import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_bu
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/sender_list_builder.dart';
+import 'package:markaz_umaza_invoice_generator/main.dart';
 import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 
-class MainPage extends ConsumerStatefulWidget {
-  const MainPage({super.key});
+class Homepage extends ConsumerStatefulWidget {
+  const Homepage({super.key});
 
   @override
-  ConsumerState<MainPage> createState() => _TabPageState();
+  ConsumerState<Homepage> createState() => _HomepageState();
 }
 
-class _TabPageState extends ConsumerState<MainPage>
+class _HomepageState extends ConsumerState<Homepage>
     with TickerProviderStateMixin {
   late AppData provider;
   late AppTheme themeMode;
   late ThemeNotifier themeNotifier;
 
-  late PageController pageController = PageController();
+  late final pageController = PageController();
   late List<AnimationController> navItemAnimControllers;
   late List<Animation<double>> navItemAnims;
 
@@ -50,36 +51,32 @@ class _TabPageState extends ConsumerState<MainPage>
   double dragDelta = 0.0;
 
   final navBarColors = [
-    const Color(0xFF6B2C2C),
-    const Color(0xFF8C5A2E),
-    const Color(0xFF4A6D8C),
-    const Color(0xFF3A5A47),
-    const Color(0xFF5B3A73),
+    MyThemes.primaryRed,
+    MyThemes.primaryOrange,
+    MyThemes.primaryBlue,
+    MyThemes.primaryGreen,
+    MyThemes.primaryPurple,
   ];
 
   final indicatorColors = [
-    const Color(0xFFF6857D),
-    const Color(0xFFFFCA8A),
-    const Color(0xFFA3CEFF),
-    const Color(0xFFA5FFCB),
-    const Color(0xFFDDB9FF)
+    MyThemes.secondaryRed,
+    MyThemes.secondaryOrange,
+    MyThemes.secondaryBlue,
+    MyThemes.secondaryGreen,
+    MyThemes.secondaryPurple,
   ];
 
-  Color? get navBarColor {
-    return Color.lerp(
-      navBarColors[smallerIndex],
-      navBarColors[largerIndex],
-      lerp,
-    );
-  }
+  Color? get navBarColor => Color.lerp(
+        navBarColors[smallerIndex],
+        navBarColors[largerIndex],
+        lerp,
+      );
 
-  Color? get indicatorColor {
-    return Color.lerp(
-      indicatorColors[smallerIndex],
-      indicatorColors[largerIndex],
-      lerp,
-    );
-  }
+  Color? get indicatorColor => Color.lerp(
+        indicatorColors[smallerIndex],
+        indicatorColors[largerIndex],
+        lerp,
+      );
 
   List<Color> get gradientColors => [
         Color.lerp(navBarColors[smallerIndex], navBarColors[largerIndex],
@@ -180,6 +177,8 @@ class _TabPageState extends ConsumerState<MainPage>
     return PopScope(
       canPop: false,
       child: Scaffold(
+        backgroundColor:
+            themeMode == AppTheme.colorful ? MyThemes.secondaryLight : null,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           toolbarHeight: 50, //10,
@@ -196,18 +195,36 @@ class _TabPageState extends ConsumerState<MainPage>
                 )
             },
             child: Center(
-              child: ElevatedButton(
-                  onPressed: () {
-                    switch (themeMode) {
-                      case AppTheme.light:
-                        themeNotifier.setTheme(AppTheme.dark);
-                      case AppTheme.dark:
-                        themeNotifier.setTheme(AppTheme.colorful);
-                      default:
-                        themeNotifier.setTheme(AppTheme.light);
-                    }
-                  },
-                  child: Text(themeMode.name.toCapitalized)),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                spacing: 20,
+                children: [
+                  ElevatedButton(
+                      onPressed: () {
+                        switch (themeMode) {
+                          case AppTheme.light:
+                            themeNotifier.setTheme(AppTheme.dark);
+                          case AppTheme.dark:
+                            themeNotifier.setTheme(AppTheme.colorful);
+                          default:
+                            themeNotifier.setTheme(AppTheme.light);
+                        }
+                      },
+                      child: Text(themeMode.name.toCapitalized)),
+                  ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          provider.resetData();
+                          await supabase.auth.signOut();
+                        } catch (e) {
+                          if (mounted) {
+                            rethrow;
+                          }
+                        }
+                      },
+                      child: const Text("Log Out")),
+                ],
+              ),
             ),
           ),
         ),
@@ -285,6 +302,9 @@ class _TabPageState extends ConsumerState<MainPage>
                   begin: Alignment.centerLeft,
                   end: Alignment.centerRight,
                 )),
+              AppTheme.dark => const BoxDecoration(
+                  color: MyThemes.primaryDark,
+                ),
               _ => BoxDecoration(
                   color: Theme.of(context).appBarTheme.backgroundColor,
                 )
@@ -298,8 +318,9 @@ class _TabPageState extends ConsumerState<MainPage>
                       decoration: switch (themeMode) {
                         AppTheme.light =>
                           const BoxDecoration(color: Colors.white),
-                        AppTheme.dark =>
-                          const BoxDecoration(color: Colors.black),
+                        AppTheme.dark => BoxDecoration(
+                            color:
+                                Theme.of(context).appBarTheme.backgroundColor),
                         _ => BoxDecoration(
                             gradient:
                                 LinearGradient(colors: indicatorGradColors))
@@ -328,7 +349,9 @@ class _TabPageState extends ConsumerState<MainPage>
                           itemColor: pageAnimValue == i
                               ? switch (themeMode) {
                                   AppTheme.light => Colors.white,
-                                  AppTheme.dark => Colors.black,
+                                  AppTheme.dark => Theme.of(context)
+                                      .appBarTheme
+                                      .backgroundColor,
                                   _ => indicatorColors[i]
                                 }
                               : Colors.transparent,

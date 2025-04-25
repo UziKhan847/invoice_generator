@@ -35,13 +35,13 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
   bool isCountryFocused = false;
 
 // Controllers
-  final Map<String, TextEditingController> controllers = {
+  final controllers = {
     'name': TextEditingController(),
     'bn': TextEditingController(),
     'street': TextEditingController(),
     'city': TextEditingController(),
     'prov': TextEditingController(),
-    'country': TextEditingController()..text = 'Canada',
+    'country': TextEditingController(),
     'zip': TextEditingController(),
     'phone': TextEditingController(),
     'email': TextEditingController(),
@@ -49,7 +49,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
   };
 
 // Focus Nodes and Keys
-  final Map<String, FocusNode> focusNodes = {
+  final focusNodes = {
     'name': FocusNode(),
     'bn': FocusNode(),
     'street': FocusNode(),
@@ -230,26 +230,6 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
-                  //Street
-                  SizedBox(
-                    height: 65,
-                    child: TextFormField(
-                      focusNode: focusNodes['street']!,
-                      controller: controllers['street']!,
-                      onTapOutside: (_) => focusNodes['street']!.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the street';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Street (#, Name, etc.)*",
-                      ),
-                    ),
-                  ),
-                  Margins.vertical18,
-
                   //Country DropDown Menu
                   DropdownMenuTile(
                     widgetKey: keys['country']!,
@@ -302,6 +282,26 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         },
                       );
                     },
+                  ),
+                  Margins.vertical18,
+
+                  //Street
+                  SizedBox(
+                    height: 65,
+                    child: TextFormField(
+                      focusNode: focusNodes['street']!,
+                      controller: controllers['street']!,
+                      onTapOutside: (_) => focusNodes['street']!.unfocus(),
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter the street';
+                        }
+                        return null;
+                      },
+                      decoration: const InputDecoration(
+                        labelText: "Street (#, Name, etc.)*",
+                      ),
+                    ),
                   ),
                   Margins.vertical18,
 

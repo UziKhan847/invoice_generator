@@ -33,7 +33,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   bool isCountryFocused = false;
 
 // Controllers
-  final Map<String, TextEditingController> controllers = {
+  final controllers = {
     'name': TextEditingController(),
     'street': TextEditingController(),
     'city': TextEditingController(),
@@ -45,7 +45,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
   };
 
 // Focus Nodes and Keys
-  final Map<String, FocusNode> focusNodes = {
+  final focusNodes = {
     'name': FocusNode(),
     'street': FocusNode(),
     'city': FocusNode(),
@@ -316,8 +316,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                                   .provinces
                                   .length,
                               itemBuilder: (context, index) {
-                                final country =
-                                    countries[selectedCountryIndex];
+                                final country = countries[selectedCountryIndex];
 
                                 String item = getProv(
                                   country.provinces,

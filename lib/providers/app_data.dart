@@ -4,12 +4,16 @@ import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart
 import 'package:markaz_umaza_invoice_generator/main.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 final appData = ChangeNotifierProvider<AppData>((ref) => AppData());
+
+const selectProfile =
+    "full_name, business_number, country, province, city, street, zip, phone, email, currency, website, logo_url";
 
 const selectSenders =
     "sender_id, name, street, city, province, country, zip, phone, email, e_transfer, business_number";
@@ -21,29 +25,58 @@ const selectReceipts =
     "receipt_id, receipt_date, paid, invoices($selectInvoices)";
 
 class AppData extends ChangeNotifier {
+  String get userId => supabase.auth.currentUser!.id;
+
+  late PostgrestMap profileData;
+  late Profile profile;
+
   late PostgrestList receiptData;
   late List<Receipt> receipts;
-  late PostgrestList newReceipt;
+  late PostgrestMap newReceipt;
   late PostgrestList invoiceCourseIds;
 
   late PostgrestList invoiceData;
   late List<Invoice> invoices;
-  late PostgrestList invoiceIdData;
+  late PostgrestMap invoiceIdData;
   late int newInvoiceId;
-  late PostgrestList newInvoice;
+  late PostgrestMap newInvoice;
 
   late PostgrestList senderData;
   late List<Sender> senders;
-  late PostgrestList newSender;
+  late PostgrestMap newSender;
 
   late PostgrestList recipientData;
   late List<Recipient> recipients;
-  late PostgrestList newRecipient;
+  late PostgrestMap newRecipient;
 
   late PostgrestList courseData;
   late List<Course> courses;
-  late PostgrestList newCourse;
-  late PostgrestList newInvoiceCourse;
+  late PostgrestMap newCourse;
+  //late PostgrestList newInvoiceCourse;
+
+  bool isLoggedIn = false;
+
+  void resetData() {
+    receipts = [];
+    invoices = [];
+    senders = [];
+    recipients = [];
+    courses = [];
+  }
+
+  Future<void> getProfileData() async {
+    try {
+      profileData = await supabase
+          .from('profiles')
+          .select(selectProfile)
+          .eq('id', userId)
+          .single();
+
+      profile = Profile.fromJson(profileData);
+    } catch (e) {
+      print("Error: $e");
+    }
+  }
 
   //Fetch Data Methods
   Future<void> getData() async {
@@ -51,32 +84,37 @@ class AppData extends ChangeNotifier {
       receiptData = await supabase
           .from("receipts")
           .select(selectReceipts)
+          .eq('profile_id', userId)
           .eq('is_deleted', false)
           .order("receipt_id", ascending: true);
 
       invoiceData = await supabase
           .from("invoices")
           .select(selectInvoices)
+          .eq('profile_id', userId)
           .eq('is_deleted', false)
           .order("invoice_id", ascending: true);
 
       senderData = await supabase
           .from("senders")
           .select(selectSenders)
+          .eq('profile_id', userId)
           .eq('is_deleted', false)
-          .order("sender_id", ascending: true);
+          .order("name", ascending: true);
 
       recipientData = await supabase
           .from("recipients")
           .select(selectRecipients)
+          .eq('profile_id', userId)
           .eq('is_deleted', false)
-          .order("recipient_id", ascending: true);
+          .order("name", ascending: true);
 
       courseData = await supabase
           .from("courses")
           .select('course_id, name, cost, cost_frequency')
+          .eq('profile_id', userId)
           .eq('is_deleted', false)
-          .order("course_id", ascending: true);
+          .order("name", ascending: true);
 
       receipts = receiptData.map(Receipt.fromJson).toList();
 
@@ -102,15 +140,19 @@ class AppData extends ChangeNotifier {
     required int invoiceId,
   }) async {
     try {
-      newReceipt = await supabase.from("receipts").insert(
-        {
-          if (receiptDate.isNotEmpty) 'receipt_date': receiptDate,
-          'paid': paid,
-          'invoice_id': invoiceId,
-        },
-      ).select(selectReceipts);
+      newReceipt = await supabase
+          .from("receipts")
+          .insert(
+            {
+              if (receiptDate.isNotEmpty) 'receipt_date': receiptDate,
+              'paid': paid,
+              'invoice_id': invoiceId,
+            },
+          )
+          .select(selectReceipts)
+          .single();
 
-      receipts.add(Receipt.fromJson(newReceipt[0]));
+      receipts.add(Receipt.fromJson(newReceipt));
 
       notifyListeners();
 
@@ -158,17 +200,21 @@ class AppData extends ChangeNotifier {
     required Map<int, Course> selectedCourses,
   }) async {
     try {
-      invoiceIdData = await supabase.from("invoices").insert(
-        {
-          if (invoiceDate.isNotEmpty) 'invoice_date': invoiceDate,
-          'due_date': dueDate.isNotEmpty ? dueDate : null,
-          'subtotal': subtotal,
-          'sender_id': senderId,
-          'recipient_id': recipientId
-        },
-      ).select("invoice_id");
+      invoiceIdData = await supabase
+          .from("invoices")
+          .insert(
+            {
+              if (invoiceDate.isNotEmpty) 'invoice_date': invoiceDate,
+              'due_date': dueDate.isNotEmpty ? dueDate : null,
+              'subtotal': subtotal,
+              'sender_id': senderId,
+              'recipient_id': recipientId
+            },
+          )
+          .select("invoice_id")
+          .single();
 
-      newInvoiceId = invoiceIdData[0]['invoice_id'];
+      newInvoiceId = invoiceIdData['invoice_id'];
 
       for (int i = 0; i < selectedCourses.length; i++) {
         await supabase.from("invoice_courses").insert({
@@ -182,9 +228,10 @@ class AppData extends ChangeNotifier {
       newInvoice = await supabase
           .from('invoices')
           .select(selectInvoices)
-          .eq('invoice_id', newInvoiceId);
+          .eq('invoice_id', newInvoiceId)
+          .single();
 
-      invoices.add(Invoice.fromJson(newInvoice[0]));
+      invoices.add(Invoice.fromJson(newInvoice));
 
       notifyListeners();
 
@@ -233,22 +280,26 @@ class AppData extends ChangeNotifier {
       required String? eTransfer,
       required String? businessNumber}) async {
     try {
-      newSender = await supabase.from("senders").insert(
-        {
-          'name': name,
-          'street': street,
-          'city': city,
-          'province': prov,
-          'country': country,
-          'zip': zip,
-          'phone': phone,
-          'email': email,
-          'e_transfer': eTransfer,
-          'business_number': businessNumber
-        },
-      ).select(selectSenders);
+      newSender = await supabase
+          .from("senders")
+          .insert(
+            {
+              'name': name,
+              'street': street,
+              'city': city,
+              'province': prov,
+              'country': country,
+              'zip': zip,
+              'phone': phone,
+              'email': email,
+              'e_transfer': eTransfer,
+              'business_number': businessNumber
+            },
+          )
+          .select(selectSenders)
+          .single();
 
-      senders.add(Sender.fromJson(newSender[0]));
+      senders.add(Sender.fromJson(newSender));
 
       senders
           .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
@@ -299,20 +350,24 @@ class AppData extends ChangeNotifier {
     required String email,
   }) async {
     try {
-      newRecipient = await supabase.from("recipients").insert(
-        {
-          'name': name,
-          'street': street,
-          'city': city,
-          'province': prov,
-          'country': country,
-          'zip': zip,
-          'phone': phone,
-          'email': email,
-        },
-      ).select(selectRecipients);
+      newRecipient = await supabase
+          .from("recipients")
+          .insert(
+            {
+              'name': name,
+              'street': street,
+              'city': city,
+              'province': prov,
+              'country': country,
+              'zip': zip,
+              'phone': phone,
+              'email': email,
+            },
+          )
+          .select(selectRecipients)
+          .single();
 
-      recipients.add(Recipient.fromJson(newRecipient[0]));
+      recipients.add(Recipient.fromJson(newRecipient));
       recipients
           .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
 
@@ -357,15 +412,19 @@ class AppData extends ChangeNotifier {
     required String frequency,
   }) async {
     try {
-      newCourse = await supabase.from("courses").insert(
-        {
-          'name': name,
-          'cost': cost,
-          'cost_frequency': frequency,
-        },
-      ).select('course_id, name, cost, cost_frequency');
+      newCourse = await supabase
+          .from("courses")
+          .insert(
+            {
+              'name': name,
+              'cost': cost,
+              'cost_frequency': frequency,
+            },
+          )
+          .select('course_id, name, cost, cost_frequency')
+          .single();
 
-      courses.add(Course.fromJson(newCourse[0]));
+      courses.add(Course.fromJson(newCourse));
 
       courses
           .sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));

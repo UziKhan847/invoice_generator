@@ -51,3 +51,4 @@ app.*.map.json
 /lib/models/country.g.dart
 /lib/models/province.g.dart
 /lib/models/country_code.g.dart
+/lib/models/profile.g.dart

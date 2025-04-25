@@ -5,9 +5,9 @@ final themeProvider = StateNotifierProvider<ThemeNotifier, AppTheme>(
     (ref) => ThemeNotifier(AppTheme.colorful));
 
 class ThemeNotifier extends StateNotifier<AppTheme> {
-  ThemeNotifier(AppTheme theme) : super(theme);
+  ThemeNotifier(super.state);
 
-  Future<void> setTheme(theme) async {
+  Future<void> setTheme(AppTheme theme) async {
     state = theme;
     await ThemePreferances.saveTheme(theme);
   }

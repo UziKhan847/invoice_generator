@@ -19,7 +19,10 @@ class Sender {
   });
 
   int senderId;
+
+  @JsonKey(name: 'business_number')
   String? businessNumber;
+  
   String name;
   String street;
   String city;
