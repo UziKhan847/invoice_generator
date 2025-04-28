@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/country.dart';
 import 'package:markaz_umaza_invoice_generator/models/province.dart';
@@ -14,10 +15,10 @@ class AddRecipient extends ConsumerStatefulWidget {
   const AddRecipient({super.key});
 
   @override
-  ConsumerState<AddRecipient> createState() => _AddRecipientConsumerState();
+  ConsumerState<AddRecipient> createState() => _AddRecipientState();
 }
 
-class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
+class _AddRecipientState extends ConsumerState<AddRecipient> {
 //  Form
   final _formKey = GlobalKey<FormState>();
 
@@ -59,18 +60,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
     'prov': GlobalKey(),
   };
 
-// Dropdown Items
-  // List<String> get provDropdownItems =>
-  //     Countries.countries[controllers['country']!.text]!['provinces']
-  //         as List<String>;
-
-// Regex and Validation
-  // RegExp get zipRegex => RegExp(Countries
-  //     .countries[controllers['country']!.text]!['postal_code_regex'] as String);
   final emailRegex = RegExp(r'^.+@[0-z]+\.[A-z]+$');
-  // RegExp get phoneRegex =>
-  //     RegExp(Countries.countries[controllers['country']!.text]!['phone_regex']
-  //         as String);
 
 // External Data
   late AppData provider;
@@ -148,14 +138,9 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "* required fields",
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                    ],
+                  Text(
+                    "* required fields",
+                    style: TextStyle(color: Colors.grey.shade600),
                   ),
                   Margins.vertical26,
 
@@ -179,7 +164,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                   ),
                   Margins.vertical18,
 
-                  //Country DropDown Menu
+                  //Country dropDown Menu
                   DropdownMenuTile(
                     widgetKey: keys['country']!,
                     layerLink: layerLinks['country']!,
@@ -193,10 +178,8 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                     labelText: "Country*",
                     labelTextSize: 12.5,
                     isFocused: isCountryFocused,
-                    menuInkHeight: 47,
-                    menuInkWidth: 150,
-                    menuBoxWidth: 150,
-                    onTapMenuBox: () {
+                    inkWellSize: const InkWellSize(width: 150),
+                    onTap: () {
                       setState(() {
                         isCountryFocused = !isCountryFocused;
                       });
@@ -215,11 +198,11 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                         itemBuilder: (context, index) {
                           String item = Countries.countries[index].name;
 
-                          return DropdownItemTile(
-                            currentMenuIndex: index,
-                            itemText: item,
-                            menuItemHeight: 50,
-                            onItemTap: () {
+                          return DropDownItemTile(
+                            currentIndex: index,
+                            itemFormat: [Text(item)],
+                            height: 50,
+                            onTap: () {
                               setState(() {
                                 controllers['country']!.text = item;
                                 selectedCountryIndex = index;
@@ -279,7 +262,7 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                       ),
 
                       if (controllers['country']!.text.isNotEmpty) ...[
-                        //Province DropDown Menu
+                        //Province dropDown Menu
                         DropdownMenuTile(
                           widgetKey: keys['prov']!,
                           layerLink: layerLinks['prov']!,
@@ -293,10 +276,8 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                           labelText: "Province*",
                           labelTextSize: 12.5,
                           isFocused: isProvFocused,
-                          menuInkHeight: 47,
-                          menuInkWidth: 68,
-                          menuBoxWidth: 68,
-                          onTapMenuBox: () {
+                          inkWellSize: const InkWellSize(width: 68),
+                          onTap: () {
                             setState(() {
                               isProvFocused = !isProvFocused;
                             });
@@ -324,11 +305,11 @@ class _AddRecipientConsumerState extends ConsumerState<AddRecipient> {
                                   country.countryCode.isoTwo,
                                 );
 
-                                return DropdownItemTile(
-                                  currentMenuIndex: index,
-                                  itemText: item,
-                                  menuItemHeight: 50,
-                                  onItemTap: () {
+                                return DropDownItemTile(
+                                  currentIndex: index,
+                                  itemFormat: [Text(item)],
+                                  height: 50,
+                                  onTap: () {
                                     setState(() {
                                       controllers['prov']!.text = item;
                                       isProvFocused = !isProvFocused;

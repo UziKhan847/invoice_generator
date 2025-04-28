@@ -1,20 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/arrow_position.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 
 class DropdownMenuTile extends StatelessWidget {
   const DropdownMenuTile({
     super.key,
     this.controller,
     required this.labelText,
-    this.labelTextSize = 10,
+    this.labelTextSize,
     required this.isFocused,
-    this.onTapMenuBox,
-    this.arrowBottomPosition,
-    this.arrowLeftPosition,
-    this.arrowRightPosition = 2,
-    this.arrowTopPosition = 12,
-    required this.menuInkHeight,
-    this.menuInkWidth,
-    this.menuBoxWidth,
+    this.onTap,
+    this.arrowPosition = const ArrowPosition(top: 12, right: 2),
+    this.inkWellSize,
     this.validator,
     this.textPadding,
     this.textStyle,
@@ -25,18 +22,13 @@ class DropdownMenuTile extends StatelessWidget {
   });
 
   final TextEditingController? controller;
-  final void Function()? onTapMenuBox;
+  final void Function()? onTap;
   final String? Function(String?)? validator;
   final String? labelText;
   final bool isFocused;
-  final double? arrowBottomPosition;
-  final double? arrowLeftPosition;
-  final double? arrowRightPosition;
-  final double? arrowTopPosition;
-  final double? menuInkHeight;
-  final double? menuInkWidth;
-  final double? menuBoxWidth;
-  final double labelTextSize;
+  final ArrowPosition arrowPosition;
+  final InkWellSize? inkWellSize;
+  final double? labelTextSize;
   final EdgeInsetsGeometry? textPadding;
   final TextStyle? textStyle;
   final Color? arrowUpColor;
@@ -52,7 +44,7 @@ class DropdownMenuTile extends StatelessWidget {
           link: layerLink,
           child: SizedBox(
             height: 65,
-            width: menuBoxWidth,
+            width: inkWellSize?.width,
             child: TextFormField(
               style: textStyle,
               readOnly: true,
@@ -78,10 +70,10 @@ class DropdownMenuTile extends StatelessWidget {
           ),
         ),
         Positioned(
-          left: arrowLeftPosition,
-          top: arrowTopPosition,
-          right: arrowRightPosition,
-          bottom: arrowBottomPosition,
+          left: arrowPosition.left,
+          top: arrowPosition.top,
+          right: arrowPosition.right,
+          bottom: arrowPosition.bottom,
           child: isFocused
               ? Icon(
                   Icons.arrow_drop_up,
@@ -94,11 +86,11 @@ class DropdownMenuTile extends StatelessWidget {
         ),
         Container(
           key: widgetKey,
-          height: menuInkHeight,
-          width: menuInkWidth,
+          height: 47,
+          width: inkWellSize?.width,
           decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
           child: InkWell(
-            onTap: onTapMenuBox,
+            onTap: onTap,
             borderRadius: BorderRadius.circular(4),
           ),
         )

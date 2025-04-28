@@ -7,10 +7,10 @@ class AddCourse extends ConsumerStatefulWidget {
   const AddCourse({super.key});
 
   @override
-  ConsumerState<AddCourse> createState() => _AddCourseConsumerState();
+  ConsumerState<AddCourse> createState() => _AddCourseState();
 }
 
-class _AddCourseConsumerState extends ConsumerState<AddCourse> {
+class _AddCourseState extends ConsumerState<AddCourse> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   final costController = TextEditingController();

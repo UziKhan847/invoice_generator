@@ -6,17 +6,17 @@ import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/flexible_column_row.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 class LoginSignupPage extends ConsumerStatefulWidget {
   const LoginSignupPage({super.key});
 
   @override
-  ConsumerState<LoginSignupPage> createState() =>
-      _LoginSignupPageConsumerState();
+  ConsumerState<LoginSignupPage> createState() => _LoginSignupPageState();
 }
 
-class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
+class _LoginSignupPageState extends ConsumerState<LoginSignupPage>
     with SingleTickerProviderStateMixin {
 // Form State & Keys
   late final _formKey = GlobalKey<FormState>();
@@ -196,31 +196,33 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
             Positioned(
                 top: orientation == Orientation.portrait ? 60 : 30,
                 left: 40,
-                child: Text(
-                  "Hello,",
-                  style: TextStyle(fontSize: 34, color: textColor),
-                )),
-            Positioned(
-                top: orientation == Orientation.portrait ? 102 : 30,
-                left: orientation == Orientation.portrait ? 40 : 135,
-                child: Row(
+                child: FlexibleColumnRow(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Sign ",
+                      "Hello, ",
                       style: TextStyle(fontSize: 34, color: textColor),
                     ),
-                    buildAnimatedSwitcher(
-                      duration: duration,
-                      animatedChild: SizedBox(
-                        width: 60,
-                        key: ValueKey(onLoginPage),
-                        child: Text(
-                          onLoginPage ? "In!" : "Up!",
-                          textAlign: TextAlign.start,
+                    Row(
+                      children: [
+                        Text(
+                          "Sign ",
                           style: TextStyle(fontSize: 34, color: textColor),
                         ),
-                      ),
-                    ),
+                        buildAnimatedSwitcher(
+                          duration: duration,
+                          animatedChild: SizedBox(
+                            width: 60,
+                            key: ValueKey(onLoginPage),
+                            child: Text(
+                              onLoginPage ? "In!" : "Up!",
+                              textAlign: TextAlign.start,
+                              style: TextStyle(fontSize: 34, color: textColor),
+                            ),
+                          ),
+                        ),
+                      ],
+                    )
                   ],
                 )),
             Positioned(
@@ -235,6 +237,7 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
                   ? size.width
                   : size.height,
               child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 40),
                 decoration: BoxDecoration(
                     color: Theme.of(context).brightness == Brightness.dark
                         ? MyThemes.secondaryDark
@@ -263,7 +266,6 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
                               //Email
                               SizedBox(
                                 height: 65,
-                                width: 285,
                                 child: TextFormField(
                                   focusNode: focusNodes[0],
                                   controller: controllers[0],
@@ -280,6 +282,12 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
                                   },
                                   decoration: MyThemes.loginSignupTextField(
                                       labelText: " Email*",
+                                      labelColor:
+                                          Theme.of(context).brightness ==
+                                                  Brightness.dark
+                                              ? MyThemes.tertiaryLight
+                                                  .withAlpha(100)
+                                              : null,
                                       floatingLabelColor:
                                           themeMode == AppTheme.colorful
                                               ? colorfulModePrimary
@@ -289,7 +297,7 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
                               //Password
                               SizedBox(
                                 height: 65,
-                                width: 285,
+                                //width: 285,
                                 child: TextFormField(
                                   focusNode: focusNodes[1],
                                   controller: controllers[1],
@@ -334,11 +342,8 @@ class _LoginSignupPageConsumerState extends ConsumerState<LoginSignupPage>
                               Margins.vertical26,
                               ElevatedButton(
                                 style: ButtonStyle(
-                                    fixedSize:
-                                        const WidgetStatePropertyAll(Size(
-                                      285,
-                                      50,
-                                    )),
+                                    minimumSize: const WidgetStatePropertyAll(
+                                        Size(double.infinity, 50)),
                                     backgroundColor: WidgetStatePropertyAll(
                                       themeMode == AppTheme.colorful
                                           ? colorfulModePrimary

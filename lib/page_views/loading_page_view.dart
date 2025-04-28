@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:markaz_umaza_invoice_generator/pages/homepage.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_pages/loading_screen_page.dart';
 
 class LoadingPageView extends StatefulWidget {
@@ -21,7 +20,7 @@ class _LoadingPageViewState extends State<LoadingPageView> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (pageController.hasClients) {
         pageController.nextPage(
-            duration: Duration(milliseconds: 1000), curve: Curves.linear);
+            duration: const Duration(milliseconds: 1000), curve: Curves.linear);
       }
     });
   }

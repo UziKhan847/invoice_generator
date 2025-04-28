@@ -1,42 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/arrow_color.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
 
-class DropdownCourseTile extends StatelessWidget {
-  DropdownCourseTile({
+class DropDownCourseTile extends StatelessWidget {
+  DropDownCourseTile({
     super.key,
-    this.isFirstCourse = false,
-    this.isLastCourse = false,
     required this.isFocused,
     required this.courseNumber,
     required this.layerLink,
     this.courseController,
     this.quantityController,
     this.quantityFocus,
-    this.onTapAffirm,
-    this.onTapMenuBox,
-    this.onTapRemove,
+    this.onTap,
     this.textStyle,
-    this.arrowDownColor,
-    this.arrowUpColor,
+    this.arrowColor,
     this.isEnabled = true,
     required this.widgetKey,
   });
 
-  final bool isFirstCourse;
-  final bool isLastCourse;
   final bool isFocused;
   final bool isEnabled;
   final TextEditingController? courseController;
   final TextEditingController? quantityController;
   final FocusNode? quantityFocus;
   final int courseNumber;
-  final void Function()? onTapMenuBox;
-  final void Function()? onTapAffirm;
-  final void Function()? onTapRemove;
+  final void Function()? onTap;
   final TextStyle? textStyle;
-  final Color? arrowUpColor;
-  final Color? arrowDownColor;
+  final ArrowColor? arrowColor;
   final LayerLink layerLink;
   final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
   final leadingZerosRegex = RegExp(r'^0+\d');
@@ -55,8 +47,8 @@ class DropdownCourseTile extends StatelessWidget {
               layerLink: layerLink,
               widgetKey: widgetKey,
               textStyle: textStyle,
-              arrowUpColor: arrowUpColor,
-              arrowDownColor: arrowDownColor,
+              arrowUpColor: arrowColor!.dropUp,
+              arrowDownColor: arrowColor!.dropDown,
               controller: courseController,
               validator: (value) {
                 if (value == null || value.isEmpty) {
@@ -69,10 +61,8 @@ class DropdownCourseTile extends StatelessWidget {
               labelText: "Course $courseNumber*",
               labelTextSize: 16,
               isFocused: isFocused,
-              arrowRightPosition: 2,
-              arrowTopPosition: 12,
-              menuInkHeight: 47,
-              onTapMenuBox: onTapMenuBox,
+              inkWellSize: const InkWellSize(height: 47),
+              onTap: onTap,
             )),
         Margins.horizontal4,
         SizedBox(

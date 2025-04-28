@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/country.dart';
 import 'package:markaz_umaza_invoice_generator/models/province.dart';
@@ -15,10 +16,12 @@ class AddSender extends ConsumerStatefulWidget {
   const AddSender({super.key});
 
   @override
-  ConsumerState<AddSender> createState() => _AddSenderConsumerState();
+  ConsumerState<AddSender> createState() => _AddSenderState();
 }
 
-class _AddSenderConsumerState extends ConsumerState<AddSender> {
+class _AddSenderState extends ConsumerState<AddSender> {
+  static const double fieldHeight = 65;
+
 // Form
   final _formKey = GlobalKey<FormState>();
 
@@ -64,19 +67,6 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
     'country': GlobalKey(),
     'prov': GlobalKey(),
   };
-
-// Dropdown Items
-  // List<String> get provDropdownItems =>
-  //     Countries.countries[controllers['country']!.text]!['provinces']
-  //         as List<String>;
-
-// Regex and Validation
-  // RegExp get zipRegex => RegExp(Countries
-  //     .countries[controllers['country']!.text]!['postal_code_regex'] as String);
-
-  // RegExp get phoneRegex =>
-  //     RegExp(Countries.countries[controllers['country']!.text]!['phone_regex']
-  //         as String);
 
 // Derived Getters
   String get bnFormat {
@@ -168,20 +158,15 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "* required fields",
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                    ],
+                  Text(
+                    "* required fields",
+                    style: TextStyle(color: Colors.grey.shade600),
                   ),
                   Margins.vertical26,
 
                   //Name Field
                   SizedBox(
-                    height: 65,
+                    height: fieldHeight,
                     child: TextFormField(
                       focusNode: focusNodes['name']!,
                       controller: controllers['name']!,
@@ -201,7 +186,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                   //BN Field
                   SizedBox(
-                    height: 65,
+                    height: fieldHeight,
                     child: TextFormField(
                       focusNode: focusNodes['bn']!,
                       controller: controllers['bn']!,
@@ -230,7 +215,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   ),
                   Margins.vertical18,
 
-                  //Country DropDown Menu
+                  //Country dropDown Menu
                   DropdownMenuTile(
                     widgetKey: keys['country']!,
                     layerLink: layerLinks['country']!,
@@ -244,10 +229,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                     labelText: "Country*",
                     labelTextSize: 12.5,
                     isFocused: isCountryFocused,
-                    menuInkHeight: 47,
-                    menuInkWidth: 150,
-                    menuBoxWidth: 150,
-                    onTapMenuBox: () {
+                    inkWellSize: const InkWellSize(width: 150),
+                    onTap: () {
                       setState(() {
                         isCountryFocused = !isCountryFocused;
                       });
@@ -266,11 +249,11 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                         itemBuilder: (context, index) {
                           String item = Countries.countries[index].name;
 
-                          return DropdownItemTile(
-                            currentMenuIndex: index,
-                            itemText: item,
-                            menuItemHeight: 50,
-                            onItemTap: () {
+                          return DropDownItemTile(
+                            currentIndex: index,
+                            itemFormat: [Text(item)],
+                            height: 50,
+                            onTap: () {
                               setState(() {
                                 controllers['country']!.text = item;
                                 selectedCountryIndex = index;
@@ -287,7 +270,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                   //Street
                   SizedBox(
-                    height: 65,
+                    height: fieldHeight,
                     child: TextFormField(
                       focusNode: focusNodes['street']!,
                       controller: controllers['street']!,
@@ -311,7 +294,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                     children: [
                       //City
                       SizedBox(
-                        height: 65,
+                        height: fieldHeight,
                         width: 190,
                         child: TextFormField(
                           focusNode: focusNodes['city']!,
@@ -330,7 +313,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                       ),
 
                       if (controllers['country']!.text.isNotEmpty) ...[
-                        //Province DropDown Menu
+                        //Province dropDown Menu
                         DropdownMenuTile(
                           widgetKey: keys['prov']!,
                           layerLink: layerLinks['prov']!,
@@ -344,10 +327,8 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                           labelText: "Province*",
                           labelTextSize: 12.5,
                           isFocused: isProvFocused,
-                          menuInkHeight: 47,
-                          menuInkWidth: 68,
-                          menuBoxWidth: 68,
-                          onTapMenuBox: () {
+                          inkWellSize: const InkWellSize(width: 68),
+                          onTap: () {
                             setState(() {
                               isProvFocused = !isProvFocused;
                             });
@@ -375,11 +356,11 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                                   country.countryCode.isoTwo,
                                 );
 
-                                return DropdownItemTile(
-                                  currentMenuIndex: index,
-                                  itemText: item,
-                                  menuItemHeight: 50,
-                                  onItemTap: () {
+                                return DropDownItemTile(
+                                  currentIndex: index,
+                                  itemFormat: [Text(item)],
+                                  height: 50,
+                                  onTap: () {
                                     setState(() {
                                       controllers['prov']!.text = item;
                                       isProvFocused = !isProvFocused;
@@ -403,7 +384,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                     //Zip
                     SizedBox(
                       width: 100,
-                      height: 65,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['zip']!,
                         controller: controllers['zip']!,
@@ -430,7 +411,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   if (controllers['country']!.text.isNotEmpty) ...[
                     //Phone
                     SizedBox(
-                      height: 65,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['phone']!,
                         controller: controllers['phone']!,
@@ -456,7 +437,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
 
                   //Email
                   SizedBox(
-                    height: 65,
+                    height: fieldHeight,
                     child: TextFormField(
                       focusNode: focusNodes['email']!,
                       controller: controllers['email']!,
@@ -481,7 +462,7 @@ class _AddSenderConsumerState extends ConsumerState<AddSender> {
                   if (selectedCountryIndex == 0) ...[
                     //Etransfer
                     SizedBox(
-                      height: 65,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['eTransfer']!,
                         controller: controllers['eTransfer']!,

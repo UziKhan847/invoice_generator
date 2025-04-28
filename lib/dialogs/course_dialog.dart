@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
@@ -66,15 +67,11 @@ class _CourseDialogState extends State<CourseDialog> {
             children: [
               Column(
                 mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Text(
-                        "* required fields",
-                        style: TextStyle(color: Colors.grey.shade600),
-                      ),
-                    ],
+                  Text(
+                    "* required fields",
+                    style: TextStyle(color: Colors.grey.shade600),
                   ),
                   Margins.vertical26,
 
@@ -134,7 +131,7 @@ class _CourseDialogState extends State<CourseDialog> {
                             TextStyle(fontSize: 35, color: Color(0xFF868686)),
                       ),
 
-                      //Frequency DropDown Menu
+                      //Frequency dropDown Menu
                       DropdownMenuTile(
                         layerLink: layerLink,
                         labelText: "Frequency*",
@@ -146,10 +143,9 @@ class _CourseDialogState extends State<CourseDialog> {
                           return null;
                         },
                         isFocused: isFrequencySelected,
-                        menuInkHeight: 47,
-                        menuInkWidth: 66,
-                        menuBoxWidth: 66,
-                        onTapMenuBox: () {
+                        inkWellSize: const InkWellSize(height: 47, width: 66),
+   
+                        onTap: () {
                           setState(() {
                             isFrequencySelected = !isFrequencySelected;
                           });
@@ -167,11 +163,11 @@ class _CourseDialogState extends State<CourseDialog> {
                             itemBuilder: (context, index) {
                               String item = frequencyDropdowItems[index];
 
-                              return DropdownItemTile(
-                                currentMenuIndex: index,
-                                itemText: item,
-                                menuItemHeight: 50,
-                                onItemTap: () {
+                              return DropDownItemTile(
+                                currentIndex: index,
+                                itemFormat: [Text(item)],
+                                height: 50,
+                                onTap: () {
                                   setState(() {
                                     widget.frequencyController.text = item;
                                     isFrequencySelected = !isFrequencySelected;

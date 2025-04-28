@@ -46,7 +46,7 @@ class _LoadingProfileDataState extends ConsumerState<LoadingProfileData> {
         if (snapshot.connectionState == ConnectionState.done &&
             !snapshot.hasError) {
           if (provider.profile.isIncomplete) {
-            return LoadingPageView(
+            return const LoadingPageView(
               secondPage: SetupPage(),
             );
           }

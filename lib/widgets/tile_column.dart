@@ -9,7 +9,7 @@ class TileColumn extends StatelessWidget {
 
   final String textOne;
   final String textTwo;
-  final double? fontSize;
+  final double fontSize;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
 

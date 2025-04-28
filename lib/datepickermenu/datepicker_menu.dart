@@ -1,42 +1,28 @@
 import 'package:flutter/material.dart';
+import 'package:markaz_umaza_invoice_generator/datepickermenu/properties/icon_position.dart';
+import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 
 class DatepickerMenu extends StatelessWidget {
   const DatepickerMenu({
     super.key,
     required this.labelText,
     required this.isFocused,
-    required this.onTapMenuBox,
+    required this.onTap,
     required this.onTapDelete,
-    required this.menuInkHeight,
-    required this.menuInkWidth,
-    required this.menuBoxWidth,
+    this.inkWellSize = const InkWellSize(height: 47, width: 155),
+    this.width = 155,
     required this.controller,
-    this.iconBottomPosition,
-    this.iconLeftPosition,
-    this.iconRightPosition,
-    this.iconTopPosition,
-    this.deleteBottomPosition,
-    this.deleteLeftPosition,
-    this.deleteRightPosition,
-    this.deleteTopPosition,
+    this.iconPosition = const IconPosition(top: 10, right: 8),
   });
 
   final TextEditingController controller;
   final String? labelText;
   final bool isFocused;
-  final void Function()? onTapMenuBox;
+  final void Function()? onTap;
   final void Function()? onTapDelete;
-  final double? iconBottomPosition;
-  final double? iconLeftPosition;
-  final double? iconRightPosition;
-  final double? iconTopPosition;
-  final double? deleteBottomPosition;
-  final double? deleteLeftPosition;
-  final double? deleteRightPosition;
-  final double? deleteTopPosition;
-  final double? menuInkHeight;
-  final double? menuInkWidth;
-  final double? menuBoxWidth;
+  final IconPosition iconPosition;
+  final InkWellSize inkWellSize;
+  final double? width;
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +33,9 @@ class DatepickerMenu extends StatelessWidget {
         Stack(
           children: [
             SizedBox(
-              width: menuBoxWidth,
+              width: width,
               child: TextFormField(
+                readOnly: true,
                 controller: controller,
                 decoration: InputDecoration(
                   labelText: labelText,
@@ -67,18 +54,17 @@ class DatepickerMenu extends StatelessWidget {
               ),
             ),
             Positioned(
-                left: iconLeftPosition,
-                top: iconTopPosition,
-                right: iconRightPosition,
-                bottom: iconBottomPosition,
+                left: iconPosition.left,
+                top: iconPosition.top,
+                right: iconPosition.right,
+                bottom: iconPosition.bottom,
                 child: const Icon(Icons.date_range_rounded)),
-            Container(
-              height: menuInkHeight,
-              width: menuInkWidth,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4)),
-              child: InkWell(
-                onTap: onTapMenuBox,
-                borderRadius: BorderRadius.circular(4),
+            InkWell(
+              onTap: onTap,
+              borderRadius: BorderRadius.circular(4),
+              child: SizedBox(
+                height: inkWellSize.height,
+                width: inkWellSize.width,
               ),
             ),
           ],

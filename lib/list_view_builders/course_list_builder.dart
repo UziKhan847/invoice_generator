@@ -12,10 +12,10 @@ class CourseListBuilder extends ConsumerStatefulWidget {
 
   @override
   ConsumerState<CourseListBuilder> createState() =>
-      _CourseListBuilderConsumerState();
+      _CourseListBuilderState();
 }
 
-class _CourseListBuilderConsumerState extends ConsumerState<CourseListBuilder> {
+class _CourseListBuilderState extends ConsumerState<CourseListBuilder> {
   bool isLoading = false;
   final formKey = GlobalKey<FormState>();
   final costController = TextEditingController();

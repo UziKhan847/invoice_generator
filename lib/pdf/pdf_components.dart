@@ -1,4 +1,5 @@
 import 'package:markaz_umaza_invoice_generator/models/invoice_course.dart';
+import 'package:markaz_umaza_invoice_generator/pdf/pdf_fonts.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
@@ -52,7 +53,7 @@ class PdfComponents {
                       },
                       textAlign: pw.TextAlign.center,
                       style: pw.TextStyle(
-                        font: pw.Font.times(),
+                        font: PdfFonts.times,
                         fontSize: switch (i) { 1 || 2 => 12, _ => 14 },
                       )),
                 ),
@@ -62,7 +63,7 @@ class PdfComponents {
           for (int i = 0; i < 5; i++) ...[
             invoiceCourses[i] == null
                 ? PdfComponents.tableRow()
-                : PdfComponents.tableRow(font: pw.Font.times(), fontSizes: [
+                : PdfComponents.tableRow(font: PdfFonts.times, fontSizes: [
                     14,
                     12,
                     14,
@@ -75,15 +76,15 @@ class PdfComponents {
                   ]),
           ],
           PdfComponents.tableRow(
-              font: pw.Font.times(),
+              font: PdfFonts.times,
               columns: ["Subtotal", '', '', "\$$subtotal"]),
           PdfComponents.tableRow(
-            font: pw.Font.times(),
+            font: PdfFonts.times,
             columns: ["HST %13", '', '', "\$${hst ?? 0.0}"],
           ),
           if (!isInvoice)
             tableRow(
-              font: pw.Font.times(),
+              font: PdfFonts.times,
               columns: ["TOTAL", '', '', "\$$total"],
             ),
           pw.TableRow(
@@ -97,7 +98,7 @@ class PdfComponents {
           ),
           tableRow(
               fontWeight: pw.FontWeight.bold,
-              font: pw.Font.timesBold(),
+              font: PdfFonts.timesBold,
               columns: [
                 (isInvoice ? "TOTAL" : "PAID"),
                 '',

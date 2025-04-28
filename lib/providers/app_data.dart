@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
@@ -29,6 +30,7 @@ class AppData extends ChangeNotifier {
 
   late PostgrestMap profileData;
   late Profile profile;
+  late PostgrestMap updatedProfile;
 
   late PostgrestList receiptData;
   late List<Receipt> receipts;
@@ -64,6 +66,7 @@ class AppData extends ChangeNotifier {
     courses = [];
   }
 
+  //Profile
   Future<void> getProfileData() async {
     try {
       profileData = await supabase
@@ -74,7 +77,58 @@ class AppData extends ChangeNotifier {
 
       profile = Profile.fromJson(profileData);
     } catch (e) {
-      print("Error: $e");
+      print("$e");
+    }
+  }
+
+  Future<void> updateProfile({
+    required BuildContext context,
+    required String fullName,
+    required String? website,
+    required String country,
+    required String street,
+    required String city,
+    required String prov,
+    required String? zip,
+    required String phone,
+    required String email,
+    required String? businessNumber,
+    required String? currency,
+    required String logoUrl,
+  }) async {
+    try {
+      updatedProfile = await supabase
+          .from("profiles")
+          .update(
+            {
+              'full_name': fullName,
+              'business_number': businessNumber,
+              'street': street,
+              'city': city,
+              'province': prov,
+              'country': country,
+              'zip': zip,
+              'phone': phone,
+              'email': email,
+              'website': website,
+              'currency': currency,
+              'logo_url': logoUrl,
+            },
+          )
+          .select(selectProfile)
+          .single();
+
+      profile = Profile.fromJson(updatedProfile);
+
+      notifyListeners();
+
+      if (context.mounted) {
+        context.showSnackBar('Successfully updated profile!');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('$e', isError: true);
+      }
     }
   }
 

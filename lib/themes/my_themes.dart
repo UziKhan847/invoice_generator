@@ -22,11 +22,16 @@ class MyThemes {
   static const secondaryPurple = Color(0xFFDDB9FF);
 
   static InputDecoration loginSignupTextField(
-      {String? labelText, Color? floatingLabelColor, Widget? suffixIcon}) {
+      {String? labelText,
+      Color? labelColor,
+      Color? floatingLabelColor,
+      Widget? suffixIcon,
+      double? labelFontSize}) {
     return InputDecoration(
       labelText: labelText,
       labelStyle: TextStyle(
-        color: floatingLabelColor,
+        color: labelColor,
+        fontSize: labelFontSize,
       ),
       floatingLabelStyle: TextStyle(
         fontSize: 20,
@@ -95,9 +100,11 @@ class MyThemes {
     dialogTitleColor: secondaryLight,
     elvtdBtnBackColor: tertiaryDark,
     elvtdBtnForeColor: primaryLight,
-    fltnActBtnBackColor: primaryDark, //tertiaryDark,
-    fltnActBtnForeColor: secondaryLight, //primaryLight,
+    fltnActBtnBackColor: primaryDark,
+    fltnActBtnForeColor: secondaryLight,
+    labelColor: tertiaryLight,
     iconColor: primaryLight,
+    inputBrdrClr: const Color(0xFF7e7e7e),
     scaffoldBackgroundColor: primaryDark,
   );
 
@@ -117,6 +124,9 @@ class MyThemes {
     Color errorBrdrClr = const Color(0xFFF44336),
     Color focusedBrdrClr = const Color(0xFF135993),
     Color disabledBrdrClr = const Color(0xFF616161),
+    Color focusedErrorBrdrClr = primaryRed,
+    Color? labelColor,
+    double? labelFontSize,
     Color? scaffoldBackgroundColor,
     Color? onPrimary,
     Color? onSecondary,
@@ -142,7 +152,8 @@ class MyThemes {
             style: ButtonStyle(
               backgroundColor: WidgetStatePropertyAll(elvtdBtnBackColor),
               elevation: const WidgetStatePropertyAll(4),
-              fixedSize: const WidgetStatePropertyAll(Size(105, 20)),
+              //fixedSize: const WidgetStatePropertyAll(Size(105, 20)),
+              minimumSize: const WidgetStatePropertyAll(Size(105, 40)),
               foregroundColor: WidgetStatePropertyAll(elvtdBtnForeColor),
               overlayColor: WidgetStatePropertyAll(secondary),
             ),
@@ -157,14 +168,18 @@ class MyThemes {
           inputDecorationTheme: InputDecorationTheme(
             isDense: true,
             errorStyle: const TextStyle(height: 0, fontSize: 11),
+            labelStyle: TextStyle(
+              color: labelColor,
+              fontSize: labelFontSize,
+            ),
             border:
                 OutlineInputBorder(borderSide: BorderSide(color: inputBrdrClr)),
             focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: focusedBrdrClr)),
             errorBorder:
                 OutlineInputBorder(borderSide: BorderSide(color: errorBrdrClr)),
-            focusedErrorBorder:
-                OutlineInputBorder(borderSide: BorderSide(color: errorBrdrClr)),
+            focusedErrorBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: focusedErrorBrdrClr)),
             disabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: disabledBrdrClr)),
             floatingLabelBehavior: FloatingLabelBehavior.always,
