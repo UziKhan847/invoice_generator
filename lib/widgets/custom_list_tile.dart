@@ -32,6 +32,7 @@ class CustomListTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      clipBehavior: Clip.hardEdge,
       margin: isLastIndex
           ? const EdgeInsets.only(top: 5, bottom: 131)
           : const EdgeInsets.symmetric(vertical: 5),

@@ -223,6 +223,7 @@ class _HomepageState extends ConsumerState<Homepage>
                         }
                       },
                       child: const Text("Log Out")),
+                
                 ],
               ),
             ),

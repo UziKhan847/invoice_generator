@@ -1,0 +1,28 @@
+{
+  "buildFiles": [
+    "/home/uzi/Desktop/Coding/Flutter/flutter/packages/flutter_tools/gradle/src/main/groovy/CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "/home/uzi/Android/Sdk/cmake/3.22.1/bin/ninja",
+      "-C",
+      "/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/RelWithDebInfo/1f52674z/x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "/home/uzi/Android/Sdk/cmake/3.22.1/bin/ninja",
+    "-C",
+    "/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/RelWithDebInfo/1f52674z/x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {},
+  "toolchains": {
+    "toolchain": {
+      "cCompilerExecutable": "/home/uzi/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/clang.lld",
+      "cppCompilerExecutable": "/home/uzi/Android/Sdk/ndk/25.1.8937393/toolchains/llvm/prebuilt/linux-x86_64/bin/clang++.lld"
+    }
+  },
+  "cFileExtensions": [],
+  "cppFileExtensions": []
+}

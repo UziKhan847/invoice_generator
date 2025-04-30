@@ -20,7 +20,7 @@ class PdfGenerator {
     final pdf = pw.Document();
 
     // Load Logo
-    final img = await rootBundle.load("assets/images/markaz_umaza_logo.png");
+    final img = await rootBundle.load("assets/images/default_logo.png");
     final imageBytes = img.buffer.asUint8List();
     pw.Image logo = pw.Image(pw.MemoryImage(imageBytes));
 

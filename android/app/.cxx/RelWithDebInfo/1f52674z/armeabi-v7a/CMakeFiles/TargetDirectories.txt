@@ -1,0 +1,2 @@
+/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/RelWithDebInfo/1f52674z/armeabi-v7a/CMakeFiles/edit_cache.dir
+/home/uzi/Desktop/Coding/Flutter/Apps/markaz_umaza_invoice_generator/android/app/.cxx/RelWithDebInfo/1f52674z/armeabi-v7a/CMakeFiles/rebuild_cache.dir

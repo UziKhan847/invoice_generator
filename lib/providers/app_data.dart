@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
@@ -131,6 +130,9 @@ class AppData extends ChangeNotifier {
       }
     }
   }
+
+  //Get Logo
+  String? get logoPath => profile.logoUrl;
 
   //Fetch Data Methods
   Future<void> getData() async {
