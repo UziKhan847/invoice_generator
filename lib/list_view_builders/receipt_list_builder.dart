@@ -16,14 +16,15 @@ class ReceiptListBuilder extends ConsumerWidget {
     provider = ref.watch(appData);
 
     return Padding(
-  padding: const EdgeInsets.symmetric(horizontal: 6),
+      padding: const EdgeInsets.symmetric(horizontal: 6),
       child: ListView.builder(
           padding: const EdgeInsets.only(top: 0, bottom: 0),
           itemCount: receipts.length,
           itemBuilder: (context, index) {
             Receipt item = receipts[index];
-      
+
             return ReceiptTile(
+              profile: provider.profile,
               receipt: item,
               isLastIndex: index == receipts.length - 1,
               onTapDelete: () {
@@ -38,7 +39,7 @@ class ReceiptListBuilder extends ConsumerWidget {
                         onTapAffirm: () async {
                           await provider.deleteReceipt(
                               context: context, receiptId: item.receiptId);
-      
+
                           if (context.mounted) {
                             Navigator.pop(context);
                           }

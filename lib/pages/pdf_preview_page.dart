@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice_course.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
@@ -10,6 +11,7 @@ import 'package:printing/printing.dart';
 class PdfPreviewPage extends StatelessWidget {
   const PdfPreviewPage({
     super.key,
+    required this.profile,
     this.receipt,
     required this.invoice,
     required this.sender,
@@ -17,6 +19,7 @@ class PdfPreviewPage extends StatelessWidget {
     required this.invoiceCourses,
   });
 
+  final Profile profile;
   final Receipt? receipt;
   final Invoice invoice;
   final Sender sender;
@@ -41,6 +44,7 @@ class PdfPreviewPage extends StatelessWidget {
                 : const Color(0xFF421070),
           ),
           build: (context) => PdfGenerator.generatePdf(
+                profile: profile,
                 receipt: receipt,
                 invoice: invoice,
                 sender: sender,

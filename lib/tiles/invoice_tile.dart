@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/dividers.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
-import 'package:markaz_umaza_invoice_generator/utils/pdf_handler.dart';
+import 'package:markaz_umaza_invoice_generator/handlers/pdf_handler.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
@@ -13,11 +14,13 @@ import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 class InvoiceTile extends StatelessWidget {
   const InvoiceTile(
       {super.key,
+      required this.profile,
       required this.invoice,
       required this.isLastIndex,
       this.onTapDelete,
       this.onTapEdit});
 
+  final Profile profile;
   final Invoice invoice;
 
   final bool isLastIndex;
@@ -26,7 +29,7 @@ class InvoiceTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final pdfHandler = PdfHandler(invoice: invoice);
+    final pdfHandler = PdfHandler(profile: profile, invoice: invoice);
 
     return CustomListTile(
       isInvoiceReceipt: true,
@@ -37,6 +40,7 @@ class InvoiceTile extends StatelessWidget {
             context,
             MaterialPageRoute(
                 builder: (context) => PdfPreviewPage(
+                      profile: profile,
                       invoice: invoice,
                       sender: invoice.senders,
                       recipient: invoice.recipients,

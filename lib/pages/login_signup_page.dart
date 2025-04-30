@@ -72,7 +72,6 @@ class _LoginSignupPageState extends ConsumerState<LoginSignupPage>
     animation = Tween<double>(begin: 0, end: 1).animate(animController)
       ..addListener(() {
         lerp = animation.value;
-        print('onLoginPage: $onLoginPage, lerp: ${animation.value}');
 
         setState(() {});
       });

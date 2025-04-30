@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/pages/pdf_preview_page.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:markaz_umaza_invoice_generator/utils/dividers.dart';
 import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
-import 'package:markaz_umaza_invoice_generator/utils/pdf_handler.dart';
+import 'package:markaz_umaza_invoice_generator/handlers/pdf_handler.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/custom_list_tile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_column.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
@@ -14,11 +15,13 @@ import 'package:markaz_umaza_invoice_generator/widgets/tile_row.dart';
 class ReceiptTile extends StatelessWidget {
   const ReceiptTile(
       {super.key,
+      required this.profile,
       required this.receipt,
       required this.isLastIndex,
       this.onTapDelete,
       this.onTapEdit});
 
+  final Profile profile;
   final Receipt receipt;
 
   final bool isLastIndex;
@@ -32,7 +35,7 @@ class ReceiptTile extends StatelessWidget {
   Widget build(BuildContext context) {
     Invoice invoice = receipt.invoices;
 
-    final pdfHandler = PdfHandler(invoice: invoice, receipt: receipt);
+    final pdfHandler = PdfHandler(profile: profile, invoice: invoice, receipt: receipt);
 
     return CustomListTile(
         onTapDelete: onTapDelete,
@@ -43,6 +46,7 @@ class ReceiptTile extends StatelessWidget {
               context,
               MaterialPageRoute(
                   builder: (context) => PdfPreviewPage(
+                    profile: profile,
                         receipt: receipt,
                         invoice: invoice,
                         sender: invoice.senders,

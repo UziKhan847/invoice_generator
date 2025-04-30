@@ -29,7 +29,7 @@ class AppData extends ChangeNotifier {
 
   late PostgrestMap profileData;
   late Profile profile;
-  late PostgrestMap updatedProfile;
+  PostgrestMap updatedProfile = {};
 
   late PostgrestList receiptData;
   late List<Receipt> receipts;
@@ -76,7 +76,7 @@ class AppData extends ChangeNotifier {
 
       profile = Profile.fromJson(profileData);
     } catch (e) {
-      print("$e");
+      throw Exception("Exception: $e");
     }
   }
 
@@ -93,7 +93,7 @@ class AppData extends ChangeNotifier {
     required String email,
     required String? businessNumber,
     required String? currency,
-    required String logoUrl,
+    required String? logoUrl,
   }) async {
     try {
       updatedProfile = await supabase
@@ -114,6 +114,7 @@ class AppData extends ChangeNotifier {
               'logo_url': logoUrl,
             },
           )
+          .eq('id', userId)
           .select(selectProfile)
           .single();
 
@@ -131,8 +132,34 @@ class AppData extends ChangeNotifier {
     }
   }
 
-  //Get Logo
-  String? get logoPath => profile.logoUrl;
+  Future<void> updateLogo({
+    required BuildContext context,
+    required String? logoUrl,
+  }) async {
+      try {
+      await supabase.from("profiles").update(
+        {
+          'logo_url': logoUrl,
+        },
+      ).eq("id", userId);
+
+      profile.logoUrl = logoUrl;
+
+      notifyListeners();
+
+      if (context.mounted) {
+        context.showSnackBar('Successfully updated profile!');
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('Could not update the Profile. Error: $e',
+            isError: true);
+      }
+    }
+  }
+
+  // //Get Logo
+  // String? get logoPath => profile.logoUrl;
 
   //Fetch Data Methods
   Future<void> getData() async {

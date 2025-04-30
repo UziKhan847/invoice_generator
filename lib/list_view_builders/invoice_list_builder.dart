@@ -30,6 +30,7 @@ class _InvoiceListBuilderState extends ConsumerState<InvoiceListBuilder> {
             Invoice item = widget.filteredInvoices.reversed.toList()[index];
 
             return InvoiceTile(
+              profile: provider.profile,
               isLastIndex: index == widget.filteredInvoices.length - 1,
               invoice: item,
               onTapDelete: () {

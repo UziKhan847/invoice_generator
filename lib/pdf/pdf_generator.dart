@@ -1,16 +1,21 @@
+import 'dart:io';
+
 import 'package:flutter/services.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice_course.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_components.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_margins.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_page_sections.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class PdfGenerator {
   static Future<Uint8List> generatePdf({
+    required Profile profile,
     Receipt? receipt,
     required Invoice invoice,
     required Sender sender,
@@ -20,8 +25,19 @@ class PdfGenerator {
     final pdf = pw.Document();
 
     // Load Logo
-    final img = await rootBundle.load("assets/images/default_logo.png");
-    final imageBytes = img.buffer.asUint8List();
+    final logoUrl = profile.logoUrl;
+    final dir = await getTemporaryDirectory();
+    final file = File("${dir.path}/$logoUrl");
+
+    Uint8List imageBytes;
+
+    if (logoUrl != null && await file.exists()) {
+      imageBytes = await file.readAsBytes();
+    } else {
+      final img = await rootBundle.load("assets/images/default_logo.png");
+      imageBytes = img.buffer.asUint8List();
+    }
+
     pw.Image logo = pw.Image(pw.MemoryImage(imageBytes));
 
     pdf.addPage(pw.Page(build: (context) {

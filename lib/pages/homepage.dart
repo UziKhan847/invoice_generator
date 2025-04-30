@@ -7,6 +7,7 @@ import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_recipient.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_sender.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/string_extension.dart';
+import 'package:markaz_umaza_invoice_generator/handlers/image_handler.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/recipient_list_builder.dart';
@@ -171,6 +172,7 @@ class _HomepageState extends ConsumerState<Homepage>
     provider = ref.watch(appData);
     themeMode = ref.watch(themeProvider);
     themeNotifier = ref.read(themeProvider.notifier);
+    final logoUrl = "${provider.userId}_compressed_logo.png";
 
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -197,7 +199,7 @@ class _HomepageState extends ConsumerState<Homepage>
             child: Center(
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 20,
+                spacing: 10,
                 children: [
                   ElevatedButton(
                       onPressed: () {
@@ -223,7 +225,23 @@ class _HomepageState extends ConsumerState<Homepage>
                         }
                       },
                       child: const Text("Log Out")),
-                
+                  ElevatedButton(
+                      onPressed: () async {
+                        try {
+                          final imageHandler = ImageHandler(logoUrl: logoUrl);
+
+                          final isFinished =
+                              await imageHandler.uploadAndSaveImage(context);
+
+                          if (isFinished && context.mounted) {
+                            await provider.updateLogo(
+                                context: context, logoUrl: logoUrl);
+                          }
+                        } catch (e) {
+                          throw Exception("Exception: $e");
+                        }
+                      },
+                      child: const Text("Update Logo")),
                 ],
               ),
             ),

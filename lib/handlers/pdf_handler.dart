@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/pdf/pdf_generator.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
@@ -11,8 +12,9 @@ import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:permission_handler/permission_handler.dart';
 
 class PdfHandler {
-  PdfHandler({required this.invoice, this.receipt});
+  PdfHandler({required this.invoice, this.receipt, required this.profile});
 
+  final Profile profile;
   final Invoice invoice;
   final Receipt? receipt;
 
@@ -31,6 +33,7 @@ class PdfHandler {
   Future<void> sendEmail(BuildContext context) async {
     try {
       final pdfPath = await getPdfFilePath(PdfGenerator.generatePdf(
+        profile: profile,
         receipt: receipt,
         invoice: invoice,
         sender: invoice.senders,
@@ -85,6 +88,7 @@ class PdfHandler {
       final file = File(filePath);
 
       await file.writeAsBytes(await PdfGenerator.generatePdf(
+        profile: profile,
         receipt: receipt,
         invoice: invoice,
         sender: invoice.senders,
