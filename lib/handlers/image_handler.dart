@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'dart:typed_data';
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
@@ -49,10 +48,9 @@ class ImageHandler {
     }
   }
 
-  Future<bool> uploadAndSaveImage(BuildContext context) async {
+  Future<bool> uploadAndSaveImage(BuildContext context, Uint8List? image) async {
     try {
-      final image = await getImageAsBytes();
-
+      
       if (image == null) {
         return false;
       }

@@ -524,44 +524,6 @@ class AppData extends ChangeNotifier {
     }
   }
 
-  // Future<void> updateCourse({
-  //   required BuildContext context,
-  //   required int courseId,
-  //   required String name,
-  //   required double cost,
-  //   required String frequency,
-  // }) async {
-  //   try {
-  //     newCourse = await supabase
-  //         .from("courses")
-  //         .update(
-  //           {
-  //             'name': name,
-  //             'cost': cost,
-  //             'cost_frequency': frequency,
-  //           },
-  //         )
-  //         .eq('course_id', courseId)
-  //         .select('course_id, name, cost, cost_frequency');
-
-  //     courses.removeWhere((e) => e.courseId == courseId);
-
-  //     courses.add(Course.fromJson(newCourse[0]));
-
-  //     courses.sort((a, b) => a.courseId.compareTo(b.courseId));
-
-  //     notifyListeners();
-
-  //     if (context.mounted) {
-  //       context.showSnackBar('Successfully Added Course');
-  //     }
-  //   } catch (e) {
-  //     if (context.mounted) {
-  //       context.showSnackBar('$e', isError: true);
-  //     }
-  //   }
-  // }
-
   Future<void> deleteCourse(
       {required BuildContext context, required int courseId}) async {
     try {

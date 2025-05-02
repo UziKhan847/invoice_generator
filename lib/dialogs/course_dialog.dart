@@ -33,13 +33,22 @@ class CourseDialog extends StatefulWidget {
 
 class _CourseDialogState extends State<CourseDialog> {
   bool isFrequencySelected = false;
-  List<String> frequencyDropdowItems = ["Hr", "Day", "Wk", "Mo", "Yr"];
+  final List<String> frequencyDropdowItems = ["Hr", "Day", "Wk", "Mo", "Yr"];
   final nameFocus = FocusNode();
   final costFocus = FocusNode();
   final quantityFocus = FocusNode();
   final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
   final leadingZerosRegex = RegExp(r'^0+\d');
+  final courseKey = GlobalKey();
   late final layerLink = LayerLink();
+
+  @override
+  void dispose() {
+    nameFocus.dispose();
+    costFocus.dispose();
+    quantityFocus.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,6 +142,7 @@ class _CourseDialogState extends State<CourseDialog> {
 
                       //Frequency dropDown Menu
                       DropdownMenuTile(
+                        widgetKey: courseKey,
                         layerLink: layerLink,
                         labelText: "Frequency*",
                         controller: widget.frequencyController,
@@ -144,13 +154,13 @@ class _CourseDialogState extends State<CourseDialog> {
                         },
                         isFocused: isFrequencySelected,
                         inkWellSize: const InkWellSize(height: 47, width: 66),
-   
                         onTap: () {
                           setState(() {
                             isFrequencySelected = !isFrequencySelected;
                           });
 
                           context.insertOverlay(
+                            widgetKey: courseKey,
                             context: context,
                             layerLink: layerLink,
                             onTapOutsideOverlay: () {

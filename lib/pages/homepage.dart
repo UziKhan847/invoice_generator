@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_course.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_invoice.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
@@ -18,6 +19,7 @@ import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/speed_dial_menu.dart';
 
 class Homepage extends ConsumerStatefulWidget {
   const Homepage({super.key});
@@ -183,7 +185,7 @@ class _HomepageState extends ConsumerState<Homepage>
             themeMode == AppTheme.colorful ? MyThemes.secondaryLight : null,
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          toolbarHeight: 50, //10,
+          toolbarHeight: 10,
           flexibleSpace: Container(
             decoration: switch (themeMode) {
               AppTheme.colorful => BoxDecoration(
@@ -196,55 +198,61 @@ class _HomepageState extends ConsumerState<Homepage>
                   color: Theme.of(context).appBarTheme.backgroundColor,
                 )
             },
-            child: Center(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                spacing: 10,
-                children: [
-                  ElevatedButton(
-                      onPressed: () {
-                        switch (themeMode) {
-                          case AppTheme.light:
-                            themeNotifier.setTheme(AppTheme.dark);
-                          case AppTheme.dark:
-                            themeNotifier.setTheme(AppTheme.colorful);
-                          default:
-                            themeNotifier.setTheme(AppTheme.light);
-                        }
-                      },
-                      child: Text(themeMode.name.toCapitalized)),
-                  ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          provider.resetData();
-                          await supabase.auth.signOut();
-                        } catch (e) {
-                          if (mounted) {
-                            rethrow;
-                          }
-                        }
-                      },
-                      child: const Text("Log Out")),
-                  ElevatedButton(
-                      onPressed: () async {
-                        try {
-                          final imageHandler = ImageHandler(logoUrl: logoUrl);
+            // child: Center(
+            //   child: Row(
+            //     mainAxisAlignment: MainAxisAlignment.center,
+            //     spacing: 10,
+            //     children: [
+            //       ElevatedButton(
+            //           onPressed: () {
+            //             switch (themeMode) {
+            //               case AppTheme.light:
+            //                 themeNotifier.setTheme(AppTheme.dark);
+            //               case AppTheme.dark:
+            //                 themeNotifier.setTheme(AppTheme.colorful);
+            //               default:
+            //                 themeNotifier.setTheme(AppTheme.light);
+            //             }
+            //           },
+            //           child: Text(themeMode.name.toCapitalized)),
+            //       ElevatedButton(
+            //           onPressed: () async {
+            //             try {
+            //               provider.resetData();
+            //               await supabase.auth.signOut();
+            //             } catch (e) {
+            //               if (mounted) {
+            //                 rethrow;
+            //               }
+            //             }
+            //           },
+            //           child: const Text("Log Out")),
+            //       ElevatedButton(
+            //           onPressed: () async {
+            //             try {
+            //               final imageHandler = ImageHandler(logoUrl: logoUrl);
 
-                          final isFinished =
-                              await imageHandler.uploadAndSaveImage(context);
+            //               final image = await imageHandler.getImageAsBytes();
 
-                          if (isFinished && context.mounted) {
-                            await provider.updateLogo(
-                                context: context, logoUrl: logoUrl);
-                          }
-                        } catch (e) {
-                          throw Exception("Exception: $e");
-                        }
-                      },
-                      child: const Text("Update Logo")),
-                ],
-              ),
-            ),
+            //               bool isFinished = false;
+
+            //               if (context.mounted) {
+            //                 isFinished = await imageHandler.uploadAndSaveImage(
+            //                     context, image);
+            //               }
+
+            //               if (isFinished && context.mounted) {
+            //                 await provider.updateLogo(
+            //                     context: context, logoUrl: logoUrl);
+            //               }
+            //             } catch (e) {
+            //               throw Exception("Exception: $e");
+            //             }
+            //           },
+            //           child: const Text("Update Logo")),
+            //     ],
+            //   ),
+            // ),
           ),
         ),
         body: PageView(
@@ -270,8 +278,10 @@ class _HomepageState extends ConsumerState<Homepage>
         ),
         floatingActionButton: pageAnimValue % 1 != 0
             ? null
-            : FloatingActionButton(
-                onPressed: () => showDialog<String>(
+            : SpeedDialMenu(
+                indicatorColor: indicatorColor,
+                navBarColor: navBarColor,
+                onTapAddItem: () => showDialog<String>(
                     barrierDismissible: false,
                     context: context,
                     builder: (BuildContext context) => switch (pageAnimValue) {
@@ -281,10 +291,53 @@ class _HomepageState extends ConsumerState<Homepage>
                           4 => const AddReceipt(),
                           _ => const AddInvoice(),
                         }),
-                backgroundColor:
-                    themeMode == AppTheme.colorful ? navBarColor : null,
-                child: const Icon(Icons.add),
-              ),
+                onTapLogout: () async {
+                  try {
+                    provider.resetData();
+                    await supabase.auth.signOut();
+                  } catch (e) {
+                    if (mounted) {
+                      rethrow;
+                    }
+                  }
+                },
+                onTapSwitchTheme: () {
+                  switch (themeMode) {
+                    case AppTheme.light:
+                      themeNotifier.setTheme(AppTheme.dark);
+                    case AppTheme.dark:
+                      themeNotifier.setTheme(AppTheme.colorful);
+                    default:
+                      themeNotifier.setTheme(AppTheme.light);
+                  }
+                },
+                page: pageAnimValue,
+                themeIcon: switch (themeMode) {
+                  AppTheme.light => Icons.light_mode_outlined,
+                  AppTheme.dark => Icons.mode_night_outlined,
+                  _ => Icons.color_lens_outlined
+                },
+                themeLabel: switch (themeMode) {
+                  AppTheme.light => 'Light',
+                  AppTheme.dark => 'Dark',
+                  _ => 'Colorful',
+                }),
+
+        // FloatingActionButton(
+        //     onPressed: () => showDialog<String>(
+        //         barrierDismissible: false,
+        //         context: context,
+        //         builder: (BuildContext context) => switch (pageAnimValue) {
+        //               1 => const AddSender(),
+        //               2 => const AddRecipient(),
+        //               3 => const AddCourse(),
+        //               4 => const AddReceipt(),
+        //               _ => const AddInvoice(),
+        //             }),
+        //     backgroundColor:
+        //         themeMode == AppTheme.colorful ? navBarColor : null,
+        //     child: const Icon(Icons.add),
+        //   ),
         bottomNavigationBar: GestureDetector(
           onHorizontalDragUpdate: (details) {
             pageController.jumpTo(

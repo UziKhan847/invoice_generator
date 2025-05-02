@@ -103,7 +103,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   @override
   Widget build(BuildContext context) {
-    themeMode = ref.read(themeProvider);
+
     final orientation = MediaQuery.of(context).orientation;
 
     return Scaffold(
