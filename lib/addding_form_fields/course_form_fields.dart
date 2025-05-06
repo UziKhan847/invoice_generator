@@ -34,7 +34,8 @@ class _CourseDialogState extends State<CourseFormFields> {
     "Day",
     "Wk",
     "Mo",
-    "Yr"
+    "Yr",
+    "Ttl"
   ];
   late final focusNodes = {
     'name': FocusNode(),

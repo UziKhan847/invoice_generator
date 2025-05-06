@@ -20,6 +20,8 @@ class AddRecipient extends ConsumerStatefulWidget {
 }
 
 class _AddRecipientState extends ConsumerState<AddRecipient> {
+  static const double fieldHeight = 65;
+
 //  Form % Scroll
   final _formKey = GlobalKey<FormState>();
   late ScrollPhysics scrollPhysics = const AlwaysScrollableScrollPhysics();
@@ -232,7 +234,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       children: [
                         //City
                         SizedBox(
-                          height: 65,
+                          height: fieldHeight,
                           width: 190,
                           child: TextFormField(
                             focusNode: focusNodes['city']!,
@@ -321,7 +323,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
 
                     //Street
                     SizedBox(
-                      height: 65,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['street']!,
                         controller: controllers['street']!,
@@ -343,8 +345,8 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                     //     null)
                     //Zip
                     SizedBox(
-                      width: 100,
-                      height: 65,
+                      width: 165,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['zip']!,
                         controller: controllers['zip']!,
@@ -373,7 +375,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
 
                     //Phone
                     SizedBox(
-                      height: 65,
+                      height: fieldHeight,
                       child: TextFormField(
                         focusNode: focusNodes['phone']!,
                         controller: controllers['phone']!,
@@ -403,7 +405,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
 
                   //Email
                   SizedBox(
-                    height: 65,
+                    height: fieldHeight,
                     child: TextFormField(
                       focusNode: focusNodes['email']!,
                       controller: controllers['email']!,
