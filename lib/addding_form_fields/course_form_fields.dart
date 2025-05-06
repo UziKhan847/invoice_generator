@@ -134,7 +134,7 @@ class _CourseDialogState extends State<CourseFormFields> {
                           },
                           decoration: const InputDecoration(
                             prefix: Text("\$"),
-                            labelText: "Cost (CAD)*",
+                            labelText: "Cost*",
                           ),
                         ),
                       ),
@@ -181,7 +181,8 @@ class _CourseDialogState extends State<CourseFormFields> {
 
                               return DropDownItemTile(
                                 currentIndex: index,
-                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8),
                                 itemFormat: Text(
                                   item,
                                   textAlign: TextAlign.center,

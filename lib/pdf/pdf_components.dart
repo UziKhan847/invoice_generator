@@ -46,7 +46,7 @@ class PdfComponents {
                   padding: const pw.EdgeInsets.all(3.0),
                   child: pw.Text(
                       switch (i) {
-                        1 => "COST (CAD)",
+                        1 => "COST",
                         2 => 'QUANTITY',
                         3 => 'AMOUNT',
                         _ => "DESCRIPTION"

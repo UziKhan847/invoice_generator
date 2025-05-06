@@ -20,7 +20,6 @@ dependencies:
   analyzer: ^6.7.0
   flutter_launcher_icons: ^0.14.3
   image: ^4.5.2
-  google_nav_bar: ^5.0.7
   flutter_slidable: ^4.0.0
   flutter_email_sender: ^7.0.0
   path_provider: ^2.1.5
@@ -28,7 +27,6 @@ dependencies:
   shared_preferences: ^2.5.3
   path: ^1.9.1
   image_picker: ^1.1.2
-  flutter_image_compress: ^2.4.0
   flutter_speed_dial: ^7.0.0
   share_plus: ^11.0.0
   dotted_border: ^2.1.0

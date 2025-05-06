@@ -297,8 +297,12 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
 
                                 return DropDownItemTile(
                                   currentIndex: index,
-                                  itemFormat: Text(item),
-                                  height: 50,
+                                  padding:
+                                      const EdgeInsets.symmetric(vertical: 8),
+                                  itemFormat: Text(
+                                    item,
+                                    textAlign: TextAlign.center,
+                                  ),
                                   onTap: () {
                                     controllers['prov']!.text = item;
                                     isProvFocused = !isProvFocused;
@@ -382,7 +386,8 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                                   .countries[selectedCountryIndex].phoneRegex !=
                               null) {
                             if (!RegExp(Countries
-                                    .countries[selectedCountryIndex].phoneRegex!)
+                                    .countries[selectedCountryIndex]
+                                    .phoneRegex!)
                                 .hasMatch(value)) {
                               return 'Please enter a valid Phone Number';
                             }

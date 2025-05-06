@@ -36,21 +36,15 @@ class ImageHandler {
         return img.encodePng(resizedImage);
       }
 
-      // final fileExtension = image.name.split('.').last.toLowerCase();
-      // if (fileExtension != 'png') {
-      //   return await FlutterImageCompress.compressWithList(bytes,
-      //       format: CompressFormat.png);
-      // }
-
       return img.encodePng(originalImage);
     } catch (e) {
       return null;
     }
   }
 
-  Future<bool> uploadAndSaveImage(BuildContext context, Uint8List? image) async {
+  Future<bool> uploadAndSaveImage(
+      BuildContext context, Uint8List? image) async {
     try {
-      
       if (image == null) {
         return false;
       }
