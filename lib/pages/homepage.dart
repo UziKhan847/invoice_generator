@@ -16,6 +16,7 @@ import 'package:markaz_umaza_invoice_generator/pages/invoice_page.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
+import 'package:markaz_umaza_invoice_generator/update_item/update_profile.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/nav_bar_item.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/speed_dial_menu.dart';
 
@@ -222,7 +223,6 @@ class _HomepageState extends ConsumerState<Homepage>
         floatingActionButton: pageAnimValue % 1 != 0
             ? null
             : SpeedDialMenu(
-         
                 textColor: switch (themeMode) {
                   AppTheme.light => Colors.black,
                   _ => Colors.white
@@ -261,6 +261,12 @@ class _HomepageState extends ConsumerState<Homepage>
                     default:
                       themeNotifier.setTheme(AppTheme.light);
                   }
+                },
+                onTapUpdateProfile: () {
+                  showDialog<String>(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) => const UpdateProfile());
                 },
                 onTapUploadLogo: () async {
                   try {

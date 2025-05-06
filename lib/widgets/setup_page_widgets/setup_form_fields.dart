@@ -8,8 +8,8 @@ import 'package:markaz_umaza_invoice_generator/models/province.dart';
 import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
 
-class FormFields extends StatefulWidget {
-  const FormFields(
+class SetupFormFields extends StatefulWidget {
+  const SetupFormFields(
       {super.key,
       required this.controllers,
       required this.orientation,
@@ -22,10 +22,10 @@ class FormFields extends StatefulWidget {
   final Orientation orientation;
 
   @override
-  State<FormFields> createState() => _InfoPageState();
+  State<SetupFormFields> createState() => _SetupFormFieldsState();
 }
 
-class _InfoPageState extends State<FormFields> {
+class _SetupFormFieldsState extends State<SetupFormFields> {
   static const double fieldHeight = 65;
 
   // Layer Link

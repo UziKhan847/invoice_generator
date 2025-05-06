@@ -7,7 +7,7 @@ import 'package:markaz_umaza_invoice_generator/pages/loading_pages/loading_scree
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 import 'package:markaz_umaza_invoice_generator/providers/logo_image_data.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/logo_upload.dart';
-import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/form_fields.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/setup_form_fields.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
@@ -193,7 +193,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                     key: pageKey,
                     onPageChanged: (value) {},
                     children: [
-                      FormFields(
+                      SetupFormFields(
                         controllers: textControllers,
                         selectedCountryIndex: selectedCountryIndex,
                         updateSlctdCtryIndex: updateSlctdCtryIndex,

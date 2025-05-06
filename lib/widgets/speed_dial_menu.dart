@@ -11,6 +11,7 @@ class SpeedDialMenu extends StatelessWidget {
     required this.onTapAddItem,
     required this.onTapLogout,
     required this.onTapSwitchTheme,
+    required this.onTapUpdateProfile,
     required this.onTapUploadLogo,
     required this.page,
     required this.themeIcon,
@@ -28,6 +29,7 @@ class SpeedDialMenu extends StatelessWidget {
   final VoidCallback onTapLogout;
   final VoidCallback onTapSwitchTheme;
   final VoidCallback onTapUploadLogo;
+  final VoidCallback onTapUpdateProfile;
 
   final ValueNotifier<bool> isDialOpen = ValueNotifier<bool>(false);
 
@@ -66,6 +68,14 @@ class SpeedDialMenu extends StatelessWidget {
           child: Icon(
             themeIcon,
           ),
+        ),
+        SpeedDialChild(
+          onTap: () {
+            onTapUpdateProfile();
+            isDialOpen.value = false;
+          },
+          label: "Upload Profile",
+          child: const Icon(Icons.person),
         ),
         SpeedDialChild(
           onTap: onTapUploadLogo,
