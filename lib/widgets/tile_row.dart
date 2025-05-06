@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
 
 class TileRow extends StatelessWidget {
-  const TileRow(this.textOne, this.textTwo,
-      {super.key,
-      this.fontSize = 12,
-      this.mainAxisAlignment = MainAxisAlignment.start,
-      this.crossAxisAlignment = CrossAxisAlignment.center});
+  const TileRow(
+    this.textOne,
+    this.textTwo, {
+    super.key,
+    this.fontSize = 12,
+    this.mainAxisAlignment = MainAxisAlignment.start,
+    this.crossAxisAlignment = CrossAxisAlignment.center,
+    this.mainAxisSize = MainAxisSize.max,
+  });
 
   final String textOne;
   final String textTwo;
   final double fontSize;
   final MainAxisAlignment mainAxisAlignment;
   final CrossAxisAlignment crossAxisAlignment;
+  final MainAxisSize mainAxisSize;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +25,7 @@ class TileRow extends StatelessWidget {
     return Row(
       mainAxisAlignment: mainAxisAlignment,
       crossAxisAlignment: crossAxisAlignment,
+      mainAxisSize: mainAxisSize,
       children: [
         Text(
           textOne,

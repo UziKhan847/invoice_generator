@@ -15,6 +15,7 @@ class CustomListTile extends StatelessWidget {
     this.onTapMail,
     this.onTapPreview,
     this.onTapSave,
+    this.onTapShare,
     this.isInvoiceReceipt = false,
   });
 
@@ -27,6 +28,7 @@ class CustomListTile extends StatelessWidget {
   final VoidCallback? onTapEdit;
   final VoidCallback? onTapPreview;
   final VoidCallback? onTapSave;
+  final VoidCallback? onTapShare;
   final bool isInvoiceReceipt;
 
   @override
@@ -34,8 +36,8 @@ class CustomListTile extends StatelessWidget {
     return Container(
       clipBehavior: Clip.hardEdge,
       margin: isLastIndex
-          ? const EdgeInsets.only(top: 5, bottom: 131)
-          : const EdgeInsets.symmetric(vertical: 5),
+          ? const EdgeInsets.only(top: 10, bottom: 131)
+          : const EdgeInsets.only(top: 10),
       decoration: BoxDecoration(
         color: Theme.of(context).brightness == Brightness.dark
             ? MyThemes.secondaryDark
@@ -47,38 +49,42 @@ class CustomListTile extends StatelessWidget {
             ? null
             : ActionPane(motion: const BehindMotion(), children: [
                 SlidableItem(
-                  icon: Icons.picture_as_pdf,
-                  text: 'Preview',
-                  onTap: onTapPreview,
-                  backgroundColor: const Color.fromARGB(255, 95, 0, 119),
-                  splashColor: const Color.fromARGB(255, 203, 13, 255),
-                  itemPosition: SlidableItemPosition.first,
+                  icon: Icons.download,
+                  text: 'Download',
+                  onTap: onTapSave,
+                  backgroundColor: const Color(0xFF003C77),
+                  splashColor: const Color(0xFF0D86FF),
+                ),
+                SlidableItem(
+                  icon: Icons.share,
+                  text: 'Share',
+                  onTap: onTapShare,
+                  backgroundColor: const Color(0xFF520088),
+                  splashColor: const Color(0xFFBB0FFF),
+                ),
+                SlidableItem(
+                  icon: Icons.mail,
+                  text: 'Mail',
+                  onTap: onTapMail,
+                  backgroundColor: const Color(0xFF7E5000),
+                  splashColor: const Color(0xFFFFA70F),
                 ),
               ]),
         endActionPane: ActionPane(motion: const BehindMotion(), children: [
           if (isInvoiceReceipt)
             SlidableItem(
-              icon: Icons.download,
-              text: 'Download',
-              onTap: onTapSave,
-              backgroundColor: const Color(0xFF003C77),
-              splashColor: const Color(0xFF0D86FF),
-            ),
-          if (isInvoiceReceipt)
-            SlidableItem(
-              icon: Icons.mail,
-              text: 'Mail',
-              onTap: onTapMail,
-              backgroundColor: const Color(0xFF965F00),
-              splashColor: const Color(0xFFFFA70F),
+              icon: Icons.picture_as_pdf,
+              text: 'Preview',
+              onTap: onTapPreview,
+              backgroundColor: const Color(0xFF096900),
+              splashColor: const Color(0xFF0CFF1B),
             ),
           SlidableItem(
             icon: Icons.delete,
             text: 'Delete',
             onTap: onTapDelete,
-            backgroundColor: const Color(0xFF8F0000),
-            splashColor: const Color(0xFFFF1010),
-            itemPosition: SlidableItemPosition.last,
+            backgroundColor: const Color(0xFF880000),
+            splashColor: const Color(0xFFFF0F0F),
           ),
         ]),
         child: Padding(
@@ -94,5 +100,3 @@ class CustomListTile extends StatelessWidget {
     );
   }
 }
-
-enum SlidableItemPosition { first, last, middle }

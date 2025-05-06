@@ -1,13 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/string_extension.dart';
+import 'package:markaz_umaza_invoice_generator/handlers/image_handler.dart';
 import 'package:markaz_umaza_invoice_generator/pages/loading_pages/loading_data_page.dart';
-import 'package:markaz_umaza_invoice_generator/pages/setup_pages/image_upload_page.dart';
-import 'package:markaz_umaza_invoice_generator/pages/setup_pages/info_page.dart';
+import 'package:markaz_umaza_invoice_generator/pages/loading_pages/loading_screen_page.dart';
+import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
+import 'package:markaz_umaza_invoice_generator/providers/logo_image_data.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/logo_upload.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/form_fields.dart';
 import 'package:markaz_umaza_invoice_generator/providers/theme_switcher.dart';
 import 'package:markaz_umaza_invoice_generator/themes/my_themes.dart';
 import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/flexible_column_row.dart';
 import 'package:markaz_umaza_invoice_generator/widgets/flexible_row_column.dart';
+import 'package:markaz_umaza_invoice_generator/widgets/setup_page_widgets/page_nav_button.dart';
 
 class SetupPage extends ConsumerStatefulWidget {
   const SetupPage({super.key});
@@ -17,21 +23,29 @@ class SetupPage extends ConsumerStatefulWidget {
 }
 
 class _SetupPageState extends ConsumerState<SetupPage> {
-  // Theme
+// Theme & Styling
   late AppTheme themeMode;
 
   Color? get textColor =>
       themeMode == AppTheme.colorful ? MyThemes.primaryLight : null;
 
-  // Form
+// Providers & Data
+  late AppData provider;
+
+// Form State & Keys
   late final _formKey = GlobalKey<FormState>();
+  late final pageKey = const PageStorageKey('outerPage');
 
-  // UI State
+// UI State
+  bool onPageTwo = false;
   late bool isLoading = false;
+  late int selectedCountryIndex = 0;
 
-// // Controllers
-  late final pageControllers = [PageController(), PageController()];
-  late final controllers = {
+// Page & Input Controllers
+  late final setupPageController = PageController();
+  late final formFlowController = PageController();
+
+  late final textControllers = {
     'name': TextEditingController(),
     'bn': TextEditingController(),
     'street': TextEditingController(),
@@ -45,29 +59,32 @@ class _SetupPageState extends ConsumerState<SetupPage> {
     'currency': TextEditingController(),
   };
 
+// Form Logic
   bool get fieldsIncomplete {
-    return controllers.entries.any((entry) {
+    return textControllers.entries.any((entry) {
       final key = entry.key;
       final value = entry.value.text;
 
       if (key == 'bn' || key == 'website') return false;
 
       if (key == 'zip') {
-        if (Countries.countries[selectedCountryIndex].postalCodeRegex != null) {
-          return false;
-        }
+        final country = Countries.countries[selectedCountryIndex];
+        if (country.postalCodeRegex != null) return false;
       }
 
       return value.isEmpty;
     });
   }
 
-  bool onPageTwo = false;
-
-// External Data
-  //late AppData provider;
-
-  late int selectedCountryIndex = 0;
+// Helpers
+  EdgeInsets getPageMargins(bool onPageTwo, Orientation orientation) {
+    if (!onPageTwo) {
+      return const EdgeInsets.only(top: 35, bottom: 0, right: 25, left: 25);
+    }
+    return orientation == Orientation.portrait
+        ? const EdgeInsets.symmetric(vertical: 35, horizontal: 25)
+        : const EdgeInsets.symmetric(vertical: 0, horizontal: 25);
+  }
 
   void updateSlctdCtryIndex(int index) {
     setState(() {
@@ -84,18 +101,13 @@ class _SetupPageState extends ConsumerState<SetupPage> {
   @override
   void initState() {
     super.initState();
-
-    // pageControllers[1].addListener(() {
-    //   setState(() {});
-    // });
   }
 
   @override
   void dispose() {
-    for (PageController e in pageControllers) {
-      e.dispose();
-    }
-    for (TextEditingController e in controllers.values) {
+    setupPageController.dispose();
+    formFlowController.dispose();
+    for (TextEditingController e in textControllers.values) {
       e.dispose();
     }
     super.dispose();
@@ -103,12 +115,18 @@ class _SetupPageState extends ConsumerState<SetupPage> {
 
   @override
   Widget build(BuildContext context) {
+    themeMode = ref.read(themeProvider);
+    provider = ref.read(appData);
+    final imageBytes = ref.watch(logoImageProvider);
 
     final orientation = MediaQuery.of(context).orientation;
+    final logoUrl = "${provider.userId}_compressed_logo.png";
+
+    final imageHandler = ImageHandler(logoUrl: logoUrl);
 
     return Scaffold(
       body: PageView(
-        controller: pageControllers[0],
+        controller: setupPageController,
         physics: const NeverScrollableScrollPhysics(),
         children: [
           Form(
@@ -134,16 +152,34 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       ),
                       SizedBox(
                         width: 181,
-                        child: Text(
-                            "This information is required during your initial login and can be updated at a later time.",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 16, color: textColor)),
+                        child: onPageTwo
+                            ? Column(
+                                children: [
+                                  Text(
+                                    "Upload a Logo",
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                        color: textColor),
+                                  ),
+                                  Text(
+                                    "Optional. Can be uploaded later; otherwise, the app icon will be used as the default logo.",
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(color: textColor),
+                                  ),
+                                ],
+                              )
+                            : Text(
+                                "This information is required during your initial login and can be updated at a later time.",
+                                textAlign: TextAlign.center,
+                                style:
+                                    TextStyle(fontSize: 16, color: textColor)),
                       ),
                     ],
                   ],
                 ),
                 Container(
-                  padding: const EdgeInsets.only(top: 35, right: 25, left: 25),
+                  padding: getPageMargins(onPageTwo, orientation),
                   height: MediaQuery.of(context).size.height * 0.65,
                   width: 315,
                   decoration: BoxDecoration(
@@ -153,15 +189,20 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                       borderRadius: BorderRadius.circular(24)),
                   child: PageView(
                     physics: const NeverScrollableScrollPhysics(),
-                    controller: pageControllers[1],
+                    controller: formFlowController,
+                    key: pageKey,
+                    onPageChanged: (value) {},
                     children: [
-                      InfoPage(
-                        controllers: controllers,
+                      FormFields(
+                        controllers: textControllers,
                         selectedCountryIndex: selectedCountryIndex,
                         updateSlctdCtryIndex: updateSlctdCtryIndex,
                         orientation: orientation,
                       ),
-                      const ImageUploadPage()
+                      LogoUpload(
+                        orientation: orientation,
+                        logoUrl: logoUrl,
+                      )
                     ],
                   ),
                 ),
@@ -170,65 +211,81 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     if (onPageTwo)
-                      ElevatedButton(
-                        style: const ButtonStyle(
-                          minimumSize: WidgetStatePropertyAll(Size(115, 40)),
-                        ),
-                        onPressed: () {
-                          pageControllers[1].previousPage(
-                              duration: const Duration(milliseconds: 250),
-                              curve: Curves.easeIn);
-                          setState(() {
-                            onPageTwo = false;
-                          });
-                        },
-                        child: const Row(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Text('‹',
-                                style: TextStyle(
-                                    fontSize: 22)), // This shows a right arrow
-                            Text(
-                              '  Back',
-                              style: TextStyle(fontSize: 18),
-                            ),
-                          ],
-                        ),
-                      ),
-                    // if (fieldsIncomplete == false)
-                    ElevatedButton(
-                      style: const ButtonStyle(
-                        minimumSize: WidgetStatePropertyAll(Size(115, 40)),
-                      ),
-                      onPressed: () {
-                        //if (_formKey.currentState!.validate()) {
-                        pageControllers[0].nextPage(
-                            duration: const Duration(milliseconds: 250),
-                            curve: Curves.easeIn);
-                        setState(() {
-                          onPageTwo = true;
-                        });
-                        // }
-                      },
-                      child: const Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            'Next  ',
-                            style: TextStyle(fontSize: 18),
-                          ),
+                      PageNavButton(
+                          btnType: PageNavButtonType.back,
+                          onPressed: () {
+                            formFlowController.previousPage(
+                                duration: const Duration(milliseconds: 250),
+                                curve: Curves.easeIn);
 
-                          Text('›',
-                              style: TextStyle(
-                                  fontSize: 22)), // This shows a right arrow
-                        ],
-                      ),
+                            setState(() {
+                              onPageTwo = false;
+                            });
+                          }),
+                    PageNavButton(
+                      btnType: onPageTwo
+                          ? PageNavButtonType.finish
+                          : PageNavButtonType.next,
+                      onPressed: onPageTwo
+                          ? () async {
+                              await setupPageController.nextPage(
+                                  duration: const Duration(milliseconds: 250),
+                                  curve: Curves.easeIn);
+
+                              if (context.mounted) {
+                                await provider.updateProfile(
+                                  context: context,
+                                  fullName: textControllers['name']!.text,
+                                  website: textControllers['website']!
+                                          .text
+                                          .isNotEmpty
+                                      ? textControllers['website']!.text
+                                      : null,
+                                  country: textControllers['country']!
+                                      .text
+                                      .countryName,
+                                  street: textControllers['street']!.text,
+                                  city: textControllers['city']!.text,
+                                  prov: textControllers['prov']!.text,
+                                  zip: textControllers['zip']!.text.isNotEmpty
+                                      ? textControllers['zip']!.text
+                                      : null,
+                                  phone: textControllers['phone']!.text,
+                                  email: textControllers['email']!.text,
+                                  businessNumber:
+                                      textControllers['bn']!.text.isNotEmpty
+                                          ? textControllers['bn']!.text
+                                          : null,
+                                  currency: textControllers['currency']!.text,
+                                  logoUrl: imageBytes != null ? logoUrl : null,
+                                );
+                              }
+
+                              if (imageBytes != null && context.mounted) {
+                                await imageHandler.uploadAndSaveImage(
+                                    context, imageBytes);
+                              }
+
+                              setupPageController.jumpToPage(
+                                  setupPageController.page!.toInt() + 1);
+                            }
+                          : () {
+                              if (_formKey.currentState!.validate()) {
+                                formFlowController.nextPage(
+                                    duration: const Duration(milliseconds: 250),
+                                    curve: Curves.easeIn);
+                                setState(() {
+                                  onPageTwo = true;
+                                });
+                              }
+                            },
                     ),
                   ],
                 ),
               ],
             ),
           ),
+          const LoadingScreenPage(),
           const LoadingDataPage(),
         ],
       ),

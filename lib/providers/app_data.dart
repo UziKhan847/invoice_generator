@@ -15,8 +15,7 @@ final appData = ChangeNotifierProvider<AppData>((ref) => AppData());
 const selectProfile =
     "full_name, business_number, country, province, city, street, zip, phone, email, currency, website, logo_url";
 
-const selectSenders =
-    "sender_id, name, street, city, province, country, zip, phone, email, e_transfer, business_number";
+const selectSenders = "sender_id, name, position, phone, email, e_transfer";
 const selectRecipients =
     "recipient_id, name, street, city, province, country, zip, phone, email";
 const selectInvoices =
@@ -136,7 +135,7 @@ class AppData extends ChangeNotifier {
     required BuildContext context,
     required String? logoUrl,
   }) async {
-      try {
+    try {
       await supabase.from("profiles").update(
         {
           'logo_url': logoUrl,
@@ -157,9 +156,6 @@ class AppData extends ChangeNotifier {
       }
     }
   }
-
-  // //Get Logo
-  // String? get logoPath => profile.logoUrl;
 
   //Fetch Data Methods
   Future<void> getData() async {
@@ -350,33 +346,24 @@ class AppData extends ChangeNotifier {
   }
 
   //Sender
-  Future<void> insertSender(
-      {required BuildContext context,
-      required String name,
-      required String street,
-      required String city,
-      required String prov,
-      required String country,
-      required String? zip,
-      required String phone,
-      required String email,
-      required String? eTransfer,
-      required String? businessNumber}) async {
+  Future<void> insertSender({
+    required BuildContext context,
+    required String name,
+    required String position,
+    required String? phone,
+    required String? email,
+    required String? eTransfer,
+  }) async {
     try {
       newSender = await supabase
           .from("senders")
           .insert(
             {
               'name': name,
-              'street': street,
-              'city': city,
-              'province': prov,
-              'country': country,
-              'zip': zip,
+              'position': position,
               'phone': phone,
               'email': email,
               'e_transfer': eTransfer,
-              'business_number': businessNumber
             },
           )
           .select(selectSenders)

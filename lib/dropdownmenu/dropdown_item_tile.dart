@@ -7,7 +7,7 @@ class DropDownItemTile extends StatelessWidget {
     this.height,
     required this.onTap,
     required this.itemFormat,
-    this.padding = const EdgeInsets.symmetric(vertical: 14),
+    this.padding = const EdgeInsets.all(0),
     this.mainAxisAlignment = MainAxisAlignment.center,
   });
 
@@ -15,7 +15,7 @@ class DropDownItemTile extends StatelessWidget {
   final int currentIndex;
   final void Function()? onTap;
   final MainAxisAlignment mainAxisAlignment;
-  final List<Widget> itemFormat;
+  final Widget itemFormat;
   final EdgeInsetsGeometry padding;
 
   @override
@@ -29,8 +29,7 @@ class DropDownItemTile extends StatelessWidget {
             onTap: onTap,
             child: Padding(
               padding: padding,
-              child: Row(
-                  mainAxisAlignment: mainAxisAlignment, children: itemFormat),
+              child: itemFormat,
             ),
           ),
         ));

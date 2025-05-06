@@ -1,13 +1,11 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_speed_dial/flutter_speed_dial.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_course.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_invoice.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_receipt.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_recipient.dart';
 import 'package:markaz_umaza_invoice_generator/adding_item/add_sender.dart';
-import 'package:markaz_umaza_invoice_generator/extensions/string_extension.dart';
 import 'package:markaz_umaza_invoice_generator/handlers/image_handler.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/course_list_builder.dart';
 import 'package:markaz_umaza_invoice_generator/list_view_builders/receipt_list_builder.dart';
@@ -198,61 +196,6 @@ class _HomepageState extends ConsumerState<Homepage>
                   color: Theme.of(context).appBarTheme.backgroundColor,
                 )
             },
-            // child: Center(
-            //   child: Row(
-            //     mainAxisAlignment: MainAxisAlignment.center,
-            //     spacing: 10,
-            //     children: [
-            //       ElevatedButton(
-            //           onPressed: () {
-            //             switch (themeMode) {
-            //               case AppTheme.light:
-            //                 themeNotifier.setTheme(AppTheme.dark);
-            //               case AppTheme.dark:
-            //                 themeNotifier.setTheme(AppTheme.colorful);
-            //               default:
-            //                 themeNotifier.setTheme(AppTheme.light);
-            //             }
-            //           },
-            //           child: Text(themeMode.name.toCapitalized)),
-            //       ElevatedButton(
-            //           onPressed: () async {
-            //             try {
-            //               provider.resetData();
-            //               await supabase.auth.signOut();
-            //             } catch (e) {
-            //               if (mounted) {
-            //                 rethrow;
-            //               }
-            //             }
-            //           },
-            //           child: const Text("Log Out")),
-            //       ElevatedButton(
-            //           onPressed: () async {
-            //             try {
-            //               final imageHandler = ImageHandler(logoUrl: logoUrl);
-
-            //               final image = await imageHandler.getImageAsBytes();
-
-            //               bool isFinished = false;
-
-            //               if (context.mounted) {
-            //                 isFinished = await imageHandler.uploadAndSaveImage(
-            //                     context, image);
-            //               }
-
-            //               if (isFinished && context.mounted) {
-            //                 await provider.updateLogo(
-            //                     context: context, logoUrl: logoUrl);
-            //               }
-            //             } catch (e) {
-            //               throw Exception("Exception: $e");
-            //             }
-            //           },
-            //           child: const Text("Update Logo")),
-            //     ],
-            //   ),
-            // ),
           ),
         ),
         body: PageView(
@@ -279,27 +222,35 @@ class _HomepageState extends ConsumerState<Homepage>
         floatingActionButton: pageAnimValue % 1 != 0
             ? null
             : SpeedDialMenu(
-                indicatorColor: indicatorColor,
-                navBarColor: navBarColor,
-                onTapAddItem: () => showDialog<String>(
-                    barrierDismissible: false,
-                    context: context,
-                    builder: (BuildContext context) => switch (pageAnimValue) {
-                          1 => const AddSender(),
-                          2 => const AddRecipient(),
-                          3 => const AddCourse(),
-                          4 => const AddReceipt(),
-                          _ => const AddInvoice(),
-                        }),
-                onTapLogout: () async {
-                  try {
-                    provider.resetData();
-                    await supabase.auth.signOut();
-                  } catch (e) {
-                    if (mounted) {
-                      rethrow;
-                    }
-                  }
+         
+                textColor: switch (themeMode) {
+                  AppTheme.light => Colors.black,
+                  _ => Colors.white
+                },
+                activeTextColor:
+                    themeMode == AppTheme.dark ? Colors.white : Colors.black,
+                indicatorColor: themeMode == AppTheme.colorful
+                    ? indicatorColor
+                    : Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                navBarColor: themeMode == AppTheme.colorful
+                    ? navBarColor
+                    : Theme.of(context)
+                        .floatingActionButtonTheme
+                        .backgroundColor,
+                onTapAddItem: () {
+                  showDialog<String>(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (BuildContext context) =>
+                          switch (pageAnimValue) {
+                            1 => const AddSender(),
+                            2 => const AddRecipient(),
+                            3 => const AddCourse(),
+                            4 => const AddReceipt(),
+                            _ => const AddInvoice(),
+                          });
                 },
                 onTapSwitchTheme: () {
                   switch (themeMode) {
@@ -309,6 +260,37 @@ class _HomepageState extends ConsumerState<Homepage>
                       themeNotifier.setTheme(AppTheme.colorful);
                     default:
                       themeNotifier.setTheme(AppTheme.light);
+                  }
+                },
+                onTapUploadLogo: () async {
+                  try {
+                    final imageHandler = ImageHandler(logoUrl: logoUrl);
+
+                    final image = await imageHandler.getImageAsBytes();
+
+                    bool isFinished = false;
+
+                    if (context.mounted) {
+                      isFinished =
+                          await imageHandler.uploadAndSaveImage(context, image);
+                    }
+
+                    if (isFinished && context.mounted) {
+                      await provider.updateLogo(
+                          context: context, logoUrl: logoUrl);
+                    }
+                  } catch (e) {
+                    throw Exception("Exception: $e");
+                  }
+                },
+                onTapLogout: () async {
+                  try {
+                    provider.resetData();
+                    await supabase.auth.signOut();
+                  } catch (e) {
+                    if (mounted) {
+                      rethrow;
+                    }
                   }
                 },
                 page: pageAnimValue,

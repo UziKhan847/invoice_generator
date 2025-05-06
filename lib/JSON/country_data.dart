@@ -16,10 +16,10 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Nunavut", "iso": "NU"},
       {"name": "Yukon", "iso": "YT"},
     ],
-    "phone_regex":
-        r"^((\+1|1)?( |-)?)?(\([2-9][0-9]{2}\)|[2-9][0-9]{2})( |-)?([2-9][0-9]{2}( |-)?[0-9]{4})$",
-    "postal_code_regex":
-        r"^(?=[^DdFfIiOoQqUu\d\s])[A-Za-z]\d(?=[^DdFfIiOoQqUu\d\s])[A-Za-z]\s{0,1}\d(?=[^DdFfIiOoQqUu\d\s])[A-Za-z]\d$",
+    // "phone_regex":
+    //     r"^((\+1|1)?( |-)?)?(\([2-9][0-9]{2}\)|[2-9][0-9]{2})( |-)?([2-9][0-9]{2}( |-)?[0-9]{4})$",
+    "phone_regex": r'^\+?(1\s?)?(\d{3}|\(\d{3}\))[\s\-]?\d{3}[\s\-]?\d{4}$',
+    "postal_code_regex": r"^[A-Za-z]\d[A-Za-z][ -]?\d[A-Za-z]\d$",
     "country_code": {"iso_two": "CA", "iso_three": "CAN"},
     "currency": "CAD",
     "flag_icon": "🇨🇦",
@@ -85,8 +85,9 @@ List<Map<String, dynamic>> countryData = [
       {"name": "United States Minor Outlying Islands", "iso": "UM"},
       {"name": "U.S. Virgin Islands", "iso": "VI"}
     ],
-    "phone_regex": r"^(\+1[-.\s]?)?(\(?\d{3}\)?[-.\s]?)?\d{3}[-.\s]?\d{4}$",
-    "postal_code_regex": r"^\b\d{5}\b(?:[- ]{1}\d{4})?$",
+
+    "phone_regex": r'^\+?(1\s?)?(\d{3}|\(\d{3}\))[\s\-]?\d{3}[\s\-]?\d{4}$',
+    "postal_code_regex": r"^\d{5}(-\d{4})?$",
     "country_code": {"iso_two": "US", "iso_three": "USA"},
     "currency": "USD", // United States Dollar
     "flag_icon": "🇺🇸",
@@ -129,7 +130,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wardak", "iso": "WAR"},
       {"name": "Zabul", "iso": "ZAB"}
     ],
-    "phone_regex": r"^(\+93|0)?(2{1}[0-8]{1}|[3-5]{1}[0-4]{1})(\d{7})$",
+    "phone_regex": null, //r"^(\+93|0)?(2{1}[0-8]{1}|[3-5]{1}[0-4]{1})(\d{7})$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "AF", "iso_three": "AFG"},
     "currency": "AFN",
@@ -142,7 +143,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Ålands landsbygd", "iso": null},
       {"name": "Ålands skärgård", "iso": null},
     ],
-    "phone_regex": r"^\+35818[0-9]{5}$",
+    "phone_regex": null, //r"^\+35818[0-9]{5}$",
     "postal_code_regex": r"^22[0-9]{3}$",
     "country_code": {"iso_two": "AX", "iso_three": "ALA"},
     "currency": "EUR",
@@ -164,7 +165,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tiranë", "iso": "11"},
       {"name": "Vlorë", "iso": "12"}
     ],
-    "phone_regex": r"^\+355[2-9]\d{7,8}$",
+    "phone_regex": null, //r"^\+355[2-9]\d{7,8}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "AL", "iso_three": "ALB"},
     "currency": "ALL",
@@ -232,7 +233,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "El M'Ghair", "iso": "57"},
       {"name": "El Menia", "iso": "58"}
     ],
-    "phone_regex": r"^(\+?213|0)(5|6|7)\d{8}$",
+    "phone_regex": null, //r"^(\+?213|0)(5|6|7)\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "DZ", "iso_three": "DZA"},
     "currency": "DZD",
@@ -249,7 +250,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Ordino", "iso": "06"},
       {"name": "Sant Julià de Lòria", "iso": "06"}
     ],
-    "phone_regex": r"^(\+376)?[346]\d{5}$",
+    "phone_regex": null, //r"^(\+376)?[346]\d{5}$",
     "postal_code_regex": r"^AD\d{3}$",
     "country_code": {"iso_two": "AD", "iso_three": "AND"},
     "currency": "EUR",
@@ -277,7 +278,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Uíge", "iso": "UIG"},
       {"name": "Zaire", "iso": "ZAI"}
     ],
-    "phone_regex": r"^(\+244)\d{9}$",
+    "phone_regex": null, //r"^(\+244)\d{9}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "AO", "iso_three": "AGO"},
     "currency": "AOA",
@@ -355,7 +356,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tucumán", "iso": "T"},
       {"name": "Ciudad Autónoma de Buenos Aires", "iso": "C"}
     ],
-    "phone_regex": r"^\+?549(11|[2368]\d)\d{8}$",
+    "phone_regex": null, //r"^\+?549(11|[2368]\d)\d{8}$",
     "postal_code_regex": r"^\d{4}|[A-Za-z]\d{4}[a-zA-Z]{3}$",
     "country_code": {"iso_two": "AR", "iso_three": "ARG"},
     "currency": "ARS",
@@ -376,7 +377,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vayots Dzor", "iso": "VD"},
       {"name": "Yerevan", "iso": "ER"}
     ],
-    "phone_regex": r"^(\+?374|0)(33|4[134]|55|77|88|9[13-689])\d{6}$",
+    "phone_regex": null, //r"^(\+?374|0)(33|4[134]|55|77|88|9[13-689])\d{6}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "AM", "iso_three": "ARM"},
     "currency": "AMD",
@@ -387,7 +388,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Aruba", "iso": "AW"},
     ],
-    "phone_regex": r"^(\+)?297(56|59|64|73|74|99)\d{5}$",
+    "phone_regex": null, //r"^(\+)?297(56|59|64|73|74|99)\d{5}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "AW", "iso_three": "ABW"},
     "currency": "AWG",
@@ -405,7 +406,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Australian Capital Territory", "iso": "ACT"},
       {"name": "Northern Territory", "iso": "NT"}
     ],
-    "phone_regex": r"^(\+?61|0)4\d{8}$",
+    "phone_regex": null, //r"^(\+?61|0)4\d{8}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "AU", "iso_three": "AUS"},
     "currency": "AUD",
@@ -424,7 +425,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vorarlberg", "iso": "8"},
       {"name": "Vienna", "iso": "9"}
     ],
-    "phone_regex": r"^\+43[1-9][0-9]{3,12}$",
+    "phone_regex": null, //r"^\+43[1-9][0-9]{3,12}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "AT", "iso_three": "AUT"},
     "currency": "EUR",
@@ -487,7 +488,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zaqatala", "iso": "ZAQ"},
       {"name": "Zardab", "iso": "ZAR"}
     ],
-    "phone_regex": r"^(\+994|0)(10|5[015]|7[07]|99)\d{7}$",
+    "phone_regex": null, //r"^(\+994|0)(10|5[015]|7[07]|99)\d{7}$",
     "postal_code_regex": r"^[A][Z]\d{4}$",
     "country_code": {"iso_two": "AZ", "iso_three": "AZE"},
     "currency": "AZN",
@@ -528,7 +529,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Spanish Wells", "iso": "SW"},
       {"name": "West Grand Bahama", "iso": "WG"}
     ],
-    "phone_regex": r"^(\+?1[-\s]?|0)?\(?242\)?[-\s]?\d{3}[-\s]?\d{4}$",
+    "phone_regex": null, //r"^(\+?1[-\s]?|0)?\(?242\)?[-\s]?\d{3}[-\s]?\d{4}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "BS", "iso_three": "BHS"},
     "currency": "BSD",
@@ -542,7 +543,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Northern", "iso": "17"},
       {"name": "Southern", "iso": "14"}
     ],
-    "phone_regex": r"^(\+?973)?(3|6)\d{7}$",
+    "phone_regex": null, //r"^(\+?973)?(3|6)\d{7}$",
     "postal_code_regex": r"^\d{3,4}$",
     "country_code": {"iso_two": "BH", "iso_three": "BHR"},
     "currency": "BHD",
@@ -560,7 +561,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sylhet", "iso": "G"},
       {"name": "Mymensingh", "iso": "H"}
     ],
-    "phone_regex": r"^(\+?880|0)1[13456789][0-9]{8}$",
+    "phone_regex": null, //r"^(\+?880|0)1[13456789][0-9]{8}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "BD", "iso_three": "BGD"},
     "currency": "BDT",
@@ -577,7 +578,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vitebsk Region", "iso": "VI"},
       {"name": "City of Minsk", "iso": "HM"}
     ],
-    "phone_regex": r"^(\+?375)?(24|25|29|33|44)\d{7}$",
+    "phone_regex": null, //r"^(\+?375)?(24|25|29|33|44)\d{7}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "BY", "iso_three": "BLR"},
     "currency": "BYN",
@@ -598,7 +599,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "West Flanders", "iso": "VWV"},
       {"name": "Brussels-Capital Region", "iso": "BRU"}
     ],
-    "phone_regex": r"^(\+?32|0)4\d{8}$",
+    "phone_regex": null, //r"^(\+?32|0)4\d{8}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "BE", "iso_three": "BEL"},
     "currency": "EUR",
@@ -620,7 +621,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Plateau", "iso": "PL"},
       {"name": "Zou", "iso": "ZO"}
     ],
-    "phone_regex": r"^(\+229)\d{8}$",
+    "phone_regex": null, //r"^(\+229)\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "BJ", "iso_three": "BEN"},
     "currency": "XOF",
@@ -639,7 +640,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southampton", "iso": null},
       {"name": "Warwick", "iso": null}
     ],
-    "phone_regex": r"^(\+?1)?441(((3|7)\d{6}$)|(5[0-3][0-9]\d{4}$)|(59\d{5}$))",
+    "phone_regex":
+        null, //r"^(\+?1)?441(((3|7)\d{6}$)|(5[0-3][0-9]\d{4}$)|(59\d{5}$))",
     "postal_code_regex": r"^[A-Za-z]{2}\s([A-Za-z]{2}|\d{2})$",
     "country_code": {"iso_two": "BM", "iso_three": "BMU"},
     "currency": "BMD",
@@ -669,7 +671,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wangdue Phodrang", "iso": "24"},
       {"name": "Zhemgang", "iso": "34"}
     ],
-    "phone_regex": r"^(\+?975|0)?(17|16|77|02)\d{6}$",
+    "phone_regex": null, //r"^(\+?975|0)?(17|16|77|02)\d{6}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "BT", "iso_three": "BTN"},
     "currency": "BTN",
@@ -688,7 +690,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Santa Cruz", "iso": "S"},
       {"name": "Tarija", "iso": "T"}
     ],
-    "phone_regex": r"^(\+?591)?(6|7)\d{7}$",
+    "phone_regex": null, //r"^(\+?591)?(6|7)\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "BO", "iso_three": "BOL"},
     "currency": "BOB",
@@ -701,7 +703,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Republika Srpska", "iso": "BIH-SRP"},
       {"name": "Brčko District", "iso": "BIH-BRC"}
     ],
-    "phone_regex": r"^((((\+|00)3876)|06))((([0-3]|[5-6])\d{6})|(4\d{7}))$",
+    "phone_regex":
+        null, //r"^((((\+|00)3876)|06))((([0-3]|[5-6])\d{6})|(4\d{7}))$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "BA", "iso_three": "BIH"},
     "currency": "BAM",
@@ -720,7 +723,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "South-East", "iso": "SE"},
       {"name": "Southern", "iso": "SO"}
     ],
-    "phone_regex": r"^(\+?267)?(7[1-8]{1})\d{6}$",
+    "phone_regex": null, //r"^(\+?267)?(7[1-8]{1})\d{6}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "BW", "iso_three": "BWA"},
     "currency": "BWP",
@@ -796,7 +799,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vratsa", "iso": "06"},
       {"name": "Yambol", "iso": "28"}
     ],
-    "phone_regex": r"^(\+?359|0)?8[789]\d{7}$",
+    "phone_regex": null, //r"^(\+?359|0)?8[789]\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "BG", "iso_three": "BGR"},
     "currency": "BGN",
@@ -819,7 +822,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sahel", "iso": "12"},
       {"name": "Sud-Ouest", "iso": "13"}
     ],
-    "phone_regex": r"^(\+226|0)[67]\d{7}$",
+    "phone_regex": null, //r"^(\+226|0)[67]\d{7}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "BF", "iso_three": "BFA"},
     "currency": "XOF",
@@ -839,7 +842,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southwest", "iso": "SW"},
       {"name": "West", "iso": "OU"},
     ],
-    "phone_regex": r"^(\+?237)6[0-9]{8}$",
+    "phone_regex": null, //r"^(\+?237)6[0-9]{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "CM", "iso_three": "CMR"},
     "currency": "XAF",
@@ -866,7 +869,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sangha-Mbaéré", "iso": "SE"},
       {"name": "Vakaga", "iso": "VK"},
     ],
-    "phone_regex": r"^(\+?236| ?)(70|75|77|72|21|22)\d{6}$",
+    "phone_regex": null, //r"^(\+?236| ?)(70|75|77|72|21|22)\d{6}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "CF", "iso_three": "CAF"},
     "currency": "XAF",
@@ -892,7 +895,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Aysén del General Carlos Ibáñez del Campo", "iso": "AI"},
       {"name": "Magallanes y de la Antártica Chilena", "iso": "MA"},
     ],
-    "phone_regex": r"^(\+?56|0)[2-9]\d{1}\d{7}$",
+    "phone_regex": null, //r"^(\+?56|0)[2-9]\d{1}\d{7}$",
     "postal_code_regex": r"^\d{7}\s\(\d{3}-\d{4}\)$",
     "country_code": {"iso_two": "CL", "iso_three": "CHL"},
     "currency": "CLP",
@@ -935,7 +938,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yunnan", "iso": "53"},
       {"name": "Zhejiang", "iso": "33"}
     ],
-    "phone_regex": r"^((\+|00)86)?(1[3-9]|9[28])\d{9}$",
+    "phone_regex": null, //r"^((\+|00)86)?(1[3-9]|9[28])\d{9}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "CN", "iso_three": "CHN"},
     "currency": "CNY",
@@ -978,7 +981,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vaupés", "iso": "VAU"},
       {"name": "Vichada", "iso": "VID"}
     ],
-    "phone_regex": r"^(\+?57)?3(0(0|1|2|4|5)|1\d|2[0-4]|5(0|1))\d{7}$",
+    "phone_regex": null, //r"^(\+?57)?3(0(0|1|2|4|5)|1\d|2[0-4]|5(0|1))\d{7}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "CO", "iso_three": "COL"},
     "currency": "COP",
@@ -1000,7 +1003,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Pool", "iso": "13"},
       {"name": "Sangha", "iso": "6"}
     ],
-    "phone_regex": r"^(\+?243|0)?(8|9)\d{8}$",
+    "phone_regex": null, //r"^(\+?243|0)?(8|9)\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "CG", "iso_three": "COG"},
     "currency": "XAF",
@@ -1017,7 +1020,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Puntarenas", "iso": "P"},
       {"name": "Limón", "iso": "L"}
     ],
-    "phone_regex": r"^(\+506)?[2-8]\d{7}$",
+    "phone_regex": null, //r"^(\+506)?[2-8]\d{7}$",
     "postal_code_regex": r"^\d{4,5}$",
     "country_code": {"iso_two": "CR", "iso_three": "CRI"},
     "currency": "CRC",
@@ -1048,7 +1051,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Međimurska županija", "iso": "20"},
       {"name": "Grad Zagreb", "iso": "21"}
     ],
-    "phone_regex": r"^\+385[1-9][0-9]{7,8}$",
+    "phone_regex": null, //r"^\+385[1-9][0-9]{7,8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "HR", "iso_three": "HRV"},
     "currency": "EUR",
@@ -1074,7 +1077,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Guantánamo", "iso": "14"},
       {"name": "Isla de la Juventud", "iso": "99"} // special municipality
     ],
-    "phone_regex": r"^(\+53|0053)?5\d{7}$",
+    "phone_regex": null, //r"^(\+53|0053)?5\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "CU", "iso_three": "CUB"},
     "currency": "CUP",
@@ -1090,7 +1093,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Nicosia", "iso": "01"},
       {"name": "Paphos", "iso": "05"}
     ],
-    "phone_regex": r"^(\+?357?)?(9(9|6)\d{6})$",
+    "phone_regex": null, //r"^(\+?357?)?(9(9|6)\d{6})$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "CY", "iso_three": "CYP"},
     "currency": "EUR",
@@ -1114,7 +1117,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zlínský kraj", "iso": "72"},
       {"name": "Moravskoslezský kraj", "iso": "80"}
     ],
-    "phone_regex": r"^(\+?420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$",
+    "phone_regex": null, //r"^(\+?420)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$",
     "postal_code_regex": r"^\d{5}\s\(\d{3}\s\d{2}\)$",
     "country_code": {"iso_two": "CZ", "iso_three": "CZE"},
     "currency": "CZK",
@@ -1129,7 +1132,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sjælland", "iso": "85"},
       {"name": "Syddanmark", "iso": "83"},
     ],
-    "phone_regex": r"^(\+?45)?\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$",
+    "phone_regex": null, //r"^(\+?45)?\s?\d{2}\s?\d{2}\s?\d{2}\s?\d{2}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "DK", "iso_three": "DNK"},
     "currency": "DKK",
@@ -1171,7 +1174,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Santo Domingo", "iso": "32"},
       {"name": "Valverde", "iso": "27"},
     ],
-    "phone_regex": r"^(\+?1)?8[024]9\d{7}$",
+    "phone_regex": null, //r"^(\+?1)?8[024]9\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "DO", "iso_three": "DOM"},
     "currency": "DOP",
@@ -1205,7 +1208,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tungurahua", "iso": "T"},
       {"name": "Zamora-Chinchipe", "iso": "Z"},
     ],
-    "phone_regex": r"^(\+?593|0)([2-7]|9[2-9])\d{7}$",
+    "phone_regex": null, //r"^(\+?593|0)([2-7]|9[2-9])\d{7}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "EC", "iso_three": "ECU"},
     "currency": "USD",
@@ -1242,7 +1245,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "South Sinai", "iso": "JS"},
       {"name": "Suez", "iso": "SUZ"},
     ],
-    "phone_regex": r"^((\+?20)|0)?1[0125]\d{8}$",
+    "phone_regex": null, //r"^((\+?20)|0)?1[0125]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "EG", "iso_three": "EGY"},
     "currency": "EGP",
@@ -1266,7 +1269,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sonsonate", "iso": "SO"},
       {"name": "Usulután", "iso": "US"},
     ],
-    "phone_regex": r"^(\+?503)?[67]\d{7}$",
+    "phone_regex": null, //r"^(\+?503)?[67]\d{7}$",
     "postal_code_regex": r"^1101$",
     "country_code": {"iso_two": "SV", "iso_three": "SLV"},
     "currency": "USD",
@@ -1291,7 +1294,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Viljandi", "iso": "84"},
       {"name": "Võru", "iso": "86"},
     ],
-    "phone_regex": r"^(\+?372)?\s?(5|8[1-4])\s?([0-9]\s?){6,7}$",
+    "phone_regex": null, //r"^(\+?372)?\s?(5|8[1-4])\s?([0-9]\s?){6,7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "EE", "iso_three": "EST"},
     "currency": "EUR",
@@ -1307,7 +1310,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vágar", "iso": null},
       {"name": "Norðoyar", "iso": null},
     ],
-    "phone_regex": r"^(\+?298)?\s?\d{2}\s?\d{2}\s?\d{2}$",
+    "phone_regex": null, //r"^(\+?298)?\s?\d{2}\s?\d{2}\s?\d{2}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "FO", "iso_three": "FRO"},
     "currency": "DKK",
@@ -1332,7 +1335,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tailevu", "iso": "14"},
       {"name": "Rotuma", "iso": "R"},
     ],
-    "phone_regex": r"^(\+?679)?\s?\d{3}\s?\d{4}$",
+    "phone_regex": null, //r"^(\+?679)?\s?\d{3}\s?\d{4}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "FJ", "iso_three": "FJI"},
     "currency": "FJD",
@@ -1361,7 +1364,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Uusimaa", "iso": "18"},
       {"name": "Southwest Finland", "iso": "19"},
     ],
-    "phone_regex": r"^(\+?358|0)\s?(4[0-6]|50)\s?(\d\s?){4,8}$",
+    "phone_regex": null, //r"^(\+?358|0)\s?(4[0-6]|50)\s?(\d\s?){4,8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "FI", "iso_three": "FIN"},
     "currency": "EUR",
@@ -1389,7 +1392,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Réunion", "iso": "RE"},
       {"name": "Mayotte", "iso": "YT"},
     ],
-    "phone_regex": r"^(\+?33|0)[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?33|0)[67]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "FR", "iso_three": "FRA"},
     "currency": "EUR",
@@ -1403,7 +1406,7 @@ List<Map<String, dynamic>> countryData = [
         "iso": null
       }, // It is a single overseas department/region
     ],
-    "phone_regex": r"^(\+?594|0|00594)[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?594|0|00594)[67]\d{8}$",
     "postal_code_regex": r"^973\d{2}$",
     "country_code": {"iso_two": "GF", "iso_three": "GUF"},
     "currency": "EUR",
@@ -1418,7 +1421,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Îles Marquises", "iso": "4"},
       {"name": "Îles Australes", "iso": "5"},
     ],
-    "phone_regex": r"^(\+?689)?8[789]\d{6}$",
+    "phone_regex": null, //r"^(\+?689)?8[789]\d{6}$",
     "postal_code_regex": r"^987\d{2}$",
     "country_code": {"iso_two": "PF", "iso_three": "PYF"},
     "currency": "XPF",
@@ -1440,7 +1443,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tbilisi", "iso": "TB"},
       {"name": "Abkhazia", "iso": "AB"}, // Disputed territory
     ],
-    "phone_regex": r"^(\+?995)?(79\d{7}|5\d{8})$",
+    "phone_regex": null, //r"^(\+?995)?(79\d{7}|5\d{8})$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "GE", "iso_three": "GEO"},
     "currency": "GEL",
@@ -1493,7 +1496,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Western", "iso": "WP"},
       {"name": "Western North", "iso": "WN"},
     ],
-    "phone_regex": r"^(\+233|0)(20|50|24|54|27|57|26|56|23|28|55|59)\d{7}$",
+    "phone_regex":
+        null, //r"^(\+233|0)(20|50|24|54|27|57|26|56|23|28|55|59)\d{7}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "GH", "iso_three": "GHA"},
     "currency": "GHS",
@@ -1517,7 +1521,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "West Macedonia", "iso": "C"},
       {"name": "Mount Athos", "iso": "69"},
     ],
-    "phone_regex": r"^(\+?30|0)?6(8[5-9]|9(?![26])[0-9])\d{7}$",
+    "phone_regex": null, //r"^(\+?30|0)?6(8[5-9]|9(?![26])[0-9])\d{7}$",
     "postal_code_regex": r"^\d{3}\s{0,1}\d{2}$",
     "country_code": {"iso_two": "GR", "iso_three": "GRC"},
     "currency": "EUR",
@@ -1532,7 +1536,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Qeqqata", "iso": "QE"},
       {"name": "Sermersooq", "iso": "SM"},
     ],
-    "phone_regex": r"^(\+?299)?\s?\d{2}\s?\d{2}\s?\d{2}$",
+    "phone_regex": null, //r"^(\+?299)?\s?\d{2}\s?\d{2}\s?\d{2}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "GL", "iso_three": "GRL"},
     "currency": "DKK",
@@ -1547,7 +1551,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Marie-Galante", "iso": null},
       {"name": "La Désirade", "iso": null},
     ],
-    "phone_regex": r"^(\+?590|0|00590)[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?590|0|00590)[67]\d{8}$",
     "postal_code_regex": r"^971\d{2}$",
     "country_code": {"iso_two": "GP", "iso_three": "GLP"},
     "currency": "EUR",
@@ -1570,7 +1574,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sark", "iso": null},
       {"name": "Herm", "iso": null},
     ],
-    "phone_regex": r"^(\+?44|0)1481\d{6}$",
+    "phone_regex": null, //r"^(\+?44|0)1481\d{6}$",
     "postal_code_regex": r"^[A-Za-z]{2}\d\s{0,1}\d[A-Za-z]{2}$",
     "country_code": {"iso_two": "GG", "iso_three": "GGY"},
     "currency": "GBP",
@@ -1590,7 +1594,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Upper Demerara-Berbice", "iso": "UD"},
       {"name": "Upper Takutu-Upper Essequibo", "iso": "UT"},
     ],
-    "phone_regex": r"^(\+592|0)6\d{6}$",
+    "phone_regex": null, //r"^(\+592|0)6\d{6}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "GY", "iso_three": "GUY"},
     "currency": "GYD",
@@ -1618,7 +1622,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Valle", "iso": "VA"},
       {"name": "Yoro", "iso": "YO"},
     ],
-    "phone_regex": r"^(\+?504)?[9|8|3|2]\d{7}$",
+    "phone_regex": null, //r"^(\+?504)?[9|8|3|2]\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "HN", "iso_three": "HND"},
     "currency": "HNL",
@@ -1631,7 +1635,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Kowloon", "iso": null},
       {"name": "New Territories", "iso": null},
     ],
-    "phone_regex": r"^(\+?852[-\s]?)?[456789]\d{3}[-\s]?\d{4}$",
+    "phone_regex": null, //r"^(\+?852[-\s]?)?[456789]\d{3}[-\s]?\d{4}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "HK", "iso_three": "HKG"},
     "currency": "HKD",
@@ -1661,7 +1665,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zala", "iso": "ZA"},
       {"name": "Budapest", "iso": "BU"},
     ],
-    "phone_regex": r"^(\+?36|06)(20|30|31|50|70)\d{7}$",
+    "phone_regex": null, //r"^(\+?36|06)(20|30|31|50|70)\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "HU", "iso_three": "HUN"},
     "currency": "HUF",
@@ -1679,7 +1683,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Eastern Region", "iso": "7"},
       {"name": "Southern Region", "iso": "8"},
     ],
-    "phone_regex": r"^\+354[0-9]{7}$",
+    "phone_regex": null, //r"^\+354[0-9]{7}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "IS", "iso_three": "ISL"},
     "currency": "ISK",
@@ -1725,7 +1729,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Lakshadweep", "iso": "LD"},
       {"name": "Puducherry", "iso": "PY"}
     ],
-    "phone_regex": r"^(\+?91|0)?[6789]\d{9}$",
+    "phone_regex": null, //r"^(\+?91|0)?[6789]\d{9}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "IN", "iso_three": "IND"},
     "currency": "INR",
@@ -1814,7 +1818,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yazd", "iso": "21"},
       {"name": "Zanjan", "iso": "19"}
     ],
-    "phone_regex": r"^(\+98|0)?9\d{9}$",
+    "phone_regex": null, //r"^(\+98|0)?9\d{9}$",
     "postal_code_regex": r"^\d{5}-\d{5}$",
     "country_code": {"iso_two": "IR", "iso_three": "IRN"},
     "currency": "IRR",
@@ -1843,7 +1847,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sulaymaniyah", "iso": "SU"},
       {"name": "Wasit", "iso": "WA"}
     ],
-    "phone_regex": r"^(\+?964|0)?7[0-9]\d{8}$",
+    "phone_regex": null, //r"^(\+?964|0)?7[0-9]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "IQ", "iso_three": "IRQ"},
     "currency": "IQD",
@@ -1879,7 +1883,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wexford", "iso": "WX"},
       {"name": "Wicklow", "iso": "WW"}
     ],
-    "phone_regex": r"^(\+?353|0)8[356789]\d{7}$",
+    "phone_regex": null, //r"^(\+?353|0)8[356789]\d{7}$",
     "postal_code_regex":
         null, // No formal postal code  "^[A-Za-z0-9]{3}\\s?[A-Za-z0-9]{4}$"
     "country_code": {"iso_two": "IE", "iso_three": "IRL"},
@@ -1910,7 +1914,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Valle d'Aosta", "iso": "23"},
       {"name": "Veneto", "iso": "34"}
     ],
-    "phone_regex": r"^(\+?39)?\s?3\d{2} ?\d{6,7}$",
+    "phone_regex": null, //r"^(\+?39)?\s?3\d{2} ?\d{6,7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "IT", "iso_three": "ITA"},
     "currency": "EUR",
@@ -1934,7 +1938,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Trelawny", "iso": "07"},
       {"name": "Westmoreland", "iso": "10"}
     ],
-    "phone_regex": r"^(\+?876)?\d{7}$",
+    "phone_regex": null, //r"^(\+?876)?\d{7}$",
     "postal_code_regex": r"^\d{2}$",
     "country_code": {"iso_two": "JM", "iso_three": "JAM"},
     "currency": "JMD",
@@ -1991,7 +1995,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Kagoshima", "iso": "46"},
       {"name": "Okinawa", "iso": "47"}
     ],
-    "phone_regex": r"^(\+81[ \-]?(\(0\))?|0)[6789]0[ \-]?\d{4}[ \-]?\d{4}$",
+    "phone_regex":
+        null, //r"^(\+81[ \-]?(\(0\))?|0)[6789]0[ \-]?\d{4}[ \-]?\d{4}$",
     "postal_code_regex": r"^\d{7}\s\(\d{3}-\d{4}\)$",
     "country_code": {"iso_two": "JP", "iso_three": "JPN"},
     "currency": "JPY",
@@ -2013,7 +2018,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tafilah", "iso": "AT"},
       {"name": "Zarqa", "iso": "AZ"}
     ],
-    "phone_regex": r"^(\+?962|0)?7[789]\d{7}$",
+    "phone_regex": null, //r"^(\+?962|0)?7[789]\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "JO", "iso_three": "JOR"},
     "currency": "JOD",
@@ -2042,7 +2047,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Almaty (city)", "iso": "ALA"},
       {"name": "Shymkent", "iso": "SHY"}
     ],
-    "phone_regex": r"^(\+?7|8)?7\d{9}$",
+    "phone_regex": null, //r"^(\+?7|8)?7\d{9}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "KZ", "iso_three": "KAZ"},
     "currency": "KZT",
@@ -2099,7 +2104,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wajir", "iso": "46"},
       {"name": "West Pokot", "iso": "47"}
     ],
-    "phone_regex": r"^(\+?254|0)(7|1)\d{8}$",
+    "phone_regex": null, //r"^(\+?254|0)(7|1)\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "KE", "iso_three": "KEN"},
     "currency": "KES",
@@ -2112,7 +2117,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Line Islands", "iso": "L"},
       {"name": "Phoenix Islands", "iso": "P"}
     ],
-    "phone_regex": r"^((\+686|686)?)?( )?((6|7)(2|3|8)[0-9]{6})$",
+    "phone_regex": null, //r"^((\+686|686)?)?( )?((6|7)(2|3|8)[0-9]{6})$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "KI", "iso_three": "KIR"},
     "currency": "AUD",
@@ -2157,7 +2162,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Pristina", "iso": null},
       {"name": "Prizren", "iso": null}
     ],
-    "phone_regex": r"^\+383[1-9][0-9]{6,7}$",
+    "phone_regex": null, //r"^\+383[1-9][0-9]{6,7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {
       "iso_two": "XK",
@@ -2176,7 +2181,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Hawalli", "iso": "HA"},
       {"name": "Mubarak Al-Kabeer", "iso": "MU"}
     ],
-    "phone_regex": r"^(\+?965)([569]\d{7}|41\d{6})$",
+    "phone_regex": null, //r"^(\+?965)([569]\d{7}|41\d{6})$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "KW", "iso_three": "KWT"},
     "currency": "KWD",
@@ -2195,7 +2200,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Bishkek", "iso": "GB"},
       {"name": "Osh City", "iso": "GO"}
     ],
-    "phone_regex": r"^(\+?7\s?\+?7|0)\s?\d{2}\s?\d{3}\s?\d{4}$",
+    "phone_regex": null, //r"^(\+?7\s?\+?7|0)\s?\d{2}\s?\d{3}\s?\d{4}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "KG", "iso_three": "KGZ"},
     "currency": "KGS",
@@ -2236,7 +2241,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Ventspils", "iso": "030"},
       {"name": "Ventspils municipality", "iso": "031"}
     ],
-    "phone_regex": r"^(\+?371)2\d{7}$",
+    "phone_regex": null, //r"^(\+?371)2\d{7}$",
     "postal_code_regex": r"^[Ll][Vv][- ]{0,1}\d{4}$",
     "country_code": {"iso_two": "LV", "iso_three": "LVA"},
     "currency": "EUR",
@@ -2254,7 +2259,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Akkar", "iso": "AK"},
       {"name": "Baalbek-Hermel", "iso": "BH"}
     ],
-    "phone_regex": r"^(\+?961)?((3|81)\d{6}|7\d{7})$",
+    "phone_regex": null, //r"^(\+?961)?((3|81)\d{6}|7\d{7})$",
     "postal_code_regex": r"^\d{4}\s{0,1}\d{4}$",
     "country_code": {"iso_two": "LB", "iso_three": "LBN"},
     "currency": "LBP",
@@ -2274,7 +2279,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Quthing", "iso": "G"},
       {"name": "Thaba-Tseka", "iso": "K"}
     ],
-    "phone_regex": r"^(\+?266)(22|28|57|58|59|27|52)\d{6}$",
+    "phone_regex": null, //r"^(\+?266)(22|28|57|58|59|27|52)\d{6}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "LS", "iso_three": "LSO"},
     "currency": "LSL",
@@ -2299,7 +2304,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Al Marj", "iso": "MJ"},
       {"name": "Al Jabal al Akhdar", "iso": "JA"}
     ],
-    "phone_regex": r"^((\+?218)|0)?(9[1-6]\d{7}|[1-8]\d{7,9})$",
+    "phone_regex": null, //r"^((\+?218)|0)?(9[1-6]\d{7}|[1-8]\d{7,9})$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "LY", "iso_three": "LBY"},
     "currency": "LYD",
@@ -2320,7 +2325,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Triesenberg", "iso": "10"},
       {"name": "Vaduz", "iso": "11"},
     ],
-    "phone_regex": r"^\+423[0-9]{3,12}$",
+    "phone_regex": null, //r"^\+423[0-9]{3,12}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "LI", "iso_three": "LIE"},
     "currency": "CHF",
@@ -2340,7 +2345,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Utena County", "iso": "UT"},
       {"name": "Vilnius County", "iso": "VL"},
     ],
-    "phone_regex": r"^(\+370|8)\d{8}$",
+    "phone_regex": null, //r"^(\+370|8)\d{8}$",
     "postal_code_regex": r"^[Ll][Tt][- ]{0,1}\d{5}$",
     "country_code": {"iso_two": "LT", "iso_three": "LTU"},
     "currency": "EUR",
@@ -2353,7 +2358,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Grevenmacher", "iso": "G"},
       {"name": "Luxembourg", "iso": "L"},
     ],
-    "phone_regex": r"^(\+352)?((6\d1)\d{6})$",
+    "phone_regex": null, //r"^(\+352)?((6\d1)\d{6})$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "LU", "iso_three": "LUX"},
     "currency": "EUR",
@@ -2364,7 +2369,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Macao", "iso": "MO"},
     ],
-    "phone_regex": r"^(\+?853[-\s]?)?[6]\d{3}[-\s]?\d{4}$",
+    "phone_regex": null, //r"^(\+?853[-\s]?)?[6]\d{3}[-\s]?\d{4}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "MO", "iso_three": "MAC"},
     "currency": "MOP",
@@ -2380,7 +2385,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Toliara", "iso": "U"},
       {"name": "Antsiranana", "iso": "D"},
     ],
-    "phone_regex": r"^((\+?261|0)(2|3)\d)?\d{7}$",
+    "phone_regex": null, //r"^((\+?261|0)(2|3)\d)?\d{7}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "MG", "iso_three": "MDG"},
     "currency": "MGA",
@@ -2453,7 +2458,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Kulhudhuffushi", "iso": "23"},
       {"name": "Malé", "iso": "MLE"}
     ],
-    "phone_regex": r"^(\+?960)?(7[2-9]|9[1-9])\d{5}$",
+    "phone_regex": null, //r"^(\+?960)?(7[2-9]|9[1-9])\d{5}$",
     "postal_code_regex": r"^\d{4,5}$",
     "country_code": {"iso_two": "MV", "iso_three": "MDV"},
     "currency": "MVR",
@@ -2531,7 +2536,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Żebbuġ", "iso": "67"},
       {"name": "Żejtun", "iso": "68"}
     ],
-    "phone_regex": r"^(\+?356|0)?(99|79|77|21|27|22|25)[0-9]{6}$",
+    "phone_regex": null, //r"^(\+?356|0)?(99|79|77|21|27|22|25)[0-9]{6}$",
     "postal_code_regex": r"^[A-Za-z]{3}\s{0,1}\d{4}$",
     "country_code": {"iso_two": "MT", "iso_three": "MLT"},
     "currency": "EUR",
@@ -2542,7 +2547,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Martinique", "iso": "MQ"},
     ],
-    "phone_regex": r"^(\+?596|0|00596)[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?596|0|00596)[67]\d{8}$",
     "postal_code_regex": r"^972\d{2}$",
     "country_code": {"iso_two": "MQ", "iso_three": "MTQ"},
     "currency": "EUR",
@@ -2565,7 +2570,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Savanne", "iso": "SA"},
       {"name": "Vacoas-Phoenix", "iso": "VP"},
     ],
-    "phone_regex": r"^(\+?230|0)?\d{8}$",
+    "phone_regex": null, //r"^(\+?230|0)?\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "MU", "iso_three": "MUS"},
     "currency": "MUR",
@@ -2607,7 +2612,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yucatán", "iso": "YUC"},
       {"name": "Zacatecas", "iso": "ZAC"},
     ],
-    "phone_regex": r"^(\+?52)?(1|01)?\d{10,11}$",
+    "phone_regex": null, //r"^(\+?52)?(1|01)?\d{10,11}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "MX", "iso_three": "MEX"},
     "currency": "MXN",
@@ -2652,7 +2657,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Telenești", "iso": "TE"},
       {"name": "Ungheni", "iso": "UN"},
     ],
-    "phone_regex": r"^(\+?373|0)((6(0|1|2|6|7|8|9))|(7(6|7|8|9)))\d{6}$",
+    "phone_regex":
+        null, //r"^(\+?373|0)((6(0|1|2|6|7|8|9))|(7(6|7|8|9)))\d{6}$",
     "postal_code_regex": r"^[M][D][- ]{0,1}\d{4}$",
     "country_code": {"iso_two": "MD", "iso_three": "MDA"},
     "currency": "MDL",
@@ -2663,7 +2669,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Monaco", "iso": null},
     ],
-    "phone_regex": r"^\+377[0-9]{8,9}$",
+    "phone_regex": null, //r"^\+377[0-9]{8,9}$",
     "postal_code_regex": r"^980\d{2}$",
     "country_code": {"iso_two": "MC", "iso_three": "MCO"},
     "currency": "EUR",
@@ -2695,7 +2701,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zavkhan", "iso": "057"},
       {"name": "Ulaanbaatar", "iso": "1"},
     ],
-    "phone_regex": r"^(\+|00|011)?976(77|81|88|91|94|95|96|99)\d{6}$",
+    "phone_regex": null, //r"^(\+|00|011)?976(77|81|88|91|94|95|96|99)\d{6}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "MN", "iso_three": "MNG"},
     "currency": "MNT",
@@ -2726,7 +2732,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Ulcinj", "iso": "20"},
       {"name": "Žabljak", "iso": "21"},
     ],
-    "phone_regex": r"^\+382[6-9][0-9]{6,7}$",
+    "phone_regex": null, //r"^\+382[6-9][0-9]{6,7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "ME", "iso_three": "MNE"},
     "currency": "EUR",
@@ -2748,7 +2754,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Laâyoune-Sakia El Hamra", "iso": "11"},
       {"name": "Dakhla-Oued Ed-Dahab", "iso": "12"},
     ],
-    "phone_regex": r"^(?:(?:\+|00)212|0)[5-7]\d{8}$",
+    "phone_regex": null, //r"^(?:(?:\+|00)212|0)[5-7]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "MA", "iso_three": "MAR"},
     "currency": "MAD",
@@ -2769,7 +2775,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tete", "iso": "T"},
       {"name": "Zambezia", "iso": "Q"},
     ],
-    "phone_regex": r"^(\+?258)?8[234567]\d{7}$",
+    "phone_regex": null, //r"^(\+?258)?8[234567]\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "MZ", "iso_three": "MOZ"},
     "currency": "MZN",
@@ -2819,7 +2825,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Otjozondjupa", "iso": "OD"},
       {"name": "Zambezi", "iso": "CA"},
     ],
-    "phone_regex": r"^(\+?264|0)(6|8)\d{7}$",
+    "phone_regex": null, //r"^(\+?264|0)(6|8)\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "NA", "iso_three": "NAM"},
     "currency": "NAD",
@@ -2836,7 +2842,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Karnali Province", "iso": "P6"},
       {"name": "Sudurpashchim Province", "iso": "P7"},
     ],
-    "phone_regex": r"^(\+?977)?9[78]\d{8}$",
+    "phone_regex": null, //r"^(\+?977)?9[78]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "NP", "iso_three": "NPL"},
     "currency": "NPR",
@@ -2858,7 +2864,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zeeland", "iso": "ZE"},
       {"name": "Zuid-Holland", "iso": "ZH"},
     ],
-    "phone_regex": r"^(((\+|00)?31\(0\))|((\+|00)?31)|0)6{1}\d{8}$",
+    "phone_regex": null, //r"^(((\+|00)?31\(0\))|((\+|00)?31)|0)6{1}\d{8}$",
     "postal_code_regex": r"^\d{4}\s{0,1}[A-Za-z]{2}$",
     "country_code": {"iso_two": "NL", "iso_three": "NLD"},
     "currency": "EUR",
@@ -2884,7 +2890,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wellington", "iso": "WGN"},
       {"name": "West Coast", "iso": "WTC"},
     ],
-    "phone_regex": r"^(\+?64|0)[28]\d{7,9}$",
+    "phone_regex": null, //r"^(\+?64|0)[28]\d{7,9}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "NZ", "iso_three": "NZL"},
     "currency": "NZD",
@@ -2911,7 +2917,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Región Autónoma de la Costa Caribe Norte", "iso": "AN"},
       {"name": "Región Autónoma de la Costa Caribe Sur", "iso": "AS"},
     ],
-    "phone_regex": r"^(\+?505)\d{7,8}$",
+    "phone_regex": null, //r"^(\+?505)\d{7,8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "NI", "iso_three": "NIC"},
     "currency": "NIO",
@@ -2958,7 +2964,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yobe", "iso": "YO"},
       {"name": "Zamfara", "iso": "ZA"},
     ],
-    "phone_regex": r"^(\+?234|0)?[789]\d{9}$",
+    "phone_regex": null, //r"^(\+?234|0)?[789]\d{9}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "NG", "iso_three": "NGA"},
     "currency": "NGN",
@@ -3048,7 +3054,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Štip", "iso": "879"},
       {"name": "Šuto Orizari", "iso": "880"}
     ],
-    "phone_regex": r"^\+389[2-9][0-9]{6,7}$",
+    "phone_regex": null, //r"^\+389[2-9][0-9]{6,7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "MK", "iso_three": "MKD"},
     "currency": "MKD",
@@ -3069,7 +3075,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vestland", "iso": "46"},
       {"name": "Viken", "iso": "30"},
     ],
-    "phone_regex": r"^(\+?47)?[49]\d{7}$",
+    "phone_regex": null, //r"^(\+?47)?[49]\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "NO", "iso_three": "NOR"},
     "currency": "NOK",
@@ -3089,7 +3095,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Musandam", "iso": "MU"},
       {"name": "Muscat", "iso": "MA"},
     ],
-    "phone_regex": r"^((\+|00)968)?(9[1-9])\d{6}$",
+    "phone_regex": null, //r"^((\+|00)968)?(9[1-9])\d{6}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "OM", "iso_three": "OMN"},
     "currency": "OMR",
@@ -3106,7 +3112,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Punjab", "iso": "PB"},
       {"name": "Sindh", "iso": "SD"},
     ],
-    "phone_regex": r"^((00|\+)?92|0)3[0-6]\d{8}$",
+    "phone_regex": null, //r"^((00|\+)?92|0)3[0-6]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "PK", "iso_three": "PAK"},
     "currency": "PKR",
@@ -3132,7 +3138,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tubas", "iso": "TBS"},
       {"name": "Tulkarm", "iso": "TKM"}
     ],
-    "phone_regex": r"^(\+?970|0)5[6|9](\d{7})$",
+    "phone_regex": null, //r"^(\+?970|0)5[6|9](\d{7})$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "PS", "iso_three": "PSE"},
     "currency": "ILS", // Israeli New Shekel
@@ -3155,7 +3161,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Guna Yala", "iso": "KY"},
       {"name": "Ngäbe-Buglé", "iso": "NB"},
     ],
-    "phone_regex": r"^(\+?507)\d{7,8}$",
+    "phone_regex": null, //r"^(\+?507)\d{7,8}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "PA", "iso_three": "PAN"},
     "currency": "PAB", // Panamanian Balboa
@@ -3187,7 +3193,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Western Highlands", "iso": "WHM"},
       {"name": "West New Britain", "iso": "WBK"},
     ],
-    "phone_regex": r"^(\+?675|0)?(7\d|8[18])\d{6}$",
+    "phone_regex": null, //r"^(\+?675|0)?(7\d|8[18])\d{6}$",
     "postal_code_regex": r"^\d{3}$",
     "country_code": {"iso_two": "PG", "iso_three": "PNG"},
     "currency": "PGK", // Papua New Guinean Kina
@@ -3215,7 +3221,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Presidente Hayes", "iso": "15"},
       {"name": "San Pedro", "iso": "2"},
     ],
-    "phone_regex": r"^(\+?595|0)9[9876]\d{7}$",
+    "phone_regex": null, //r"^(\+?595|0)9[9876]\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "PY", "iso_three": "PRY"},
     "currency": "PYG", // Paraguayan Guarani
@@ -3250,7 +3256,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tumbes", "iso": "TUM"},
       {"name": "Ucayali", "iso": "UCA"},
     ],
-    "phone_regex": r"^(\+?51)?9\d{8}$",
+    "phone_regex": null, //r"^(\+?51)?9\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "PE", "iso_three": "PER"},
     "currency": "PEN", // Peruvian Nuevo Sol
@@ -3343,7 +3349,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zamboanga del Sur", "iso": "ZAS"},
       {"name": "Zamboanga Sibugay", "iso": "ZSI"},
     ],
-    "phone_regex": r"^(09|\+639)\d{9}$",
+    "phone_regex": null, //r"^(09|\+639)\d{9}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "PH", "iso_three": "PHL"},
     "currency": "PHP", // Philippine Peso
@@ -3369,7 +3375,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Wielkopolskie", "iso": "30"},
       {"name": "Zachodniopomorskie", "iso": "32"},
     ],
-    "phone_regex": r"^(\+?48)? ?([5-8]\d|45) ?\d{3} ?\d{2} ?\d{2}$",
+    "phone_regex": null, //r"^(\+?48)? ?([5-8]\d|45) ?\d{3} ?\d{2} ?\d{2}$",
     "postal_code_regex": r"^\d{2}[- ]{0,1}\d{3}$",
     "country_code": {"iso_two": "PL", "iso_three": "POL"},
     "currency": "PLN", // Polish Zloty
@@ -3399,7 +3405,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vila Real", "iso": "17"},
       {"name": "Viseu", "iso": "18"},
     ],
-    "phone_regex": r"^(\+?351)?9[1236]\d{7}$",
+    "phone_regex": null, //r"^(\+?351)?9[1236]\d{7}$",
     "postal_code_regex": r"^\d{4}[- ]{0,1}\d{3}$|^\d{4}$",
     "country_code": {"iso_two": "PT", "iso_three": "PRT"},
     "currency": "EUR", // Euro
@@ -3417,7 +3423,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Az Za'ayin", "iso": "ZA"},
       {"name": "Umm Salal", "iso": "US"},
     ],
-    "phone_regex": r"^(\+974)?[3567]\d{7}$",
+    "phone_regex": null, //r"^(\+974)?[3567]\d{7}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "QA", "iso_three": "QAT"},
     "currency": "QAR", // Qatari Riyal
@@ -3428,7 +3434,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Réunion", "iso": "RE"}
     ],
-    "phone_regex": r"^(\+?262|0|00262)[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?262|0|00262)[67]\d{8}$",
     "postal_code_regex": r"^974\d{2}$",
     "country_code": {"iso_two": "RE", "iso_three": "REU"},
     "currency": "EUR", // Euro
@@ -3480,7 +3486,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Vaslui", "iso": "VS"},
       {"name": "Vrancea", "iso": "VN"},
     ],
-    "phone_regex": r"^(\+?40|0)\s?7\d{2}(\/|\s|\.|-)?\d{3}(\s|\.|-)?\d{3}$",
+    "phone_regex":
+        null, //r"^(\+?40|0)\s?7\d{2}(\/|\s|\.|-)?\d{3}(\s|\.|-)?\d{3}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "RO", "iso_three": "ROU"},
     "currency": "RON", // Romanian Leu
@@ -3573,7 +3580,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yaroslavl Oblast", "iso": "YAR"},
       {"name": "Zabaykalsky Krai", "iso": "ZAB"},
     ],
-    "phone_regex": r"^(\+?7|8)?9\d{9}$",
+    "phone_regex": null, //r"^(\+?7|8)?9\d{9}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "RU", "iso_three": "RUS"},
     "currency": "RUB", // Russian Ruble
@@ -3588,7 +3595,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southern", "iso": "05"},
       {"name": "Western", "iso": "04"},
     ],
-    "phone_regex": r"^(\+?250|0)?[7]\d{8}$",
+    "phone_regex": null, //r"^(\+?250|0)?[7]\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "RW", "iso_three": "RWA"},
     "currency": "RWF", // Rwandan Franc
@@ -3612,7 +3619,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Saint Thomas Middle Island", "iso": "13"},
       {"name": "Trinity Palmetto Point", "iso": "15"},
     ],
-    "phone_regex": r"^(?:\+1|1)869(?:46\d|48[89]|55[6-8]|66\d|76[02-7])\d{4}$",
+    "phone_regex":
+        null, //r"^(?:\+1|1)869(?:46\d|48[89]|55[6-8]|66\d|76[02-7])\d{4}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "KN", "iso_three": "KNA"},
     "currency": "XCD", // East Caribbean Dollar
@@ -3631,7 +3639,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "San Marino", "iso": "07"},
       {"name": "Serravalle", "iso": "09"}
     ],
-    "phone_regex": r"^((\+378)|(0549)|(\+390549)|(\+3780549))?6\d{5,9}$",
+    "phone_regex":
+        null, //r"^((\+378)|(0549)|(\+390549)|(\+3780549))?6\d{5,9}$",
     "postal_code_regex": r"^4789\d$",
     "country_code": {"iso_two": "SM", "iso_three": "SMR"},
     "currency": "EUR", // Euro
@@ -3654,7 +3663,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Riyadh", "iso": "01"},
       {"name": "Tabuk", "iso": "07"},
     ],
-    "phone_regex": r"^(!?(\+?966)|0)?5\d{8}$",
+    "phone_regex": null, //r"^(!?(\+?966)|0)?5\d{8}$",
     "postal_code_regex": r"^\d{5}(-{1}\d{4})?$",
     "country_code": {"iso_two": "SA", "iso_three": "SAU"},
     "currency": "SAR", // Saudi Riyal
@@ -3669,7 +3678,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southern and Eastern Serbia", "iso": null},
       {"name": "Kosovo and Metohija", "iso": "KM"},
     ],
-    "phone_regex": r"^(\+3816|06)[- \d]{5,9}$",
+    "phone_regex": null, //r"^(\+3816|06)[- \d]{5,9}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "RS", "iso_three": "SRB"},
     "currency": "RSD", // Serbian Dinar
@@ -3684,7 +3693,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southern", "iso": "S"},
       {"name": "Western Area", "iso": "W"}
     ],
-    "phone_regex": r"^(\+?232|0)\d{8}$",
+    "phone_regex": null, //r"^(\+?232|0)\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "SL", "iso_three": "SLE"},
     "currency": "SLL", // Sierra Leonean Leone
@@ -3699,7 +3708,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "South East", "iso": "04"},
       {"name": "South West", "iso": "05"},
     ],
-    "phone_regex": r"^(\+65)?[3689]\d{7}$",
+    "phone_regex": null, //r"^(\+65)?[3689]\d{7}$",
     "postal_code_regex": r"^\d{2}$|^\d{4}$|^\d{6}$",
     "country_code": {"iso_two": "SG", "iso_three": "SGP"},
     "currency": "SGD", // Singapore Dollar
@@ -3717,7 +3726,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Trnavský kraj", "iso": "TA"},
       {"name": "Žilinský kraj", "iso": "ZI"}
     ],
-    "phone_regex": r"^(\+?421)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$",
+    "phone_regex": null, //r"^(\+?421)? ?[1-9][0-9]{2} ?[0-9]{3} ?[0-9]{3}$",
     "postal_code_regex": r"^\d{5}\s\(\d{3}\s\d{2}\)$",
     "country_code": {"iso_two": "SK", "iso_three": "SVK"},
     "currency": "EUR", // Euro
@@ -3770,7 +3779,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Togdheer", "iso": "TO"},
       {"name": "Woqooyi Galbeed", "iso": "WO"}
     ],
-    "phone_regex": r"^(\+?252|0)((6[0-9])\d{7}|(7[1-9])\d{7})$",
+    "phone_regex": null, //r"^(\+?252|0)((6[0-9])\d{7}|(7[1-9])\d{7})$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "SO", "iso_three": "SOM"},
     "currency": "SOS", // Somali Shilling
@@ -3789,7 +3798,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Northern Cape", "iso": "NC"},
       {"name": "Western Cape", "iso": "WC"}
     ],
-    "phone_regex": r"^(\+?27|0)\d{9}$",
+    "phone_regex": null, //r"^(\+?27|0)\d{9}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "ZA", "iso_three": "ZAF"},
     "currency": "ZAR", // South African Rand
@@ -3809,7 +3818,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Western Bahr el Ghazal", "iso": "BW"},
       {"name": "Western Equatoria", "iso": "EW"}
     ],
-    "phone_regex": r"^(\+?211|0)(9[1257])\d{7}$",
+    "phone_regex": null, //r"^(\+?211|0)(9[1257])\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "SS", "iso_three": "SSD"},
     "currency": "SSP", // South Sudanese Pound
@@ -3838,7 +3847,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Ceuta", "iso": "CE"},
       {"name": "Melilla", "iso": "ML"}
     ],
-    "phone_regex": r"^(\+?34)?[6|7]\d{8}$",
+    "phone_regex": null, //r"^(\+?34)?[6|7]\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "ES", "iso_three": "ESP"},
     "currency": "EUR", // Euro
@@ -3857,7 +3866,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Uva", "iso": "8"},
       {"name": "Western", "iso": "1"}
     ],
-    "phone_regex": r"^(?:0|94|\+94)?(7(0|1|2|4|5|6|7|8)( |-)?)\d{7}$",
+    "phone_regex": null, //r"^(?:0|94|\+94)?(7(0|1|2|4|5|6|7|8)( |-)?)\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "LK", "iso_three": "LKA"},
     "currency": "LKR", // Sri Lankan Rupee
@@ -3885,7 +3894,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Northern", "iso": "NO"},
       {"name": "River Nile", "iso": "NR"}
     ],
-    "phone_regex": r"^((\+?249)|0)?(9[012369]|1[012])\d{7}$",
+    "phone_regex": null, //r"^((\+?249)|0)?(9[012369]|1[012])\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "SD", "iso_three": "SDN"},
     "currency": "SDG", // Sudanese Pound
@@ -3916,7 +3925,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Västernorrland County", "iso": "Y"},
       {"name": "Jämtland County", "iso": "Z"}
     ],
-    "phone_regex": r"^(\+?46|0)[\s\-]?7[\s\-]?[02369]([\s\-]?\d){7}$",
+    "phone_regex": null, //r"^(\+?46|0)[\s\-]?7[\s\-]?[02369]([\s\-]?\d){7}$",
     "postal_code_regex": r"^\d{3}\s*\d{2}$",
     "country_code": {"iso_two": "SE", "iso_three": "SWE"},
     "currency": "SEK", // Swedish Krona
@@ -3952,7 +3961,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zug", "iso": "ZG"},
       {"name": "Zurich", "iso": "ZH"}
     ],
-    "phone_regex": r"^(\+41|0)([1-9])\d{1,9}$",
+    "phone_regex": null, //r"^(\+41|0)([1-9])\d{1,9}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "CH", "iso_three": "CHE"},
     "currency": "CHF", // Swiss Franc
@@ -3976,7 +3985,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Rif Dimashq", "iso": "RD"},
       {"name": "Tartus", "iso": "TA"}
     ],
-    "phone_regex": r"^(!?(\+?963)|0)?9\d{8}$",
+    "phone_regex": null, //r"^(!?(\+?963)|0)?9\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "SY", "iso_three": "SYR"},
     "currency": "SYP", // Syrian Pound
@@ -4008,7 +4017,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Lienchiang County", "iso": "LIE"},
       {"name": "Kinmen County", "iso": "KIN"}
     ],
-    "phone_regex": r"^(\+?886\-?|0)?9\d{8}$",
+    "phone_regex": null, //r"^(\+?886\-?|0)?9\d{8}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "TW", "iso_three": "TWN"},
     "currency": "TWD", // New Taiwan Dollar
@@ -4023,7 +4032,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Region of Republican Subordination", "iso": "RA"},
       {"name": "Dushanbe", "iso": "DU"}
     ],
-    "phone_regex": r"^(\+?992)?[5][5]\d{7}$",
+    "phone_regex": null, //r"^(\+?992)?[5][5]\d{7}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "TJ", "iso_three": "TJK"},
     "currency": "TJS", // Tajikistani Somoni
@@ -4063,7 +4072,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Zanzibar Central/South", "iso": "11"},
       {"name": "Zanzibar West", "iso": "15"}
     ],
-    "phone_regex": r"^(\+?255|0)?[67]\d{8}$",
+    "phone_regex": null, //r"^(\+?255|0)?[67]\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "TZ", "iso_three": "TZA"},
     "currency": "TZS", // Tanzanian Shilling
@@ -4150,7 +4159,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yala", "iso": "95"},
       {"name": "Yasothon", "iso": "35"},
     ],
-    "phone_regex": r"^(\+66|66|0)\d{9}$",
+    "phone_regex": null, //r"^(\+66|66|0)\d{9}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "TH", "iso_three": "THA"},
     "currency": "THB", // Thai Baht
@@ -4184,7 +4193,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tunis", "iso": "11"},
       {"name": "Zaghouan", "iso": "22"}
     ],
-    "phone_regex": r"^(\+?216)?[2459]\d{7}$",
+    "phone_regex": null, //r"^(\+?216)?[2459]\d{7}$",
     "postal_code_regex": r"^\d{4}$",
     "country_code": {"iso_two": "TN", "iso_three": "TUN"},
     "currency": "TND", // Tunisian Dinar
@@ -4275,7 +4284,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Osmaniye", "iso": "80"},
       {"name": "Düzce", "iso": "81"},
     ],
-    "phone_regex": r"^(\+?90|0)?5\d{9}$",
+    "phone_regex": null, //r"^(\+?90|0)?5\d{9}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "TR", "iso_three": "TUR"},
     "currency": "TRY", // Turkish Lira
@@ -4291,7 +4300,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Mary", "iso": "M"},
       {"name": "Ashgabat", "iso": "S"}
     ],
-    "phone_regex": r"^(\+993|993|8)\d{8}$",
+    "phone_regex": null, //r"^(\+993|993|8)\d{8}$",
     "postal_code_regex": r"^\d{6}$",
     "country_code": {"iso_two": "TM", "iso_three": "TKM"},
     "currency": "TMT", // Turkmenistan Manat
@@ -4305,7 +4314,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Northern Region", "iso": "N"},
       {"name": "Western Region", "iso": "W"},
     ],
-    "phone_regex": r"^(\+?256|0)?[7]\d{8}$",
+    "phone_regex": null, //r"^(\+?256|0)?[7]\d{8}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "UG", "iso_three": "UGA"},
     "currency": "UGX", // Ugandan Shilling
@@ -4342,7 +4351,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Kyiv", "iso": "30"},
       {"name": "Sevastopol", "iso": "40"},
     ],
-    "phone_regex": r"^(\+?38|8)?0\d{9}$",
+    "phone_regex": null, //r"^(\+?38|8)?0\d{9}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "UA", "iso_three": "UKR"},
     "currency": "UAH", // Ukrainian Hryvnia
@@ -4359,7 +4368,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sharjah", "iso": "SH"},
       {"name": "Umm Al Quwain", "iso": "UQ"},
     ],
-    "phone_regex": r"^((\+?971)|0)?5[024568]\d{7}$",
+    "phone_regex": null, //r"^((\+?971)|0)?5[024568]\d{7}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "AE", "iso_three": "ARE"},
     "currency": "AED", // United Arab Emirates Dirham
@@ -4373,7 +4382,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Scotland", "iso": "SCT"},
       {"name": "Wales", "iso": "WLS"},
     ],
-    "phone_regex": r"^(\+?44|0)7\d{9}$",
+    "phone_regex": null, //r"^(\+?44|0)7\d{9}$",
     "postal_code_regex": r"^[A-Z]{1,2}[0-9R][0-9A-Z]?\s*[0-9][A-Z-[CIKMOV]]{2}",
     "country_code": {"iso_two": "GB", "iso_three": "GBR"},
     "currency": "GBP", // British Pound Sterling
@@ -4402,7 +4411,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tacuarembó", "iso": "TA"},
       {"name": "Treinta y Tres", "iso": "TT"}
     ],
-    "phone_regex": r"^(\+598|0)9[1-9][\d]{6}$",
+    "phone_regex": null, //r"^(\+598|0)9[1-9][\d]{6}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "UY", "iso_three": "URY"},
     "currency": "UYU", // Uruguayan Peso
@@ -4426,7 +4435,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Tashkent", "iso": "TK"},
       {"name": "Tashkent City", "iso": "TT"},
     ],
-    "phone_regex": r"^(\+?998)?(6[125-79]|7[1-69]|88|9\d)\d{7}$",
+    "phone_regex": null, //r"^(\+?998)?(6[125-79]|7[1-69]|88|9\d)\d{7}$",
     "postal_code_regex": r"^\d{3} \d{3}$",
     "country_code": {"iso_two": "UZ", "iso_three": "UZB"},
     "currency": "UZS", // Uzbekistani Som
@@ -4460,7 +4469,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Yaracuy", "iso": "U"},
       {"name": "Zulia", "iso": "V"},
     ],
-    "phone_regex": r"^(\+?58)?(2|4)\d{9}$",
+    "phone_regex": null, //r"^(\+?58)?(2|4)\d{9}$",
     "postal_code_regex": r"^\d{4}(\s[a-zA-Z]{1})?$",
     "country_code": {"iso_two": "VE", "iso_three": "VEN"},
     "currency": "VES", // Venezuelan Bolívar Soberano
@@ -4547,7 +4556,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Sigave", "iso": null},
       {"name": "Wallis", "iso": null},
     ],
-    "phone_regex": r"^(\+681)?\d{6}$",
+    "phone_regex": null, //r"^(\+681)?\d{6}$",
     "postal_code_regex": r"^986\d{2}$",
     "country_code": {"iso_two": "WF", "iso_three": "WLF"},
     "currency": "XPF", // CFP Franc
@@ -4558,7 +4567,7 @@ List<Map<String, dynamic>> countryData = [
     "provinces": [
       {"name": "Western Sahara", "iso": null}
     ],
-    "phone_regex": r"^(\+?212|0)[\s\-]?(5288|5289)[\s\-]?\d{5}$",
+    "phone_regex": null, //r"^(\+?212|0)[\s\-]?(5288|5289)[\s\-]?\d{5}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "EH", "iso_three": "ESH"},
     "currency": "MAD", // Moroccan Dirham
@@ -4590,7 +4599,8 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Socotra", "iso": "SU"},
       {"name": "Ta'izz", "iso": "TA"},
     ],
-    "phone_regex": r"^(((\+|00)9677|0?7)[0137]\d{7}|((\+|00)967|0)[1-7]\d{6})$",
+    "phone_regex":
+        null, //r"^(((\+|00)9677|0?7)[0137]\d{7}|((\+|00)967|0)[1-7]\d{6})$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "YE", "iso_three": "YEM"},
     "currency": "YER", // Yemeni Rial
@@ -4610,7 +4620,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Southern", "iso": "07"},
       {"name": "Western", "iso": "01"},
     ],
-    "phone_regex": r"^(\+?26)?09[567]\d{7}$",
+    "phone_regex": null, //r"^(\+?26)?09[567]\d{7}$",
     "postal_code_regex": r"^\d{5}$",
     "country_code": {"iso_two": "ZM", "iso_three": "ZMB"},
     "currency": "ZMK", // Zambian Kwacha
@@ -4630,7 +4640,7 @@ List<Map<String, dynamic>> countryData = [
       {"name": "Matabeleland South", "iso": "MS"},
       {"name": "Midlands", "iso": "MI"},
     ],
-    "phone_regex": r"^(\+263)[0-9]{9}$",
+    "phone_regex": null, //r"^(\+263)[0-9]{9}$",
     "postal_code_regex": null, // No formal postal code
     "country_code": {"iso_two": "ZW", "iso_three": "ZWE"},
     "currency": "ZWL", // Zimbabwean Dollar

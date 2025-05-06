@@ -46,7 +46,7 @@ class PdfGenerator {
       return pw.Column(
         mainAxisAlignment: pw.MainAxisAlignment.center,
         children: [
-          PdfPageSections.buildHeader(logo, sender, isInvoice),
+          PdfPageSections.buildHeader(logo, profile, isInvoice),
           PdfMargins.vertical60,
           PdfPageSections.buildRecipientDetails(
               recipient, invoice, receipt, isInvoice),

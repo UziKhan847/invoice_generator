@@ -21,10 +21,6 @@ class SenderTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // int senderAddressLength =
-    //     "${sender.street}, ${sender.city}, ${sender.province}, ${sender.zip}"
-    //         .length;
-
     final name = sender.name.replaceAll(RegExp(' '), '\n');
 
     return CustomListTile(
@@ -53,12 +49,14 @@ class SenderTile extends StatelessWidget {
                   Theme.of(context).brightness == Brightness.dark),
               Expanded(
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   spacing: 8,
                   children: [
-                    IconWithText(Icons.location_on,
-                        ' ${sender.street} ${sender.city} ${sender.province} ${sender.zip ?? ''}'),
-                    IconWithText(Icons.phone, " ${sender.phone}"),
-                    IconWithText(Icons.email, ' ${sender.email}')
+                    IconWithText(
+                        Icons.account_circle_rounded, " ${sender.position}"),
+                    IconWithText(Icons.phone, " ${sender.phone ?? ''}"),
+                    IconWithText(Icons.email, ' ${sender.email ?? ''}'),
+                    IconWithText(Icons.payment, ' ${sender.eTransfer ?? ''}'),
                   ],
                 ),
               )

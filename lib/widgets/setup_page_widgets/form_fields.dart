@@ -8,8 +8,8 @@ import 'package:markaz_umaza_invoice_generator/models/province.dart';
 import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
 
-class InfoPage extends StatefulWidget {
-  const InfoPage(
+class FormFields extends StatefulWidget {
+  const FormFields(
       {super.key,
       required this.controllers,
       required this.orientation,
@@ -22,10 +22,10 @@ class InfoPage extends StatefulWidget {
   final Orientation orientation;
 
   @override
-  State<InfoPage> createState() => _InfoPageState();
+  State<FormFields> createState() => _InfoPageState();
 }
 
-class _InfoPageState extends State<InfoPage> {
+class _InfoPageState extends State<FormFields> {
   static const double fieldHeight = 65;
 
   // Layer Link
@@ -36,9 +36,11 @@ class _InfoPageState extends State<InfoPage> {
   };
 
   // UI State
-  late bool isProvFocused = false;
-  late bool isCountryFocused = false;
-  late bool isCurrencyFocused = false;
+  late final Map<String, bool> focusStates = {
+    'isProvFocused': false,
+    'isCountryFocused': false,
+    'isCurrencyFocused': false,
+  };
 
   // Focus Nodes and Keys
   late final focusNodes = {
@@ -94,7 +96,6 @@ class _InfoPageState extends State<InfoPage> {
 
   @override
   Widget build(BuildContext context) {
-
     return SingleChildScrollView(
       child: Column(
         spacing: 30,
@@ -172,10 +173,11 @@ class _InfoPageState extends State<InfoPage> {
               return null;
             },
             labelText: "Country*",
-            isFocused: isCountryFocused,
+            isFocused: focusStates['isCountryFocused']!,
             onTap: () {
               setState(() {
-                isCountryFocused = !isCountryFocused;
+                focusStates['isCountryFocused'] =
+                    !focusStates['isCountryFocused']!;
               });
 
               context.insertOverlay(
@@ -184,7 +186,8 @@ class _InfoPageState extends State<InfoPage> {
                 layerLink: layerLinks['country']!,
                 onTapOutsideOverlay: () {
                   setState(() {
-                    isCountryFocused = !isCountryFocused;
+                    focusStates['isCountryFocused'] =
+                        !focusStates['isCountryFocused']!;
                   });
                   context.removeOverlay();
                 },
@@ -196,12 +199,17 @@ class _InfoPageState extends State<InfoPage> {
 
                   return DropDownItemTile(
                     currentIndex: index,
-                    itemFormat: [Text(item)],
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    itemFormat: Text(
+                      item,
+                      textAlign: TextAlign.center,
+                    ),
                     onTap: () {
                       setState(() {
                         widget.controllers['country']!.text = item;
                         widget.updateSlctdCtryIndex(index);
-                        isCountryFocused = !isCountryFocused;
+                        focusStates['isCountryFocused'] =
+                            !focusStates['isCountryFocused']!;
                       });
                       context.removeOverlay();
                     },
@@ -249,11 +257,12 @@ class _InfoPageState extends State<InfoPage> {
                   },
                   labelText: "Province*",
                   labelTextSize: 12.5,
-                  isFocused: isProvFocused,
+                  isFocused: focusStates['isProvFocused']!,
                   inkWellSize: const InkWellSize(width: 80),
                   onTap: () {
                     setState(() {
-                      isProvFocused = !isProvFocused;
+                      focusStates['isProvFocused'] =
+                          !focusStates['isProvFocused']!;
                     });
 
                     context.insertOverlay(
@@ -262,7 +271,8 @@ class _InfoPageState extends State<InfoPage> {
                       layerLink: layerLinks['prov']!,
                       onTapOutsideOverlay: () {
                         setState(() {
-                          isProvFocused = !isProvFocused;
+                          focusStates['isProvFocused'] =
+                              !focusStates['isProvFocused']!;
                         });
                         context.removeOverlay();
                       },
@@ -281,12 +291,16 @@ class _InfoPageState extends State<InfoPage> {
 
                         return DropDownItemTile(
                           currentIndex: index,
-                          itemFormat: [Text(item)],
-                          height: 50,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          itemFormat: Text(
+                            item,
+                            textAlign: TextAlign.center,
+                          ),
                           onTap: () {
                             setState(() {
                               widget.controllers['prov']!.text = item;
-                              isProvFocused = !isProvFocused;
+                              focusStates['isProvFocused'] =
+                                  !focusStates['isProvFocused']!;
                             });
                             context.removeOverlay();
                           },
@@ -319,14 +333,14 @@ class _InfoPageState extends State<InfoPage> {
               ),
             ),
 
-          if (widget.controllers['country']!.text.isNotEmpty &&
-              Countries
-                      .countries[widget.selectedCountryIndex].postalCodeRegex !=
-                  null)
+          if (widget.controllers['country']!.text.isNotEmpty)
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
+                // if (Countries
+                //         .countries[selectedCountryIndex].postalCodeRegex !=
+                //     null)
                 //Zip
                 SizedBox(
                   width: 165,
@@ -336,18 +350,24 @@ class _InfoPageState extends State<InfoPage> {
                     controller: widget.controllers['zip']!,
                     onTapOutside: (_) => focusNodes['zip']!.unfocus(),
                     validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Enter Zipcode';
-                      } else if (!RegExp(Countries
-                              .countries[widget.selectedCountryIndex]
-                              .postalCodeRegex!)
-                          .hasMatch(value)) {
-                        return 'Invalid Zip';
+                      if (Countries.countries[widget.selectedCountryIndex]
+                              .postalCodeRegex !=
+                          null) {
+                        if (value == null || value.isEmpty) {
+                          return 'Enter Zipcode';
+                        } else if (!RegExp(Countries
+                                .countries[widget.selectedCountryIndex]
+                                .postalCodeRegex!)
+                            .hasMatch(value)) {
+                          return 'Invalid Zip';
+                        }
                       }
+
                       return null;
                     },
-                    decoration: const InputDecoration(
-                      labelText: "Zipcode*",
+                    decoration: InputDecoration(
+                      labelText:
+                          "Zipcode${Countries.countries[widget.selectedCountryIndex].postalCodeRegex != null ? '*' : ''}",
                     ),
                   ),
                 ),
@@ -365,11 +385,12 @@ class _InfoPageState extends State<InfoPage> {
                   },
                   labelText: "Currency*",
                   labelTextSize: 12.5,
-                  isFocused: isCurrencyFocused,
+                  isFocused: focusStates['isCurrencyFocused']!,
                   inkWellSize: const InkWellSize(width: 80),
                   onTap: () {
                     setState(() {
-                      isCurrencyFocused = !isCurrencyFocused;
+                      focusStates['isCurrencyFocused'] =
+                          !focusStates['isCurrencyFocused']!;
                     });
 
                     context.insertOverlay(
@@ -378,7 +399,8 @@ class _InfoPageState extends State<InfoPage> {
                       layerLink: layerLinks['currency']!,
                       onTapOutsideOverlay: () {
                         setState(() {
-                          isCurrencyFocused = !isCurrencyFocused;
+                          focusStates['isCurrencyFocused'] =
+                              !focusStates['isCurrencyFocused']!;
                         });
                         context.removeOverlay();
                       },
@@ -388,12 +410,16 @@ class _InfoPageState extends State<InfoPage> {
 
                         return DropDownItemTile(
                           currentIndex: index,
-                          itemFormat: [Text(item)],
-                          height: 50,
+                          padding: const EdgeInsets.symmetric(vertical: 8),
+                          itemFormat: Text(
+                            item,
+                            textAlign: TextAlign.center,
+                          ),
                           onTap: () {
                             setState(() {
                               widget.controllers['currency']!.text = item;
-                              isCurrencyFocused = !isCurrencyFocused;
+                              focusStates['isCurrencyFocused'] =
+                                  !focusStates['isCurrencyFocused']!;
                             });
                             context.removeOverlay();
                           },
@@ -417,10 +443,14 @@ class _InfoPageState extends State<InfoPage> {
                 validator: (value) {
                   if (value == null || value.isEmpty) {
                     return 'Please enter a Phone Number';
-                  } else if (!RegExp(Countries
-                          .countries[widget.selectedCountryIndex].phoneRegex)
-                      .hasMatch(value)) {
-                    return 'Please enter a valid Phone Number';
+                  } else if (Countries
+                          .countries[widget.selectedCountryIndex].phoneRegex !=
+                      null) {
+                    if (!RegExp(Countries
+                            .countries[widget.selectedCountryIndex].phoneRegex!)
+                        .hasMatch(value)) {
+                      return 'Please enter a valid Phone Number';
+                    }
                   }
                   return null;
                 },

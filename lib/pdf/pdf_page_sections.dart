@@ -1,4 +1,5 @@
 import 'package:markaz_umaza_invoice_generator/models/invoice.dart';
+import 'package:markaz_umaza_invoice_generator/models/profile.dart';
 import 'package:markaz_umaza_invoice_generator/models/receipt.dart';
 import 'package:markaz_umaza_invoice_generator/models/recipient.dart';
 import 'package:markaz_umaza_invoice_generator/models/sender.dart';
@@ -8,24 +9,24 @@ import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 
 class PdfPageSections {
-  static pw.Widget buildHeader(pw.Image logo, Sender sender, bool isInvoice) {
+  static pw.Widget buildHeader(pw.Image logo, Profile profile, bool isInvoice) {
     return pw.Row(
       children: [
         pw.Column(
           crossAxisAlignment: pw.CrossAxisAlignment.start,
           children: [
-            pw.Text("Markaz Umaza",
+            pw.Text(profile.fullName!,
                 style:
                     pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 21)),
             PdfMargins.vertical6,
             PdfComponents.generalText(
-                text: sender.businessNumber == null
+                text: profile.businessNumber == null
                     ? ''
-                    : "BN: ${sender.businessNumber}"),
+                    : "BN: ${profile.businessNumber}"),
             PdfComponents.generalText(
-                text: "${sender.street}, ${sender.city}, ${sender.province}"),
-            PdfComponents.generalText(text: sender.email),
-            PdfComponents.generalText(text: sender.phone),
+                text: "${profile.street}, ${profile.city}, ${profile.province}"),
+            PdfComponents.generalText(text: profile.email!),
+            PdfComponents.generalText(text: profile.phone!),
           ],
         ),
         pw.Expanded(child: pw.SizedBox()),

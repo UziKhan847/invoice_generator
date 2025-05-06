@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:markaz_umaza_invoice_generator/dialogs/course_dialog.dart';
+import 'package:markaz_umaza_invoice_generator/addding_form_fields/course_form_fields.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
 
 class AddCourse extends ConsumerStatefulWidget {
@@ -12,17 +12,19 @@ class AddCourse extends ConsumerStatefulWidget {
 
 class _AddCourseState extends ConsumerState<AddCourse> {
   bool isLoading = false;
-  final formKey = GlobalKey<FormState>();
-  final costController = TextEditingController();
-  final frequencyController = TextEditingController();
-  final nameController = TextEditingController();
+  late final formKey = GlobalKey<FormState>();
+  late final Map<String, TextEditingController> controllers = {
+    'name': TextEditingController(),
+    'cost': TextEditingController(),
+    'frequency': TextEditingController(),
+  };
   late AppData provider;
 
   @override
   void dispose() {
-    nameController.dispose();
-    costController.dispose();
-    frequencyController.dispose();
+    for (TextEditingController e in controllers.values) {
+      e.dispose();
+    }
     super.dispose();
   }
 
@@ -34,19 +36,17 @@ class _AddCourseState extends ConsumerState<AddCourse> {
   Widget build(BuildContext context) {
     provider = ref.watch(appData);
 
-    return CourseDialog(
+    return CourseFormFields(
       formKey: formKey,
-      costController: costController,
-      frequencyController: frequencyController,
-      nameController: nameController,
+      controllers: controllers,
       onTapAffirm: () async {
         if (formKey.currentState!.validate()) {
           loadCircle();
           await provider.insertCourse(
             context: context,
-            name: nameController.text,
-            cost: double.parse(costController.text),
-            frequency: frequencyController.text,
+            name: controllers['name']!.text,
+            cost: double.parse(controllers['cost']!.text),
+            frequency: controllers['frequency']!.text,
           );
           loadCircle();
 

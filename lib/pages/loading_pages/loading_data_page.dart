@@ -18,7 +18,7 @@ class _LoadingDataPageState extends ConsumerState<LoadingDataPage> {
   @override
   void initState() {
     super.initState();
-    data = ref.read(appData).getData(); // only runs once per login
+    data = ref.read(appData).getData();
   }
 
   @override

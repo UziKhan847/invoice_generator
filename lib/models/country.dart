@@ -20,7 +20,7 @@ class Country {
   List<Province> provinces;
 
   @JsonKey(name: 'phone_regex')
-  String phoneRegex;
+  String? phoneRegex;
 
   @JsonKey(name: 'postal_code_regex')
   String? postalCodeRegex;

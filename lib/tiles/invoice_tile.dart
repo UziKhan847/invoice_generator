@@ -61,6 +61,9 @@ class InvoiceTile extends StatelessWidget {
           }
         }
       },
+      onTapShare: () {
+        pdfHandler.sharePdf(context);
+      },
       onTapMail: () {
         showDialog(
             context: context,

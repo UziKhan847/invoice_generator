@@ -4,6 +4,7 @@ import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_item_tile.d
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/dropdown_menu_tile.dart';
 import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_well_size.dart';
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
+import 'package:markaz_umaza_invoice_generator/extensions/string_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/country.dart';
 import 'package:markaz_umaza_invoice_generator/models/province.dart';
 import 'package:markaz_umaza_invoice_generator/providers/app_data.dart';
@@ -19,8 +20,9 @@ class AddRecipient extends ConsumerStatefulWidget {
 }
 
 class _AddRecipientState extends ConsumerState<AddRecipient> {
-//  Form
+//  Form % Scroll
   final _formKey = GlobalKey<FormState>();
+  late ScrollPhysics scrollPhysics = const AlwaysScrollableScrollPhysics();
 
 // Layer Link
   late final layerLinks = {
@@ -111,7 +113,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
             street: controllers['street']!.text,
             city: controllers['city']!.text,
             prov: controllers['prov']!.text,
-            country: controllers['country']!.text,
+            country: controllers['country']!.text.countryName,
             zip: countries[selectedCountryIndex].postalCodeRegex == null
                 ? null
                 : controllers['zip']!.text,
@@ -133,8 +135,10 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
         child: SizedBox(
           width: 270,
           child: ListView(
+            physics: scrollPhysics,
             children: [
               Column(
+                spacing: 18,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -142,7 +146,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                     "* required fields",
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-                  Margins.vertical26,
+                  Margins.vertical8,
 
                   //Name Field
                   SizedBox(
@@ -162,7 +166,6 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       ),
                     ),
                   ),
-                  Margins.vertical18,
 
                   //Country dropDown Menu
                   DropdownMenuTile(
@@ -176,38 +179,44 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       return null;
                     },
                     labelText: "Country*",
-                    labelTextSize: 12.5,
                     isFocused: isCountryFocused,
-                    inkWellSize: const InkWellSize(width: 150),
+                    //inkWellSize: const InkWellSize(width: 150),
                     onTap: () {
-                      setState(() {
-                        isCountryFocused = !isCountryFocused;
-                      });
+                      isCountryFocused = !isCountryFocused;
+                      scrollPhysics = const NeverScrollableScrollPhysics();
+                      setState(() {});
 
                       context.insertOverlay(
                         context: context,
                         widgetKey: keys['country']!,
                         layerLink: layerLinks['country']!,
                         onTapOutsideOverlay: () {
-                          setState(() {
-                            isCountryFocused = !isCountryFocused;
-                          });
+                          isCountryFocused = !isCountryFocused;
+                          scrollPhysics = const AlwaysScrollableScrollPhysics();
+                          setState(() {});
                           context.removeOverlay();
                         },
                         itemCount: Countries.countries.length,
                         itemBuilder: (context, index) {
-                          String item = Countries.countries[index].name;
+                          String countryName = Countries.countries[index].name;
+                          String countryFlag =
+                              Countries.countries[index].flagIcon;
+                          String item = "$countryFlag - $countryName";
 
                           return DropDownItemTile(
                             currentIndex: index,
-                            itemFormat: [Text(item)],
-                            height: 50,
+                            padding: const EdgeInsets.symmetric(vertical: 10),
+                            itemFormat: Text(
+                              item,
+                              textAlign: TextAlign.center,
+                            ),
                             onTap: () {
-                              setState(() {
-                                controllers['country']!.text = item;
-                                selectedCountryIndex = index;
-                                isCountryFocused = !isCountryFocused;
-                              });
+                              controllers['country']!.text = item;
+                              selectedCountryIndex = index;
+                              isCountryFocused = !isCountryFocused;
+                              scrollPhysics =
+                                  const AlwaysScrollableScrollPhysics();
+                              setState(() {});
                               context.removeOverlay();
                             },
                           );
@@ -215,53 +224,32 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       );
                     },
                   ),
-                  Margins.vertical18,
 
-                  //Street
-                  SizedBox(
-                    height: 65,
-                    child: TextFormField(
-                      focusNode: focusNodes['street']!,
-                      controller: controllers['street']!,
-                      onTapOutside: (_) => focusNodes['street']!.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter the street';
-                        }
-                        return null;
-                      },
-                      decoration: const InputDecoration(
-                        labelText: "Street (#, Name, etc.)*",
-                      ),
-                    ),
-                  ),
-                  Margins.vertical18,
-
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      //City
-                      SizedBox(
-                        height: 65,
-                        width: 190,
-                        child: TextFormField(
-                          focusNode: focusNodes['city']!,
-                          controller: controllers['city']!,
-                          onTapOutside: (_) => focusNodes['city']!.unfocus(),
-                          validator: (value) {
-                            if (value == null || value.isEmpty) {
-                              return 'Please enter City name';
-                            }
-                            return null;
-                          },
-                          decoration: const InputDecoration(
-                            labelText: "City*",
+                  if (controllers['country']!.text.isNotEmpty) ...[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        //City
+                        SizedBox(
+                          height: 65,
+                          width: 190,
+                          child: TextFormField(
+                            focusNode: focusNodes['city']!,
+                            controller: controllers['city']!,
+                            onTapOutside: (_) => focusNodes['city']!.unfocus(),
+                            validator: (value) {
+                              if (value == null || value.isEmpty) {
+                                return 'Please enter City name';
+                              }
+                              return null;
+                            },
+                            decoration: const InputDecoration(
+                              labelText: "City*",
+                            ),
                           ),
                         ),
-                      ),
 
-                      if (controllers['country']!.text.isNotEmpty) ...[
                         //Province dropDown Menu
                         DropdownMenuTile(
                           widgetKey: keys['prov']!,
@@ -278,18 +266,20 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                           isFocused: isProvFocused,
                           inkWellSize: const InkWellSize(width: 68),
                           onTap: () {
-                            setState(() {
-                              isProvFocused = !isProvFocused;
-                            });
+                            isProvFocused = !isProvFocused;
+                            scrollPhysics =
+                                const NeverScrollableScrollPhysics();
+                            setState(() {});
 
                             context.insertOverlay(
                               context: context,
                               widgetKey: keys['prov']!,
                               layerLink: layerLinks['prov']!,
                               onTapOutsideOverlay: () {
-                                setState(() {
-                                  isProvFocused = !isProvFocused;
-                                });
+                                isProvFocused = !isProvFocused;
+                                scrollPhysics =
+                                    const AlwaysScrollableScrollPhysics();
+                                setState(() {});
                                 context.removeOverlay();
                               },
                               itemCount: Countries
@@ -307,13 +297,14 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
 
                                 return DropDownItemTile(
                                   currentIndex: index,
-                                  itemFormat: [Text(item)],
+                                  itemFormat: Text(item),
                                   height: 50,
                                   onTap: () {
-                                    setState(() {
-                                      controllers['prov']!.text = item;
-                                      isProvFocused = !isProvFocused;
-                                    });
+                                    controllers['prov']!.text = item;
+                                    isProvFocused = !isProvFocused;
+                                    scrollPhysics =
+                                        const AlwaysScrollableScrollPhysics();
+                                    setState(() {});
                                     context.removeOverlay();
                                   },
                                 );
@@ -322,14 +313,30 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                           },
                         ),
                       ],
-                    ],
-                  ),
-                  Margins.vertical18,
+                    ),
 
-                  if (controllers['country']!.text.isNotEmpty &&
-                      Countries.countries[selectedCountryIndex]
-                              .postalCodeRegex !=
-                          null) ...[
+                    //Street
+                    SizedBox(
+                      height: 65,
+                      child: TextFormField(
+                        focusNode: focusNodes['street']!,
+                        controller: controllers['street']!,
+                        onTapOutside: (_) => focusNodes['street']!.unfocus(),
+                        validator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Please enter the street';
+                          }
+                          return null;
+                        },
+                        decoration: const InputDecoration(
+                          labelText: "Street (#, Name, etc.)*",
+                        ),
+                      ),
+                    ),
+
+                    // if (Countries
+                    //         .countries[selectedCountryIndex].postalCodeRegex !=
+                    //     null)
                     //Zip
                     SizedBox(
                       width: 100,
@@ -339,14 +346,19 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                         controller: controllers['zip']!,
                         onTapOutside: (_) => focusNodes['zip']!.unfocus(),
                         validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Enter Zipcode';
-                          } else if (!RegExp(Countries
-                                  .countries[selectedCountryIndex]
-                                  .postalCodeRegex!)
-                              .hasMatch(value)) {
-                            return 'Invalid Zip';
+                          if (Countries.countries[selectedCountryIndex]
+                                  .postalCodeRegex !=
+                              null) {
+                            if (value == null || value.isEmpty) {
+                              return 'Enter Zipcode';
+                            } else if (!RegExp(Countries
+                                    .countries[selectedCountryIndex]
+                                    .postalCodeRegex!)
+                                .hasMatch(value)) {
+                              return 'Invalid Zip';
+                            }
                           }
+
                           return null;
                         },
                         decoration: const InputDecoration(
@@ -354,10 +366,7 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                         ),
                       ),
                     ),
-                    Margins.vertical18,
-                  ],
 
-                  if (controllers['country']!.text.isNotEmpty) ...[
                     //Phone
                     SizedBox(
                       height: 65,
@@ -369,10 +378,14 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Please enter a Phone Number';
-                          } else if (!RegExp(Countries
-                                  .countries[selectedCountryIndex].phoneRegex)
-                              .hasMatch(value)) {
-                            return 'Please enter a valid Phone Number';
+                          } else if (Countries
+                                  .countries[selectedCountryIndex].phoneRegex !=
+                              null) {
+                            if (!RegExp(Countries
+                                    .countries[selectedCountryIndex].phoneRegex!)
+                                .hasMatch(value)) {
+                              return 'Please enter a valid Phone Number';
+                            }
                           }
                           return null;
                         },
@@ -381,7 +394,6 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                         ),
                       ),
                     ),
-                    Margins.vertical18,
                   ],
 
                   //Email
@@ -405,7 +417,6 @@ class _AddRecipientState extends ConsumerState<AddRecipient> {
                       ),
                     ),
                   ),
-                  Margins.vertical18,
                 ],
               ),
             ],

@@ -5,57 +5,59 @@ import 'package:markaz_umaza_invoice_generator/dropdownmenu/properties.dart/ink_
 import 'package:markaz_umaza_invoice_generator/extensions/context_extension.dart';
 import 'package:markaz_umaza_invoice_generator/models/course.dart';
 import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
-import 'package:markaz_umaza_invoice_generator/utils/margins.dart';
+import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
 
-class CourseDialog extends StatefulWidget {
-  const CourseDialog({
+class CourseFormFields extends StatefulWidget {
+  const CourseFormFields({
     super.key,
     this.isLoading = false,
     this.item,
     required this.onTapAffirm,
     required this.formKey,
-    required this.costController,
-    required this.frequencyController,
-    required this.nameController,
+    required this.controllers,
   });
 
   final bool isLoading;
   final void Function()? onTapAffirm;
   final GlobalKey<FormState> formKey;
-  final TextEditingController nameController;
-  final TextEditingController costController;
-  final TextEditingController frequencyController;
+  final Map<String, TextEditingController> controllers;
   final Course? item;
 
   @override
-  State<CourseDialog> createState() => _CourseDialogState();
+  State<CourseFormFields> createState() => _CourseDialogState();
 }
 
-class _CourseDialogState extends State<CourseDialog> {
-  bool isFrequencySelected = false;
-  final List<String> frequencyDropdowItems = ["Hr", "Day", "Wk", "Mo", "Yr"];
-  final nameFocus = FocusNode();
-  final costFocus = FocusNode();
-  final quantityFocus = FocusNode();
-  final numTwoDecimalsRegex = RegExp(r'^\d+(\.\d{1,2})?$');
-  final leadingZerosRegex = RegExp(r'^0+\d');
+class _CourseDialogState extends State<CourseFormFields> {
+  bool isFrequencyFocused = false;
+  late final List<String> frequencyDropdowItems = [
+    "Hr",
+    "Day",
+    "Wk",
+    "Mo",
+    "Yr"
+  ];
+  late final focusNodes = {
+    'name': FocusNode(),
+    'cost': FocusNode(),
+  };
   final courseKey = GlobalKey();
   late final layerLink = LayerLink();
+  late ScrollPhysics scrollPhysics = const AlwaysScrollableScrollPhysics();
 
   @override
   void dispose() {
-    nameFocus.dispose();
-    costFocus.dispose();
-    quantityFocus.dispose();
+    for (FocusNode node in focusNodes.values) {
+      node.dispose();
+    }
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     if (widget.item != null) {
-      widget.nameController.text = widget.item!.name;
-      widget.costController.text = "${widget.item!.cost}";
-      widget.frequencyController.text = widget.item!.costFrequency;
+      widget.controllers['name']!.text = widget.item!.name;
+      widget.controllers['cost']!.text = "${widget.item!.cost}";
+      widget.controllers['name']!.text = widget.item!.costFrequency;
     }
 
     return DialogTile(
@@ -73,8 +75,10 @@ class _CourseDialogState extends State<CourseDialog> {
         child: SizedBox(
           width: 290,
           child: ListView(
+            physics: scrollPhysics,
             children: [
               Column(
+                spacing: 18,
                 mainAxisAlignment: MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -82,15 +86,15 @@ class _CourseDialogState extends State<CourseDialog> {
                     "* required fields",
                     style: TextStyle(color: Colors.grey.shade600),
                   ),
-                  Margins.vertical26,
+                  const SizedBox(),
 
                   //Name Field
                   SizedBox(
                     height: 65,
                     child: TextFormField(
-                      focusNode: nameFocus,
-                      controller: widget.nameController,
-                      onTapOutside: (_) => nameFocus.unfocus(),
+                      focusNode: focusNodes['name']!,
+                      controller: widget.controllers['name']!,
+                      onTapOutside: (_) => focusNodes['name']!.unfocus(),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
                           return 'Please enter a name';
@@ -104,7 +108,6 @@ class _CourseDialogState extends State<CourseDialog> {
                       ),
                     ),
                   ),
-                  Margins.vertical18,
 
                   //Cost Field
                   Row(
@@ -115,14 +118,16 @@ class _CourseDialogState extends State<CourseDialog> {
                         width: 180,
                         child: TextFormField(
                           keyboardType: const TextInputType.numberWithOptions(),
-                          focusNode: costFocus,
-                          controller: widget.costController,
-                          onTapOutside: (_) => costFocus.unfocus(),
+                          focusNode: focusNodes['cost']!,
+                          controller: widget.controllers['cost']!,
+                          onTapOutside: (_) => focusNodes['cost']!.unfocus(),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
                               return 'Enter cost';
-                            } else if (!numTwoDecimalsRegex.hasMatch(value) ||
-                                leadingZerosRegex.hasMatch(value)) {
+                            } else if (!RegularExpressions.numTwoDecimalsRegex
+                                    .hasMatch(value) ||
+                                RegularExpressions.leadingZerosRegex
+                                    .hasMatch(value)) {
                               return 'Invalid cost';
                             }
                             return null;
@@ -145,28 +150,29 @@ class _CourseDialogState extends State<CourseDialog> {
                         widgetKey: courseKey,
                         layerLink: layerLink,
                         labelText: "Frequency*",
-                        controller: widget.frequencyController,
+                        controller: widget.controllers['frequency'],
                         validator: (value) {
                           if (value == null || value.isEmpty) {
                             return 'Invalid';
                           }
                           return null;
                         },
-                        isFocused: isFrequencySelected,
+                        isFocused: isFrequencyFocused,
                         inkWellSize: const InkWellSize(height: 47, width: 66),
                         onTap: () {
-                          setState(() {
-                            isFrequencySelected = !isFrequencySelected;
-                          });
+                          isFrequencyFocused = !isFrequencyFocused;
+                          scrollPhysics = const NeverScrollableScrollPhysics();
+                          setState(() {});
 
                           context.insertOverlay(
                             widgetKey: courseKey,
                             context: context,
                             layerLink: layerLink,
                             onTapOutsideOverlay: () {
-                              setState(() {
-                                isFrequencySelected = !isFrequencySelected;
-                              });
+                              isFrequencyFocused = !isFrequencyFocused;
+                              scrollPhysics =
+                                  const AlwaysScrollableScrollPhysics();
+                              setState(() {});
                               context.removeOverlay();
                             },
                             itemCount: frequencyDropdowItems.length,
@@ -175,13 +181,17 @@ class _CourseDialogState extends State<CourseDialog> {
 
                               return DropDownItemTile(
                                 currentIndex: index,
-                                itemFormat: [Text(item)],
-                                height: 50,
+                                padding: const EdgeInsets.symmetric(vertical: 8),
+                                itemFormat: Text(
+                                  item,
+                                  textAlign: TextAlign.center,
+                                ),
                                 onTap: () {
-                                  setState(() {
-                                    widget.frequencyController.text = item;
-                                    isFrequencySelected = !isFrequencySelected;
-                                  });
+                                  widget.controllers['frequency']!.text = item;
+                                  isFrequencyFocused = !isFrequencyFocused;
+                                  scrollPhysics =
+                                      const AlwaysScrollableScrollPhysics();
+                                  setState(() {});
                                   context.removeOverlay();
                                 },
                               );

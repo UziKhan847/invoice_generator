@@ -10,6 +10,7 @@ import 'package:markaz_umaza_invoice_generator/tiles/dialog_tile.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:share_plus/share_plus.dart';
 
 class PdfHandler {
   PdfHandler({required this.invoice, this.receipt, required this.profile});
@@ -18,28 +19,80 @@ class PdfHandler {
   final Invoice invoice;
   final Receipt? receipt;
 
-  //EMAIL
-  Future<String> getPdfFilePath(Future<Uint8List> pdf) async {
+  Future<Uint8List?> getPdfBytes() {
+    return PdfGenerator.generatePdf(
+      profile: profile,
+      receipt: receipt,
+      invoice: invoice,
+      sender: invoice.senders,
+      recipient: invoice.recipients,
+      invoiceCourses: invoice.invoiceCourses!.asMap(),
+    );
+  }
+
+  String get pdfFileName =>
+      '${receipt == null ? invoice.invoiceDate : receipt!.receiptDate}_${invoice.recipients.name}'
+          .replaceAll(RegExp('[- ]'), '_');
+
+  Future<String> getPdfFilePath(Uint8List pdf, String fileName) async {
     final dir = await getTemporaryDirectory();
-    final fileName =
-        '${receipt == null ? invoice.invoiceDate : receipt!.receiptDate}_${invoice.recipients.name}'
-            .replaceAll(RegExp('[- ]'), '_');
+    // final fileName =
+    //     '${receipt == null ? invoice.invoiceDate : receipt!.receiptDate}_${invoice.recipients.name}'
+    //         .replaceAll(RegExp('[- ]'), '_');
     final file = File('${dir.path}/$fileName.pdf');
 
-    await file.writeAsBytes(await pdf);
+    await file.writeAsBytes(pdf);
     return file.path;
   }
 
+  //SHARE
+  Future<void> sharePdf(BuildContext context) async {
+    try {
+      final pdfBytes = await getPdfBytes();
+
+      if (pdfBytes == null) {
+        if (context.mounted) {
+          context.showSnackBar(
+              'Error generating the PDF, email not sent. Try Again');
+        }
+        return;
+      }
+
+      final filePath = await getPdfFilePath(pdfBytes, pdfFileName);
+
+      final params = ShareParams(
+        text: pdfFileName,
+        files: [XFile(filePath)],
+      );
+
+      final result = await SharePlus.instance.share(params);
+
+      if (result.status == ShareResultStatus.success) {
+        if (context.mounted) {
+          context.showSnackBar('Succesfully shared PDF.');
+        }
+      }
+    } catch (e) {
+      if (context.mounted) {
+        context.showSnackBar('Error: $e.', isError: true);
+      }
+    }
+  }
+
+  //EMAIL
   Future<void> sendEmail(BuildContext context) async {
     try {
-      final pdfPath = await getPdfFilePath(PdfGenerator.generatePdf(
-        profile: profile,
-        receipt: receipt,
-        invoice: invoice,
-        sender: invoice.senders,
-        recipient: invoice.recipients,
-        invoiceCourses: invoice.invoiceCourses!.asMap(),
-      ));
+      final pdfBytes = await getPdfBytes();
+
+      if (pdfBytes == null) {
+        if (context.mounted) {
+          context.showSnackBar(
+              'Error generating the PDF, email not sent. Try Again');
+        }
+        return;
+      }
+
+      final pdfPath = await getPdfFilePath(pdfBytes, pdfFileName);
 
       String courseNames = invoice.invoiceCourses!
           .asMap()
@@ -87,14 +140,17 @@ class PdfHandler {
 
       final file = File(filePath);
 
-      await file.writeAsBytes(await PdfGenerator.generatePdf(
-        profile: profile,
-        receipt: receipt,
-        invoice: invoice,
-        sender: invoice.senders,
-        recipient: invoice.recipients,
-        invoiceCourses: invoice.invoiceCourses!.asMap(),
-      ));
+      final pdfBytes = await getPdfBytes();
+
+      if (pdfBytes == null) {
+        if (context.mounted) {
+          context.showSnackBar(
+              'Error generating the PDF, email not sent. Try Again');
+        }
+        return '';
+      }
+
+      await file.writeAsBytes(pdfBytes);
 
       return filePath;
     } catch (e) {

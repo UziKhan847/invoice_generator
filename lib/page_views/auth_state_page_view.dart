@@ -25,10 +25,10 @@ class _AuthRouterPageViewState extends State<AuthStatePageView> {
     initialPage = supabase.auth.currentSession == null ? 1 : 0;
     pageController = PageController(initialPage: initialPage);
 
-    authSub = supabase.auth.onAuthStateChange.listen((data) {
+    authSub = supabase.auth.onAuthStateChange.listen((data) async {
       final event = data.event;
       if (event == AuthChangeEvent.signedIn) {
-        pageController.animateToPage(0,
+        await pageController.animateToPage(0,
             duration: const Duration(milliseconds: 1000), curve: Curves.ease);
       } else if (event == AuthChangeEvent.signedOut) {
         pageController.jumpToPage(1);
