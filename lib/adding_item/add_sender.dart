@@ -103,16 +103,18 @@ class _AddSenderState extends ConsumerState<AddSender> {
           await provider.insertSender(
               context: context,
               name: controllers['name']!.text,
-              position: controllers['position']!.text,
+              position: controllers['position']!.text.isNotEmpty
+                  ? controllers['position']!.text
+                  : 'N/A',
               phone: controllers['phone']!.text.isNotEmpty
                   ? controllers['phone']!.text
-                  : null,
+                  : 'N/A',
               email: controllers['email']!.text.isNotEmpty
                   ? controllers['email']!.text
-                  : null,
+                  : 'N/A',
               eTransfer: controllers['eTransfer']!.text.isNotEmpty
                   ? controllers['eTransfer']!.text
-                  : null);
+                  : 'N/A');
           loadCircle();
 
           if (context.mounted) {
@@ -167,14 +169,14 @@ class _AddSenderState extends ConsumerState<AddSender> {
                       focusNode: focusNodes['position']!,
                       controller: controllers['position']!,
                       onTapOutside: (_) => focusNodes['position']!.unfocus(),
-                      validator: (value) {
-                        if (value == null || value.isEmpty) {
-                          return 'Please enter your position or N/A';
-                        }
-                        return null;
-                      },
+                      // validator: (value) {
+                      //   if (value == null || value.isEmpty) {
+                      //     return 'Please enter your position or N/A';
+                      //   }
+                      //   return null;
+                      // },
                       decoration: const InputDecoration(
-                        labelText: "Position* (N/A if not available)",
+                        labelText: "Position",
                       ),
                     ),
                   ),

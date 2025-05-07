@@ -194,6 +194,7 @@ class _SetupPageState extends ConsumerState<SetupPage> {
                     onPageChanged: (value) {},
                     children: [
                       SetupFormFields(
+                        isSetup: true,
                         controllers: textControllers,
                         selectedCountryIndex: selectedCountryIndex,
                         updateSlctdCtryIndex: updateSlctdCtryIndex,

@@ -9,17 +9,20 @@ import 'package:markaz_umaza_invoice_generator/utils/countries.dart';
 import 'package:markaz_umaza_invoice_generator/utils/regular_expressions.dart';
 
 class SetupFormFields extends StatefulWidget {
-  const SetupFormFields(
-      {super.key,
-      required this.controllers,
-      required this.orientation,
-      required this.selectedCountryIndex,
-      required this.updateSlctdCtryIndex});
+  const SetupFormFields({
+    super.key,
+    required this.controllers,
+    required this.orientation,
+    required this.selectedCountryIndex,
+    required this.updateSlctdCtryIndex,
+    required this.isSetup,
+  });
 
   final Map<String, TextEditingController> controllers;
   final int selectedCountryIndex;
   final void Function(int) updateSlctdCtryIndex;
   final Orientation orientation;
+  final bool isSetup;
 
   @override
   State<SetupFormFields> createState() => _SetupFormFieldsState();
@@ -98,10 +101,10 @@ class _SetupFormFieldsState extends State<SetupFormFields> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: Column(
-        spacing: 30,
+        spacing: widget.isSetup ? 30 : 18,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          if (widget.orientation == Orientation.portrait) ...[
+          if (widget.orientation == Orientation.portrait && widget.isSetup) ...[
             const Text(
                 "This information is required during your initial login and can be updated at a later time.",
                 style: TextStyle(fontSize: 16)),
@@ -506,9 +509,10 @@ class _SetupFormFieldsState extends State<SetupFormFields> {
             ),
           ),
 
-          const SizedBox(
-            height: 50,
-          )
+          if (widget.isSetup)
+            const SizedBox(
+              height: 50,
+            )
         ],
       ),
     );

@@ -34,7 +34,8 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile> {
 // UI State
   bool onPageTwo = false;
   late bool isLoading = false;
-  late int selectedCountryIndex = 0;
+  late int selectedCountryIndex;
+  late String countryFlag;
 
   late final controllers = {
     'name': TextEditingController(),
@@ -56,13 +57,20 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile> {
     'street': provider.profile.street,
     'city': provider.profile.city,
     'prov': provider.profile.province,
-    'country': provider.profile.country,
+    'country': "$countryFlag - ${provider.profile.country}",
     'zip': provider.profile.zip,
     'phone': provider.profile.phone,
     'email': provider.profile.email,
     'website': provider.profile.website,
     'currency': provider.profile.currency,
   };
+
+  String getCountryFlag() => Countries.countries
+      .firstWhere((e) => e.name == provider.profile.country)
+      .flagIcon;
+
+  int getSelectedCountryIndex() =>
+      Countries.countries.indexWhere((e) => e.name == provider.profile.country);
 
 // Form Logic
   bool get fieldsIncomplete {
@@ -122,6 +130,8 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile> {
     final orientation = MediaQuery.of(context).orientation;
 
     if (!isInitialized) {
+      selectedCountryIndex = getSelectedCountryIndex();
+      countryFlag = getCountryFlag();
       profileMap.forEach((key, value) {
         controllers[key]?.text = value ?? '';
       });
@@ -173,6 +183,7 @@ class _UpdateProfileState extends ConsumerState<UpdateProfile> {
         child: SizedBox(
           width: 270,
           child: SetupFormFields(
+              isSetup: false,
               controllers: controllers,
               orientation: orientation,
               selectedCountryIndex: selectedCountryIndex,
